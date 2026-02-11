@@ -1,70 +1,68 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Configurable bank transfer option (admin-managed) with customer modal display",
+  "title": "Polish bank transfer details dialog with order summary, improved copy UX, and WhatsApp confirmation CTA",
   "requirements": [
     {
-      "id": "REQ-16",
-      "summary": "Add React Query hooks to fetch and admin-update bank transfer details via the backend actor, following existing Stripe hook patterns.",
+      "id": "REQ-19",
+      "summary": "Pass the clicked plan context into the bank transfer details dialog and render it as a clear Order Summary block at the top.",
       "acceptanceCriteria": [
-        "There is a query hook that fetches bank transfer details and caches them via React Query.",
-        "There is a mutation hook that updates bank transfer details and invalidates/refetches the cached query on success.",
-        "Hook error states are surfaced to the UI so the admin can understand failures (e.g., unauthorized, validation)."
+        "When a user clicks “Pay via Bank Transfer” on a specific plan card, the bank transfer dialog shows an order summary that matches the clicked plan (network, plan title, data, and displayed price).",
+        "The dialog continues to display the configured bank details fields as before.",
+        "No changes are made to any paths listed in frontend.immutablePaths."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/components/DataPlansSection.tsx",
           "operation": "modify",
-          "description": "Add React Query hooks for bank transfer details: a cached query hook calling the backend capability to fetch bank details (getBankRequirements) and a mutation hook calling the backend capability to save bank details (saveBankDetails) with cache invalidation on success; ensure hook errors are returned to consumers so UI can render clear messages."
+          "description": "Track the currently selected plan summary (network, plan title, data amount, displayed price) when the user clicks “Pay via Bank Transfer”, and pass it into the BankTransferDetailsDialog as a new prop. Ensure this is wired from the specific plan card that was clicked. Use existing shadcn-ui Button composition already present; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
+          "operation": "modify",
+          "description": "Extend BankTransferDetailsDialog to accept an optional order summary prop and render a compact \"Order Summary\" block at the top of the dialog content (above bank details). Keep all existing bank details fields and the unavailable-state behavior intact. Use existing shadcn-ui Dialog/Alert/Button building blocks (compose only; do not modify ui components); verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-17",
-      "summary": "Add an admin-only header entry point that opens a dialog to configure and save bank transfer details with validation and clear success/error feedback.",
+      "id": "REQ-20",
+      "summary": "Reduce friction in the bank transfer dialog by adding a “Copy all details” action and clear numbered instructions in English, while retaining per-field copy capability.",
       "acceptanceCriteria": [
-        "When an authenticated admin opens the configuration dialog, they can enter and save bank transfer details.",
-        "The UI validates required fields (bank name, account name, account number) and shows clear English error messages for missing/invalid inputs.",
-        "On successful save, the dialog shows a success confirmation and the saved details are reflected in subsequent reads.",
-        "Non-admin users do not see the bank transfer configuration entry point in the header UI."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add a small React Query hook to determine whether the current authenticated caller is an admin (via backend capability isCallerAdmin) so the header can reliably hide admin-only bank detail configuration for non-admin users."
-        },
-        {
-          "path": "frontend/src/components/payments/BankTransferAdminSetup.tsx",
-          "operation": "create",
-          "description": "Create an admin configuration form component for BankDetails (bankName, accountName, accountNumber required; note optional) that uses existing shadcn-ui form primitives (e.g., Button, Input, Label, Alert) and the new bank detail query/mutation hooks to prefill, validate, save, and show success/error states. Use shadcn-ui Dialog subcomponents for headings where appropriate. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/IBNHeader.tsx",
-          "operation": "modify",
-          "description": "Add an admin-only header button/menu entry that opens a shadcn-ui Dialog containing the new BankTransferAdminSetup component; ensure it only renders when the user is authenticated and the admin-check hook returns true. Compose with existing shadcn-ui Dialog/Button components (do not edit any files under frontend/src/components/ui). Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-18",
-      "summary": "Add a customer-facing 'Pay via Bank Transfer' action on each plan card that opens a modal showing configured bank details and instructions, without breaking existing Stripe/WhatsApp flows.",
-      "acceptanceCriteria": [
-        "Each plan card offers a clear bank transfer action (e.g., a button) alongside the existing 'Pay Now' and 'Order via WhatsApp' flows.",
-        "The bank transfer modal displays bank name, account name, and account number (and optional note if set) in a readable layout, with a copy-friendly presentation (e.g., easy to select/copy).",
-        "If bank transfer details are not configured, the bank transfer action is hidden or disabled and the UI explains that bank transfer is currently unavailable (in English).",
-        "Adding the bank transfer option does not break the existing Stripe checkout flow or WhatsApp ordering flow for any network-specific plan."
+        "A “Copy all details” button is available when bank details are present and copies a well-formatted multi-line block to the clipboard.",
+        "The dialog includes a concise numbered instruction list (e.g., transfer exact amount, keep proof, contact support for confirmation).",
+        "Existing per-field copy buttons continue to work (or are replaced only if the new experience is clearly better and still provides copy capability for all fields)."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-          "operation": "create",
-          "description": "Create a reusable customer modal component that uses shadcn-ui Dialog (and optional Alert) to present bank transfer details plus a short English instruction block; render bank name/account name/account number prominently with copy-friendly/selectable text presentation and show the optional note only when provided. If details are null/unavailable, show an English 'Bank transfer is currently unavailable' message. Verify the component's usage instructions before implementing."
+          "operation": "modify",
+          "description": "Add a single prominent \"Copy all details\" action when bankDetails is present. Implement formatting as a multi-line block that includes bank name, account name, account number, and conditionally IBAN/BIC when available. Keep existing per-field copy buttons working. Add a concise numbered instruction list in English for completing the transfer and confirming payment. Use existing shadcn-ui Button/Alert components via composition; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "summary": "Add a WhatsApp confirmation CTA inside the bank transfer dialog that opens WhatsApp to the existing number with a prefilled message containing the selected plan summary and a proof prompt.",
+      "acceptanceCriteria": [
+        "The bank transfer dialog includes a button/link that opens a WhatsApp chat to 09033449260 with a prefilled message that includes the plan’s network, plan name, data, and price.",
+        "The WhatsApp CTA is only shown when bank details are available and a plan has been selected via the “Pay via Bank Transfer” action.",
+        "The existing “Order via WhatsApp” flow on plan cards remains unchanged and continues to work."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/whatsapp.ts",
+          "operation": "modify",
+          "description": "Add a dedicated helper to build a WhatsApp URL for bank-transfer payment confirmation that reuses the existing WHATSAPP_NUMBER and URL formatting logic, and supports a prefilled message containing the selected plan summary plus a prompt to attach/describe transfer proof. Keep getWhatsAppOrderUrl behavior unchanged."
+        },
+        {
+          "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
+          "operation": "modify",
+          "description": "Add a prominent WhatsApp confirmation CTA inside the dialog that uses the new WhatsApp helper to open chat to 09033449260 with a prefilled confirmation message. Only render this CTA when both bankDetails is present and an order summary was provided (i.e., user came from “Pay via Bank Transfer” on a plan card). Use existing shadcn-ui Button (asChild link pattern where appropriate) via composition; verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/components/DataPlansSection.tsx",
           "operation": "modify",
-          "description": "Add a 'Pay via Bank Transfer' action to each plan card alongside the existing PayNowButton and WhatsApp button; wire it to open the new BankTransferDetailsDialog and source its data from the bank details query hook. If bank details are not configured, disable or hide the action and show an English explanation without affecting existing Stripe checkout or WhatsApp ordering flows. Compose using existing shadcn-ui Button/Dialog components (do not edit any files under frontend/src/components/ui). Verify the component's usage instructions before implementing."
+          "description": "Ensure the dialog receives the selected plan summary only when opened from the “Pay via Bank Transfer” action, so the WhatsApp confirmation CTA gating condition is met without affecting the existing “Order via WhatsApp” link on plan cards. Use existing shadcn-ui Button composition already present; verify the component's usage instructions before implementing."
         }
       ]
     }

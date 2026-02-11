@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 9,
+  "projectStateVersion": 11,
   "summary": "Build a professional data-selling application named IBN with a polished UI, updated color/theme, WhatsApp contact link, and support for in-app payments (without requiring WhatsApp) plus additional attractive engagement features.",
   "architectural_notes": [
     "Support an alternative payment method: bank transfer. Provide admin-configurable bank details (account name/number/bank) that can be shown in the purchase flow (e.g., at checkout or after order creation) alongside existing payment options."
@@ -135,6 +135,30 @@
         "REQ-18"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-customer-facing-bank-transfer-flow-so-the-selected-plan-context-network-plan-name-data-amount-and-price-is-passed-into-the-bank-transfer-details-dialog-and-displayed-clearly-at-the-top-of-the-dialog-as-a-short-order-summary-block",
+      "title": "Update the customer-facing bank transfer flow so the selected plan context (network, plan name, data amount, and price) is passed into the bank transfer details dialog and displayed clearly at the top of the dialog as a short \"Order Summary\" block.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-the-bank-transfer-details-dialog-ux-to-reduce-friction-add-a-single-copy-all-details-action-copies-bank-name-account-name-account-number-and-any-optional-iban-bic-and-provide-clear-step-by-step-instructions-in-english-for-completing-a-bank-transfer-and-confirming-payment",
+      "title": "Improve the bank transfer details dialog UX to reduce friction: add a single \"Copy all details\" action (copies bank name, account name, account number, and any optional IBAN/BIC) and provide clear step-by-step instructions in English for completing a bank transfer and confirming payment.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-prominent-whatsapp-confirmation-cta-inside-the-bank-transfer-details-dialog-that-opens-whatsapp-with-a-prefilled-message-containing-the-selected-plan-summary-and-a-prompt-for-the-customer-to-attach-describe-their-transfer-proof-while-keeping-the-existing-global-whatsapp-number-unchanged-09033449260",
+      "title": "Add a prominent WhatsApp confirmation CTA inside the bank transfer details dialog that opens WhatsApp with a prefilled message containing the selected plan summary and a prompt for the customer to attach/describe their transfer proof (while keeping the existing global WhatsApp number unchanged: 09033449260).",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -206,6 +230,12 @@
       "reqIds": [
         "REQ-15"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Refine/improve how bank transfer details are presented to customers during checkout/purchase flow (UI/UX polish for bank details modal/section)",
+      "reqIds": [],
       "status": "pending"
     }
   ],

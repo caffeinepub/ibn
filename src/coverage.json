@@ -1,57 +1,50 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T01:23:58.107Z",
+  "generatedAt": "2026-02-11T01:29:38.521Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
+    "total": 3,
     "implemented": 3,
     "items": [
       {
-        "id": "REQ-15",
-        "summary": "Add backend support for bank transfer details by introducing a BankDetails record (e.g., bank name, account name, account number, optional note) that can be saved by an admin and retrieved by the frontend for display to customers.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-16",
-        "summary": "Add React Query hooks to read and (admin-only) update the bank transfer details from the backend actor, following the existing patterns used for Stripe configuration in frontend/src/hooks/useQueries.ts.",
+        "id": "REQ-19",
+        "summary": "Update the customer-facing bank transfer flow so the selected plan context (network, plan name, data amount, and price) is passed into the bank transfer details dialog and displayed clearly at the top of the dialog as a short \"Order Summary\" block.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/components/DataPlansSection.tsx",
+          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/components/DataPlansSection.tsx",
+          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
         ]
       },
       {
-        "id": "REQ-17",
-        "summary": "Provide an admin UI to configure bank transfer details (bank name, account name, account number, optional note) in a dialog accessible from the header when the admin is logged in, without editing any immutable frontend paths.",
+        "id": "REQ-20",
+        "summary": "Improve the bank transfer details dialog UX to reduce friction: add a single \"Copy all details\" action (copies bank name, account name, account number, and any optional IBAN/BIC) and provide clear step-by-step instructions in English for completing a bank transfer and confirming payment.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/payments/BankTransferAdminSetup.tsx",
-          "frontend/src/components/IBNHeader.tsx"
+          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/payments/BankTransferAdminSetup.tsx",
-          "frontend/src/components/IBNHeader.tsx"
+          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
         ]
       },
       {
-        "id": "REQ-18",
-        "summary": "Add a customer-facing 'Pay via Bank Transfer' option on each data plan card that opens a modal showing the configured bank transfer details (and a short instruction block) so customers can pay by bank transfer as an alternative to Stripe and WhatsApp ordering.",
+        "id": "REQ-21",
+        "summary": "Add a prominent WhatsApp confirmation CTA inside the bank transfer details dialog that opens WhatsApp with a prefilled message containing the selected plan summary and a prompt for the customer to attach/describe their transfer proof (while keeping the existing global WhatsApp number unchanged: 09033449260).",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/lib/whatsapp.ts",
           "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
           "frontend/src/components/DataPlansSection.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/lib/whatsapp.ts",
           "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
           "frontend/src/components/DataPlansSection.tsx"
         ]
@@ -59,20 +52,13 @@
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
     "frontend/src/components/DataPlansSection.tsx",
-    "frontend/src/components/IBNHeader.tsx",
-    "frontend/src/components/payments/BankTransferAdminSetup.tsx",
     "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/lib/whatsapp.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

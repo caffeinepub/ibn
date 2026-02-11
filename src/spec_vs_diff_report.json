@@ -1,60 +1,41 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T01:23:58.104Z",
-  "summary": "Implemented frontend UI and React Query hooks for bank transfer setup and customer display, plus header entry point for admins. Backend changes are truncated; required backend persistence/admin-only enforcement for bank details is not evidenced. Some extra bank detail fields (IBAN/BIC) were added beyond the requested schema, and the frontend query calls an oddly named backend method (`getBankRequirements`) which may not match the intended API.",
+  "generatedAt": "2026-02-11T01:29:38.518Z",
+  "summary": "Diff implements plan-context passing into the bank transfer dialog and adds WhatsApp URL support for a bank-transfer confirmation message. Some REQ-20/REQ-21 acceptance criteria (numbered instructions, per-field copy behavior, and conditional display of WhatsApp CTA based on plan selection) are not fully verifiable from the provided truncated diff.",
   "missing_requirements": [
     {
-      "id": "REQ-15",
-      "requirement": "Bank transfer details are persisted in canister state (survive canister upgrades).",
-      "reason": "The backend diff snippet does not show any stable variables, preupgrade/postupgrade hooks, or other upgrade-safe persistence for the new bank transfer details.",
+      "id": "REQ-20",
+      "requirement": "Dialog includes a concise numbered instruction list in English for completing a bank transfer and confirming payment.",
+      "reason": "The truncated dialog diff shows only the header/description and start of the order summary. No numbered instruction list is visible in the provided snippet, so it cannot be confirmed as implemented.",
       "evidence": [
-        "backend/main.mo (truncated)"
+        "frontend/src/components/payments/BankTransferDetailsDialog.tsx (truncated)"
       ]
     },
     {
-      "id": "REQ-15",
-      "requirement": "Backend exposes an admin-only method to set/update bank transfer details; unauthorized (non-admin) callers cannot set/update bank transfer details (must trap with a clear error).",
-      "reason": "The backend diff snippet does not show the new bank-details setter method or its admin check/trap behavior.",
+      "id": "REQ-20",
+      "requirement": "Existing per-field copy buttons continue to work (or are replaced only if the new experience is clearly better and still provides copy capability for all fields).",
+      "reason": "The diff shows new shared copy helpers and a bulk \"copyAllDetails\" function, but the truncated content does not show the actual per-field copy UI, so it cannot be confirmed that per-field copy remains available for all fields.",
       "evidence": [
-        "backend/main.mo (truncated)"
+        "frontend/src/components/payments/BankTransferDetailsDialog.tsx (truncated)"
       ]
     },
     {
-      "id": "REQ-15",
-      "requirement": "Backend exposes a public query method to fetch the currently configured bank transfer details (or null/none if not configured).",
-      "reason": "The backend diff snippet does not show any bank-details query method; additionally, the frontend hook calls `actor.getBankRequirements()` which is not evidenced in the backend snippet.",
+      "id": "REQ-21",
+      "requirement": "WhatsApp confirmation CTA is only shown when bank details are available and a plan has been selected via “Pay via Bank Transfer”.",
+      "reason": "The component gates the entire dialog content on `bankDetails` (early return when absent), but the snippet does not show the WhatsApp CTA rendering and whether it is also gated on `planSummary` being present.",
       "evidence": [
-        "backend/main.mo (truncated)",
-        "frontend/src/hooks/useQueries.ts"
+        "frontend/src/components/payments/BankTransferDetailsDialog.tsx (truncated)"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Extended bank transfer details schema/UI to include IBAN and BIC fields.",
-      "reason": "BuildRequest only asked for bank name, account name, account number, and optional note; IBAN/BIC were not requested.",
-      "evidence": [
-        "frontend/src/components/payments/BankTransferAdminSetup.tsx"
-      ]
-    },
-    {
-      "description": "Frontend fetch hook calls `actor.getBankRequirements()` (unexpected API name).",
-      "reason": "The BuildRequest specifies fetching bank transfer details but does not mention a `getBankRequirements` method; this may be an unrequested API shape and could indicate a mismatch with the intended backend method.",
-      "evidence": [
-        "frontend/src/hooks/useQueries.ts"
-      ]
-    }
-  ],
-  "confidence": 0.62,
+  "hallucinated_features": [],
+  "confidence": 0.58,
   "changed_files": [
-    "backend/main.mo",
     "frontend-file-summaries.txt",
     "frontend/src/components/DataPlansSection.tsx",
-    "frontend/src/components/IBNHeader.tsx",
-    "frontend/src/components/payments/BankTransferAdminSetup.tsx",
     "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/lib/whatsapp.ts",
     "project_state.json"
   ]
 }

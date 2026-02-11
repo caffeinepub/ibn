@@ -9,13 +9,34 @@ import { BankTransferDetailsDialog } from './payments/BankTransferDetailsDialog'
 import { useGetBankDetails } from '@/hooks/useQueries';
 import { MOBILE_NETWORKS, getPlansByNetwork, type MobileNetwork } from '@/data/mobileNetworkPlans';
 
+export interface PlanSummary {
+  network: string;
+  planName: string;
+  data: string;
+  price: string;
+}
+
 export function DataPlansSection() {
   const [selectedNetwork, setSelectedNetwork] = useState<MobileNetwork>('MTN');
   const [bankTransferOpen, setBankTransferOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<PlanSummary | null>(null);
   const { data: bankDetails, isLoading: bankDetailsLoading } = useGetBankDetails();
   const plans = getPlansByNetwork(selectedNetwork);
 
   const isBankTransferAvailable = !bankDetailsLoading && bankDetails !== null && bankDetails !== undefined;
+
+  const handleBankTransferClick = (plan: PlanSummary) => {
+    setSelectedPlan(plan);
+    setBankTransferOpen(true);
+  };
+
+  const handleDialogClose = (open: boolean) => {
+    setBankTransferOpen(open);
+    if (!open) {
+      // Clear selected plan when dialog closes
+      setSelectedPlan(null);
+    }
+  };
 
   return (
     <section id="plans" className="py-16 md:py-20 scroll-mt-16">
@@ -90,7 +111,12 @@ export function DataPlansSection() {
                 
                 {isBankTransferAvailable && (
                   <Button 
-                    onClick={() => setBankTransferOpen(true)}
+                    onClick={() => handleBankTransferClick({
+                      network: plan.network,
+                      planName: plan.title,
+                      data: plan.data,
+                      price: plan.price
+                    })}
                     className="w-full gap-2"
                     variant="secondary"
                     size="sm"
@@ -140,8 +166,9 @@ export function DataPlansSection() {
       {/* Bank Transfer Details Dialog */}
       <BankTransferDetailsDialog 
         open={bankTransferOpen}
-        onOpenChange={setBankTransferOpen}
+        onOpenChange={handleDialogClose}
         bankDetails={bankDetails ?? null}
+        planSummary={selectedPlan}
       />
     </section>
   );

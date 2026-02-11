@@ -1,93 +1,73 @@
 {
   "kind": "build_request",
-  "title": "Add configurable bank transfer payment option with admin-managed bank details",
+  "title": "Polish bank transfer details presentation in the purchase flow",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-15",
-      "text": "Add backend support for bank transfer details by introducing a BankDetails record (e.g., bank name, account name, account number, optional note) that can be saved by an admin and retrieved by the frontend for display to customers.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "allow me to put my bank details for payment if customer purchase"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes an admin-only method to set/update bank transfer details.",
-        "Backend exposes a public query method to fetch the currently configured bank transfer details (or null/none if not configured).",
-        "Bank transfer details are persisted in canister state (survive canister upgrades).",
-        "Unauthorized callers (non-admin) cannot set/update bank transfer details (must trap with a clear error)."
-      ]
-    },
-    {
-      "id": "REQ-16",
-      "text": "Add React Query hooks to read and (admin-only) update the bank transfer details from the backend actor, following the existing patterns used for Stripe configuration in frontend/src/hooks/useQueries.ts.",
+      "id": "REQ-19",
+      "text": "Update the customer-facing bank transfer flow so the selected plan context (network, plan name, data amount, and price) is passed into the bank transfer details dialog and displayed clearly at the top of the dialog as a short \"Order Summary\" block.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "allow me to put my bank details for payment if customer purchase"
+          "If you'd like, I can help refine how the bank details appear during checkout.",
+          "go ahead"
         ]
       },
       "acceptanceCriteria": [
-        "There is a query hook that fetches bank transfer details and caches them via React Query.",
-        "There is a mutation hook that updates bank transfer details and invalidates/refetches the cached query on success.",
-        "Hook error states are surfaced to the UI so the admin can understand failures (e.g., unauthorized, validation)."
+        "When a user clicks “Pay via Bank Transfer” on a specific plan card, the bank transfer dialog shows an order summary that matches the clicked plan (network, plan title, data, and displayed price).",
+        "The dialog continues to display the configured bank details fields as before.",
+        "No changes are made to any paths listed in frontend.immutablePaths."
       ]
     },
     {
-      "id": "REQ-17",
-      "text": "Provide an admin UI to configure bank transfer details (bank name, account name, account number, optional note) in a dialog accessible from the header when the admin is logged in, without editing any immutable frontend paths.",
+      "id": "REQ-20",
+      "text": "Improve the bank transfer details dialog UX to reduce friction: add a single \"Copy all details\" action (copies bank name, account name, account number, and any optional IBAN/BIC) and provide clear step-by-step instructions in English for completing a bank transfer and confirming payment.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "allow me to put my bank details for payment if customer purchase"
+          "refine how the bank details appear during checkout"
         ]
       },
       "acceptanceCriteria": [
-        "When an authenticated admin opens the configuration dialog, they can enter and save bank transfer details.",
-        "The UI validates required fields (bank name, account name, account number) and shows clear English error messages for missing/invalid inputs.",
-        "On successful save, the dialog shows a success confirmation and the saved details are reflected in subsequent reads.",
-        "Non-admin users do not see the bank transfer configuration entry point in the header UI."
+        "A “Copy all details” button is available when bank details are present and copies a well-formatted multi-line block to the clipboard.",
+        "The dialog includes a concise numbered instruction list (e.g., transfer exact amount, keep proof, contact support for confirmation).",
+        "Existing per-field copy buttons continue to work (or are replaced only if the new experience is clearly better and still provides copy capability for all fields)."
       ]
     },
     {
-      "id": "REQ-18",
-      "text": "Add a customer-facing 'Pay via Bank Transfer' option on each data plan card that opens a modal showing the configured bank transfer details (and a short instruction block) so customers can pay by bank transfer as an alternative to Stripe and WhatsApp ordering.",
+      "id": "REQ-21",
+      "text": "Add a prominent WhatsApp confirmation CTA inside the bank transfer details dialog that opens WhatsApp with a prefilled message containing the selected plan summary and a prompt for the customer to attach/describe their transfer proof (while keeping the existing global WhatsApp number unchanged: 09033449260).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "allow me to put my bank details for payment if customer purchase"
+          "refine how the bank details appear during checkout"
         ]
       },
       "acceptanceCriteria": [
-        "Each plan card offers a clear bank transfer action (e.g., a button) alongside the existing 'Pay Now' and 'Order via WhatsApp' flows.",
-        "The bank transfer modal displays bank name, account name, and account number (and optional note if set) in a readable layout, with a copy-friendly presentation (e.g., easy to select/copy).",
-        "If bank transfer details are not configured, the bank transfer action is hidden or disabled and the UI explains that bank transfer is currently unavailable (in English).",
-        "Adding the bank transfer option does not break the existing Stripe checkout flow or WhatsApp ordering flow for any network-specific plan."
+        "The bank transfer dialog includes a button/link that opens a WhatsApp chat to 09033449260 with a prefilled message that includes the plan’s network, plan name, data, and price.",
+        "The WhatsApp CTA is only shown when bank details are available and a plan has been selected via the “Pay via Bank Transfer” action.",
+        "The existing “Order via WhatsApp” flow on plan cards remains unchanged and continues to work."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor with all logic in backend/main.mo.",
-    "Do not edit any files under frontend/src/components/ui or any frontend immutablePaths listed in SYSTEM_CONTEXT; compose existing UI components instead.",
-    "Use English for any user-facing text."
+    "Do not edit any files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or anything in frontend/src/components/ui (compose instead).",
+    "Keep all user-facing text in English.",
+    "Do not change the WhatsApp phone number (must remain 09033449260)."
   ],
   "nonGoals": [
-    "Do not integrate any external bank/payment API for verifying bank transfers.",
-    "Do not remove or replace the existing Stripe 'Pay Now' checkout flow.",
-    "Do not add third-party authentication; continue using Internet Identity only."
+    "Do not add new payment providers or replace Stripe checkout.",
+    "Do not implement backend changes for bank transfer (this is a UI/UX refinement only).",
+    "Do not introduce real-time payment verification for bank transfers."
   ],
   "imageRequirements": {
     "required": [],

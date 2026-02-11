@@ -2,52 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-react-query-hooks-to-read-and-admin-only-update-the-bank-transfer-details-from-the-backend-actor-following-the-existing-patterns-used-for-stripe-configuration-in-frontend-src-hooks-usequeries-ts",
-      "featureTitle": "Add React Query hooks to read and (admin-only) update the bank transfer details from the backend actor, following the existing patterns used for Stripe configuration in frontend/src/hooks/useQueries.ts.",
-      "files": [
-        "frontend/src/hooks/useQueries.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "stripe@3.0.0",
-        "http-outcalls@3.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-16"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-provide-an-admin-ui-to-configure-bank-transfer-details-bank-name-account-name-account-number-optional-note-in-a-dialog-accessible-from-the-header-when-the-admin-is-logged-in-without-editing-any-immutable-frontend-paths",
-      "featureTitle": "Provide an admin UI to configure bank transfer details (bank name, account name, account number, optional note) in a dialog accessible from the header when the admin is logged in, without editing any immutable frontend paths.",
-      "files": [
-        "frontend/src/components/IBNHeader.tsx",
-        "frontend/src/components/payments/BankTransferAdminSetup.tsx",
-        "frontend/src/hooks/useQueries.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "stripe@3.0.0",
-        "http-outcalls@3.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-17"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-customer-facing-pay-via-bank-transfer-option-on-each-data-plan-card-that-opens-a-modal-showing-the-configured-bank-transfer-details-and-a-short-instruction-block-so-customers-can-pay-by-bank-transfer-as-an-alternative-to-stripe-and-whatsapp-ordering",
-      "featureTitle": "Add a customer-facing 'Pay via Bank Transfer' option on each data plan card that opens a modal showing the configured bank transfer details (and a short instruction block) so customers can pay by bank transfer as an alternative to Stripe and WhatsApp ordering.",
+      "featureId": "feature-update-the-customer-facing-bank-transfer-flow-so-the-selected-plan-context-network-plan-name-data-amount-and-price-is-passed-into-the-bank-transfer-details-dialog-and-displayed-clearly-at-the-top-of-the-dialog-as-a-short-order-summary-block",
+      "featureTitle": "Update the customer-facing bank transfer flow so the selected plan context (network, plan name, data amount, and price) is passed into the bank transfer details dialog and displayed clearly at the top of the dialog as a short \"Order Summary\" block.",
       "files": [
         "frontend/src/components/DataPlansSection.tsx",
         "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
@@ -63,7 +19,51 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-18"
+        "REQ-19"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-improve-the-bank-transfer-details-dialog-ux-to-reduce-friction-add-a-single-copy-all-details-action-copies-bank-name-account-name-account-number-and-any-optional-iban-bic-and-provide-clear-step-by-step-instructions-in-english-for-completing-a-bank-transfer-and-confirming-payment",
+      "featureTitle": "Improve the bank transfer details dialog UX to reduce friction: add a single \"Copy all details\" action (copies bank name, account name, account number, and any optional IBAN/BIC) and provide clear step-by-step instructions in English for completing a bank transfer and confirming payment.",
+      "files": [
+        "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "stripe@3.0.0",
+        "http-outcalls@3.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-20"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-prominent-whatsapp-confirmation-cta-inside-the-bank-transfer-details-dialog-that-opens-whatsapp-with-a-prefilled-message-containing-the-selected-plan-summary-and-a-prompt-for-the-customer-to-attach-describe-their-transfer-proof-while-keeping-the-existing-global-whatsapp-number-unchanged-09033449260",
+      "featureTitle": "Add a prominent WhatsApp confirmation CTA inside the bank transfer details dialog that opens WhatsApp with a prefilled message containing the selected plan summary and a prompt for the customer to attach/describe their transfer proof (while keeping the existing global WhatsApp number unchanged: 09033449260).",
+      "files": [
+        "frontend/src/components/DataPlansSection.tsx",
+        "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
+        "frontend/src/lib/whatsapp.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "stripe@3.0.0",
+        "http-outcalls@3.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-21"
       ],
       "confidence": "high"
     }
