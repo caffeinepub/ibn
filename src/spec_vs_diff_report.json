@@ -1,0 +1,71 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-11T00:30:02.988Z",
+  "summary": "Most frontend requirements for branding, landing layout, WhatsApp CTA, data plans, footer, and a coherent theme appear implemented. The main gap is the absence (in the diff evidence) of the required generated image assets under the specified public folder, even though the UI references them.",
+  "missing_requirements": [
+    {
+      "id": "REQ-7",
+      "requirement": "Add generated brand assets (logo and a subtle hero background/illustration) as static images and render them in the UI from the frontend public assets folder.",
+      "reason": "The UI references the required asset paths, but the diff summary does not show the actual image files being added under `frontend/public/assets/generated`, so the requirement to add/store generated images there is not evidenced as implemented.",
+      "evidence": [
+        "frontend/src/components/IBNHeader.tsx (references /assets/generated/ibn-logo.dim_512x512.png)",
+        "frontend/src/components/IBNFooter.tsx (references /assets/generated/ibn-logo.dim_512x512.png)",
+        "frontend/src/components/LandingPage.tsx (references /assets/generated/ibn-hero-bg.dim_1600x900.png)"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Social media follow icons/links in the footer (Facebook/X/Instagram)",
+      "reason": "Not requested in the BuildRequest requirements; footer only required basic business/contact text and repeated WhatsApp link.",
+      "evidence": [
+        "frontend/src/components/IBNFooter.tsx"
+      ]
+    },
+    {
+      "description": "Additional contact details (support email and location)",
+      "reason": "Not requested; only WhatsApp contact link/number was explicitly required.",
+      "evidence": [
+        "frontend/src/components/IBNFooter.tsx"
+      ]
+    },
+    {
+      "description": "Support link and internal quick links (e.g., #plans, #about)",
+      "reason": "Not requested as part of landing page or footer requirements; could be extra navigation beyond stated scope.",
+      "evidence": [
+        "frontend/src/components/IBNFooter.tsx"
+      ]
+    },
+    {
+      "description": "React Query actor invalidation/refetch logic in useActor and placeholder useQueries file",
+      "reason": "Backend interaction/query structure was not part of requested requirements for the landing/WhatsApp-focused app.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/DataPlansSection.tsx",
+    "frontend/src/components/IBNFooter.tsx",
+    "frontend/src/components/IBNHeader.tsx",
+    "frontend/src/components/LandingPage.tsx",
+    "frontend/src/components/WhatsAppCTA.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/whatsapp.ts",
+    "frontend/src/main.tsx",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

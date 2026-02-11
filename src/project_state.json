@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build a professional data-selling application named IBN with a polished UI and a WhatsApp contact link for more details.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Minimal modern wordmark logo reading \"IBN\" (ibn-logo.dim_512x512.png)\n- Subtle abstract tech background for a hero section (ibn-hero-bg.dim_1600x900.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-a-branded-application-shell-named-ibn-that-clearly-presents-the-app-as-a-professional-data-selling-application-including-the-app-name-in-the-header-and-page-title-metadata",
+      "title": "Create a branded application shell named \"IBN\" that clearly presents the app as a professional data-selling application, including the app name in the header and page title/metadata.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-clean-landing-page-layout-suitable-for-a-data-selling-business-including-sections-for-a-short-hero-headline-a-brief-description-and-a-visible-call-to-action-to-contact-via-whatsapp-for-more-details",
+      "title": "Implement a clean landing page layout suitable for a data-selling business, including sections for: a short hero headline, a brief description, and a visible call-to-action to contact via WhatsApp for more details.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-whatsapp-contact-link-button-that-opens-whatsapp-chat-for-the-phone-number-09033449260",
+      "title": "Add a WhatsApp contact link/button that opens WhatsApp chat for the phone number 09033449260.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-professional-visual-theme-colors-typography-spacing-components-across-the-ui-suitable-for-a-commercial-data-selling-brand-use-a-consistent-design-system-across-all-screens",
+      "title": "Apply a coherent, professional visual theme (colors, typography, spacing, components) across the UI suitable for a commercial data-selling brand; use a consistent design system across all screens.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-a-simple-data-plans-or-equivalent-section-on-the-landing-page-that-lists-example-data-bundle-offerings-static-editable-in-code-with-name-price-and-brief-description",
+      "title": "Provide a simple \"Data Plans\" (or equivalent) section on the landing page that lists example data bundle offerings (static, editable in code) with name, price, and brief description.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-include-a-footer-with-basic-business-contact-text-and-a-repeated-whatsapp-contact-link-for-09033449260",
+      "title": "Include a footer with basic business/contact text and a repeated WhatsApp contact link for 09033449260.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-brand-assets-logo-and-a-subtle-hero-background-illustration-as-static-images-and-render-them-in-the-ui-from-the-frontend-public-assets-folder",
+      "title": "Add generated brand assets (logo and a subtle hero background/illustration) as static images and render them in the UI from the frontend public assets folder.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a professional data-selling application for selling DATA (IBN)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Brand the application with the name \"IBN\"",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Design the app with a very good-looking, professional UI",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add a WhatsApp contact link (09033449260) for more details",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "IBN",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

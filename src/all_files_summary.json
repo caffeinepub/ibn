@@ -1,0 +1,21 @@
+{
+  "backend/main.mo": "Empty Motoko actor with no methods or state.",
+  "feature_evidence.json": "Feature evidence report linking product requirements to affected frontend files and components.",
+  "frontend-file-summaries.txt": "Text file providing short descriptions of key frontend components, utilities, and styling files.",
+  "frontend/index.css": "Global Tailwind CSS setup defining design tokens, color variables, and base styling for light and dark modes.",
+  "frontend/index.html": "HTML entry point that sets the page title and mounts the React application.",
+  "frontend/src/App.tsx": "Main React app wrapper rendering the header, landing page, and footer in a full-height layout.",
+  "frontend/src/components/DataPlansSection.tsx": "Renders a grid of predefined mobile data plans with features and WhatsApp purchase links.",
+  "frontend/src/components/IBNFooter.tsx": "Footer with brand info, quick links, contact details, social icons, and dynamic WhatsApp support links.",
+  "frontend/src/components/IBNHeader.tsx": "Sticky top header showing the IBN logo, brand name, and a WhatsApp contact button.",
+  "frontend/src/components/LandingPage.tsx": "Landing page including hero, about, data plans, and CTA sections with branding and feature highlights.",
+  "frontend/src/components/WhatsAppCTA.tsx": "Reusable button component generating WhatsApp chat links with optional size, number display, and custom message.",
+  "frontend/src/hooks/useActor.ts": "Creates and caches a backend actor based on the current Internet Identity, invalidating dependent queries when the actor changes.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Provides a React context and provider for managing Internet Identity authentication, including login, logout, and stored identity restoration.",
+  "frontend/src/hooks/useQueries.ts": "Placeholder file for future React Query hooks; currently empty.",
+  "frontend/src/index.css": "Defines Tailwind base styles and custom color variables for light and dark themes using OKLCH values.",
+  "frontend/src/lib/whatsapp.ts": "Generates a WhatsApp chat URL for a fixed Nigerian phone number with optional prefilled text.",
+  "frontend/src/main.tsx": "Bootstraps the React app, wrapping it with React Query and Internet Identity providers.",
+  "frontend/tailwind.config.js": "Configures Tailwind with custom colors, fonts, animations, plugins, and container settings.",
+  "project_state.json": "Stores project metadata, features, requirements, and design goals for the IBN application."
+}

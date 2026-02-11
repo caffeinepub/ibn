@@ -1,0 +1,142 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-a-branded-application-shell-named-ibn-that-clearly-presents-the-app-as-a-professional-data-selling-application-including-the-app-name-in-the-header-and-page-title-metadata",
+      "featureTitle": "Create a branded application shell named \"IBN\" that clearly presents the app as a professional data-selling application, including the app name in the header and page title/metadata.",
+      "files": [
+        "frontend/index.html",
+        "frontend/src/App.tsx",
+        "frontend/src/components/IBNHeader.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-clean-landing-page-layout-suitable-for-a-data-selling-business-including-sections-for-a-short-hero-headline-a-brief-description-and-a-visible-call-to-action-to-contact-via-whatsapp-for-more-details",
+      "featureTitle": "Implement a clean landing page layout suitable for a data-selling business, including sections for: a short hero headline, a brief description, and a visible call-to-action to contact via WhatsApp for more details.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/LandingPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-whatsapp-contact-link-button-that-opens-whatsapp-chat-for-the-phone-number-09033449260",
+      "featureTitle": "Add a WhatsApp contact link/button that opens WhatsApp chat for the phone number 09033449260.",
+      "files": [
+        "frontend/src/components/LandingPage.tsx",
+        "frontend/src/components/WhatsAppCTA.tsx",
+        "frontend/src/lib/whatsapp.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-coherent-professional-visual-theme-colors-typography-spacing-components-across-the-ui-suitable-for-a-commercial-data-selling-brand-use-a-consistent-design-system-across-all-screens",
+      "featureTitle": "Apply a coherent, professional visual theme (colors, typography, spacing, components) across the UI suitable for a commercial data-selling brand; use a consistent design system across all screens.",
+      "files": [
+        "frontend/src/components/IBNHeader.tsx",
+        "frontend/src/components/LandingPage.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-provide-a-simple-data-plans-or-equivalent-section-on-the-landing-page-that-lists-example-data-bundle-offerings-static-editable-in-code-with-name-price-and-brief-description",
+      "featureTitle": "Provide a simple \"Data Plans\" (or equivalent) section on the landing page that lists example data bundle offerings (static, editable in code) with name, price, and brief description.",
+      "files": [
+        "frontend/src/components/DataPlansSection.tsx",
+        "frontend/src/components/LandingPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-include-a-footer-with-basic-business-contact-text-and-a-repeated-whatsapp-contact-link-for-09033449260",
+      "featureTitle": "Include a footer with basic business/contact text and a repeated WhatsApp contact link for 09033449260.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/IBNFooter.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-generated-brand-assets-logo-and-a-subtle-hero-background-illustration-as-static-images-and-render-them-in-the-ui-from-the-frontend-public-assets-folder",
+      "featureTitle": "Add generated brand assets (logo and a subtle hero background/illustration) as static images and render them in the UI from the frontend public assets folder.",
+      "files": [
+        "frontend/src/components/IBNHeader.tsx",
+        "frontend/src/components/LandingPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

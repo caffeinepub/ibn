@@ -1,0 +1,12 @@
+{
+  "frontend/src/App.tsx": "Main application component that renders the IBN data-selling app with header, landing page content, and footer in a flex layout.",
+  "frontend/src/components/IBNHeader.tsx": "Sticky header component displaying the IBN logo, brand name, and a WhatsApp contact button with responsive design.",
+  "frontend/src/components/LandingPage.tsx": "Complete landing page with hero section (using generated background), feature highlights, about section, data plans, and call-to-action areas.",
+  "frontend/src/components/DataPlansSection.tsx": "Displays four data plan cards (Starter, Standard, Premium, Business) with pricing, features, and WhatsApp order buttons.",
+  "frontend/src/components/WhatsAppCTA.tsx": "Reusable WhatsApp call-to-action button component with configurable size, number display, and pre-filled message support.",
+  "frontend/src/components/IBNFooter.tsx": "Footer component with brand info, quick links, contact details (including WhatsApp), social media icons, and Caffeine.ai attribution with UTM tracking.",
+  "frontend/src/lib/whatsapp.ts": "Utility module that exports the WhatsApp number constant and generates properly formatted WhatsApp chat URLs with optional pre-filled messages.",
+  "frontend/src/hooks/useQueries.ts": "Placeholder file for React Query hooks to interact with backend (currently empty as backend has no methods).",
+  "frontend/src/index.css": "Global styles with OKLCH color system featuring a modern blue-to-cyan tech palette for both light and dark modes, plus typography settings.",
+  "frontend/tailwind.config.js": "Tailwind configuration extended with Inter font family, custom shadows (soft, glow), and refined design tokens for the IBN brand."
+}
