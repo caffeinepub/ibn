@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Copy, CheckCircle, Building2, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import type { BankDetails } from '@/backend';
@@ -16,12 +17,15 @@ export interface PlanSummary {
 interface BankTransferDetailsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  bankDetails: BankDetails | null;
+  bankAccounts: BankDetails[] | null;
   planSummary?: PlanSummary | null;
 }
 
-export function BankTransferDetailsDialog({ open, onOpenChange, bankDetails, planSummary }: BankTransferDetailsDialogProps) {
+export function BankTransferDetailsDialog({ open, onOpenChange, bankAccounts, planSummary }: BankTransferDetailsDialogProps) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [selectedAccountIndex, setSelectedAccountIndex] = useState(0);
+
+  const selectedAccount = bankAccounts && bankAccounts.length > 0 ? bankAccounts[selectedAccountIndex] : null;
 
   const copyToClipboard = async (text: string, field: string) => {
     try {
@@ -34,16 +38,16 @@ export function BankTransferDetailsDialog({ open, onOpenChange, bankDetails, pla
   };
 
   const copyAllDetails = async () => {
-    if (!bankDetails) return;
+    if (!selectedAccount) return;
     
-    let allDetails = `Bank Name: ${bankDetails.bankName}\nAccount Name: ${bankDetails.accountName}\nAccount Number: ${bankDetails.accountNumber}`;
+    let allDetails = `Bank Name: ${selectedAccount.bankName}\nAccount Name: ${selectedAccount.accountName}\nAccount Number: ${selectedAccount.accountNumber}`;
     
-    if (bankDetails.iban) {
-      allDetails += `\nIBAN: ${bankDetails.iban}`;
+    if (selectedAccount.iban) {
+      allDetails += `\nIBAN: ${selectedAccount.iban}`;
     }
     
-    if (bankDetails.bic) {
-      allDetails += `\nBIC/SWIFT: ${bankDetails.bic}`;
+    if (selectedAccount.bic) {
+      allDetails += `\nBIC/SWIFT: ${selectedAccount.bic}`;
     }
     
     try {
@@ -55,7 +59,7 @@ export function BankTransferDetailsDialog({ open, onOpenChange, bankDetails, pla
     }
   };
 
-  if (!bankDetails) {
+  if (!bankAccounts || bankAccounts.length === 0) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent>
@@ -77,6 +81,8 @@ export function BankTransferDetailsDialog({ open, onOpenChange, bankDetails, pla
       </Dialog>
     );
   }
+
+  const hasMultipleAccounts = bankAccounts.length > 1;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -112,6 +118,26 @@ export function BankTransferDetailsDialog({ open, onOpenChange, bankDetails, pla
             </div>
           )}
 
+          {/* Bank Account Selection (if multiple accounts) */}
+          {hasMultipleAccounts && (
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Select Bank Account</Label>
+              <Tabs 
+                value={selectedAccountIndex.toString()} 
+                onValueChange={(value) => setSelectedAccountIndex(parseInt(value))}
+                className="w-full"
+              >
+                <TabsList className="grid w-full" style={{ gridTemplateColumns: `repeat(${bankAccounts.length}, 1fr)` }}>
+                  {bankAccounts.map((account, index) => (
+                    <TabsTrigger key={index} value={index.toString()}>
+                      {account.bankName}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </div>
+          )}
+
           {/* Copy All Details Button */}
           <Button 
             onClick={copyAllDetails}
@@ -131,146 +157,161 @@ export function BankTransferDetailsDialog({ open, onOpenChange, bankDetails, pla
             )}
           </Button>
 
-          {/* Bank Name */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Bank Name</label>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
-                {bankDetails.bankName}
-              </div>
-              <Button
-                size="icon"
-                variant="outline"
-                onClick={() => copyToClipboard(bankDetails.bankName, 'bankName')}
-              >
-                {copiedField === 'bankName' ? (
-                  <CheckCircle className="h-4 w-4 text-primary" />
-                ) : (
-                  <Copy className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-          </div>
-
-          {/* Account Name */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Account Name</label>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
-                {bankDetails.accountName}
-              </div>
-              <Button
-                size="icon"
-                variant="outline"
-                onClick={() => copyToClipboard(bankDetails.accountName, 'accountName')}
-              >
-                {copiedField === 'accountName' ? (
-                  <CheckCircle className="h-4 w-4 text-primary" />
-                ) : (
-                  <Copy className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-          </div>
-
-          {/* Account Number */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Account Number</label>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
-                {bankDetails.accountNumber}
-              </div>
-              <Button
-                size="icon"
-                variant="outline"
-                onClick={() => copyToClipboard(bankDetails.accountNumber, 'accountNumber')}
-              >
-                {copiedField === 'accountNumber' ? (
-                  <CheckCircle className="h-4 w-4 text-primary" />
-                ) : (
-                  <Copy className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-          </div>
-
-          {/* IBAN (if provided) */}
-          {bankDetails.iban && (
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground">IBAN</label>
-              <div className="flex items-center gap-2">
-                <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
-                  {bankDetails.iban}
+          {selectedAccount && (
+            <>
+              {/* Bank Name */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">Bank Name</label>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
+                    {selectedAccount.bankName}
+                  </div>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => copyToClipboard(selectedAccount.bankName, 'bankName')}
+                  >
+                    {copiedField === 'bankName' ? (
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
                 </div>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  onClick={() => copyToClipboard(bankDetails.iban!, 'iban')}
-                >
-                  {copiedField === 'iban' ? (
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </Button>
               </div>
-            </div>
-          )}
 
-          {/* BIC (if provided) */}
-          {bankDetails.bic && (
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground">BIC/SWIFT Code</label>
-              <div className="flex items-center gap-2">
-                <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
-                  {bankDetails.bic}
+              {/* Account Name */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">Account Name</label>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
+                    {selectedAccount.accountName}
+                  </div>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => copyToClipboard(selectedAccount.accountName, 'accountName')}
+                  >
+                    {copiedField === 'accountName' ? (
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
                 </div>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  onClick={() => copyToClipboard(bankDetails.bic!, 'bic')}
-                >
-                  {copiedField === 'bic' ? (
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </Button>
               </div>
-            </div>
+
+              {/* Account Number */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">Account Number</label>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
+                    {selectedAccount.accountNumber}
+                  </div>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => copyToClipboard(selectedAccount.accountNumber, 'accountNumber')}
+                  >
+                    {copiedField === 'accountNumber' ? (
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              {/* IBAN (if provided) */}
+              {selectedAccount.iban && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground">IBAN</label>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
+                      {selectedAccount.iban}
+                    </div>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => copyToClipboard(selectedAccount.iban!, 'iban')}
+                    >
+                      {copiedField === 'iban' ? (
+                        <CheckCircle className="h-4 w-4 text-primary" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* BIC (if provided) */}
+              {selectedAccount.bic && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground">BIC/SWIFT Code</label>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 p-3 bg-muted rounded-md font-mono text-sm select-all">
+                      {selectedAccount.bic}
+                    </div>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => copyToClipboard(selectedAccount.bic!, 'bic')}
+                    >
+                      {copiedField === 'bic' ? (
+                        <CheckCircle className="h-4 w-4 text-primary" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Additional Note */}
+              {selectedAccount.note && (
+                <Alert>
+                  <AlertDescription className="text-sm">
+                    <strong>Note:</strong> {selectedAccount.note}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </>
           )}
 
-          {/* Additional Note */}
-          {bankDetails.note && (
-            <Alert>
-              <AlertDescription className="text-sm">
-                <strong>Important:</strong> {bankDetails.note}
-              </AlertDescription>
-            </Alert>
-          )}
+          {/* Payment Instructions */}
+          <div className="rounded-lg border bg-muted/50 p-4 space-y-3">
+            <h3 className="font-semibold text-sm">Payment Instructions</h3>
+            <ol className="space-y-2 text-sm text-muted-foreground">
+              <li className="flex gap-2">
+                <span className="font-semibold text-foreground">1.</span>
+                <span>Transfer the exact amount to the account details above</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-foreground">2.</span>
+                <span>Take a screenshot or save your payment receipt</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-foreground">3.</span>
+                <span>Click the button below to confirm your payment via WhatsApp</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-foreground">4.</span>
+                <span>Send your payment proof and we'll activate your data plan</span>
+              </li>
+            </ol>
+          </div>
 
-          {/* Instructions */}
-          <Alert className="border-primary bg-primary/5">
-            <AlertDescription className="text-sm space-y-2">
-              <p className="font-semibold mb-2">How to complete your payment:</p>
-              <ol className="list-decimal list-inside space-y-1 ml-1">
-                <li>Transfer the exact amount shown above</li>
-                <li>Keep your payment receipt or proof</li>
-                <li>Click the button below to confirm via WhatsApp</li>
-              </ol>
-            </AlertDescription>
-          </Alert>
-
-          {/* WhatsApp Confirmation CTA */}
-          {planSummary && (
+          {/* WhatsApp Confirmation Button */}
+          {planSummary && selectedAccount && (
             <Button 
               asChild
               className="w-full gap-2"
               size="lg"
             >
               <a 
-                href={getWhatsAppBankTransferConfirmationUrl(planSummary)} 
-                target="_blank" 
+                href={getWhatsAppBankTransferConfirmationUrl(planSummary, selectedAccount.bankName)}
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <MessageCircle className="h-5 w-5" />
@@ -278,12 +319,17 @@ export function BankTransferDetailsDialog({ open, onOpenChange, bankDetails, pla
               </a>
             </Button>
           )}
-
-          <Button onClick={() => onOpenChange(false)} variant="outline" className="w-full">
-            Close
-          </Button>
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+// Helper component for Label (since it's not imported)
+function Label({ children, className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
+  return (
+    <label className={className} {...props}>
+      {children}
+    </label>
   );
 }

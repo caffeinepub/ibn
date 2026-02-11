@@ -37,14 +37,18 @@ export function getWhatsAppOrderUrl(options: {
 /**
  * Generates a WhatsApp URL for bank transfer payment confirmation
  * @param planSummary Selected plan details including network, plan name, data, and price
+ * @param bankName The selected bank name for the transfer
  * @returns WhatsApp URL with pre-filled confirmation message
  */
-export function getWhatsAppBankTransferConfirmationUrl(planSummary: {
-  network: string;
-  planName: string;
-  data: string;
-  price: string;
-}): string {
-  const message = `Hello! I have completed a bank transfer for the following data plan:\n\nNetwork: ${planSummary.network}\nPlan: ${planSummary.planName}\nData: ${planSummary.data}\nAmount: ${planSummary.price}\n\nI will send my payment proof shortly. Please confirm and activate my data plan.`;
+export function getWhatsAppBankTransferConfirmationUrl(
+  planSummary: {
+    network: string;
+    planName: string;
+    data: string;
+    price: string;
+  },
+  bankName: string
+): string {
+  const message = `Hello! I have completed a bank transfer for the following data plan:\n\nNetwork: ${planSummary.network}\nPlan: ${planSummary.planName}\nData: ${planSummary.data}\nAmount: ${planSummary.price}\nPaid into: ${bankName}\n\nI will send my payment proof shortly. Please confirm and activate my data plan.`;
   return getWhatsAppUrl(message);
 }

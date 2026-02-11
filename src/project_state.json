@@ -1,9 +1,10 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 11,
+  "projectStateVersion": 13,
   "summary": "Build a professional data-selling application named IBN with a polished UI, updated color/theme, WhatsApp contact link, and support for in-app payments (without requiring WhatsApp) plus additional attractive engagement features.",
   "architectural_notes": [
-    "Support an alternative payment method: bank transfer. Provide admin-configurable bank details (account name/number/bank) that can be shown in the purchase flow (e.g., at checkout or after order creation) alongside existing payment options."
+    "Support an alternative payment method: bank transfer. Provide admin-configurable bank details (account name/number/bank) that can be shown in the purchase flow (e.g., at checkout or after order creation) alongside existing payment options.",
+    "Bank transfer configuration should support multiple bank accounts (each with bank name, account name, account number, optional note) rather than a single BankDetails record, since the business provided multiple bank options (OPAY, Moniepoint, Polaris)."
   ],
   "known_issues": [],
   "isFixRequest": false,
@@ -159,6 +160,38 @@
         "REQ-21"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-react-query-hooks-and-types-so-the-app-reads-and-saves-a-list-of-bank-transfer-accounts-instead-of-a-single-bankdetails-object-following-the-existing-patterns-in-frontend-src-hooks-usequeries-ts",
+      "title": "Update the frontend React Query hooks and types so the app reads and saves a list of bank transfer accounts (instead of a single bankDetails object), following the existing patterns in frontend/src/hooks/useQueries.ts.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-bank-transfer-setup-ui-to-manage-multiple-bank-accounts-allow-adding-editing-and-removing-bank-accounts-validate-required-fields-bank-name-account-name-account-number-for-each-entry-and-save-the-full-list-to-the-backend-all-user-facing-text-must-be-in-english",
+      "title": "Update the admin bank transfer setup UI to manage multiple bank accounts: allow adding, editing, and removing bank accounts; validate required fields (bank name, account name, account number) for each entry; and save the full list to the backend. All user-facing text must be in English.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-customer-facing-bank-transfer-details-dialog-to-support-selecting-which-bank-account-to-pay-into-when-multiple-accounts-exist-and-ensure-all-copy-actions-and-displayed-details-use-the-selected-account-all-user-facing-text-must-be-in-english",
+      "title": "Update the customer-facing bank transfer details dialog to support selecting which bank account to pay into when multiple accounts exist, and ensure all copy actions and displayed details use the selected account. All user-facing text must be in English.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-whatsapp-bank-transfer-confirmation-cta-continues-to-work-with-the-multi-account-flow-and-include-the-selected-bank-name-in-the-prefilled-confirmation-message-while-keeping-the-whatsapp-number-unchanged-09033449260",
+      "title": "Ensure the WhatsApp bank-transfer confirmation CTA continues to work with the multi-account flow, and include the selected bank name in the prefilled confirmation message (while keeping the WhatsApp number unchanged: 09033449260).",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -236,6 +269,36 @@
       "id": "AR-14",
       "summary": "Refine/improve how bank transfer details are presented to customers during checkout/purchase flow (UI/UX polish for bank details modal/section)",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Support configuring and displaying multiple bank transfer accounts (e.g., OPAY, Moniepoint, Polaris) so customers can choose which bank details to use",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Update the backend bank transfer storage to support multiple bank accounts (not a single BankDetails record), while keeping admin-only write access and authenticated-user read access.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Implement a conditional state migration so that if existing deployments have a single saved bankDetails record, it is migrated into the new multi-account list on upgrade without data loss.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Preconfigure the app with the user-provided bank accounts so customers can immediately use bank transfer after deployment/upgrade (unless the admin has already configured a different set of accounts). Accounts to include: (1) Bank Name: OPAY, Account Name: USMAN UMAR, Account Number: 9033449260; (2) Bank Name: MONIE POINT, Account Name: USMAN UMAR, Account Number: 9033449260; (3) Bank Name: POLARIS BANK, Account Name: USMAN UMAR, Account Number: 3028545600.",
+      "reqIds": [
+        "REQ-24"
+      ],
       "status": "pending"
     }
   ],

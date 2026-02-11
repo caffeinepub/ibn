@@ -1,76 +1,149 @@
 {
   "kind": "build_request",
-  "title": "Polish bank transfer details presentation in the purchase flow",
+  "title": "Support multiple bank transfer accounts and preconfigure provided bank details",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-19",
-      "text": "Update the customer-facing bank transfer flow so the selected plan context (network, plan name, data amount, and price) is passed into the bank transfer details dialog and displayed clearly at the top of the dialog as a short \"Order Summary\" block.",
-      "target": "frontend",
+      "id": "REQ-22",
+      "text": "Update the backend bank transfer storage to support multiple bank accounts (not a single BankDetails record), while keeping admin-only write access and authenticated-user read access.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "recent-messages:user-1"
         ],
         "quotes": [
-          "If you'd like, I can help refine how the bank details appear during checkout.",
-          "go ahead"
+          "ACCNT NAME:  USMAN UMAR\n BANK NAME:   OPAY\n ACCNT NO:       9033449260 ...\n BANK NAME:   MONIE POINT\n ACCNT NO:       9033449260 ...\n BANK NAME:   POLARIS BANK\n ACCNT NO:       3028545600"
         ]
       },
       "acceptanceCriteria": [
-        "When a user clicks “Pay via Bank Transfer” on a specific plan card, the bank transfer dialog shows an order summary that matches the clicked plan (network, plan title, data, and displayed price).",
-        "The dialog continues to display the configured bank details fields as before.",
-        "No changes are made to any paths listed in frontend.immutablePaths."
+        "Backend exposes a query method that returns a list/array of bank accounts to authenticated users.",
+        "Backend exposes an admin-only method to save/update the full list of bank accounts.",
+        "Existing authorization behavior is preserved: only admins can modify; only authenticated users can view.",
+        "No additional backend actors/services are introduced (single-actor architecture preserved)."
       ]
     },
     {
-      "id": "REQ-20",
-      "text": "Improve the bank transfer details dialog UX to reduce friction: add a single \"Copy all details\" action (copies bank name, account name, account number, and any optional IBAN/BIC) and provide clear step-by-step instructions in English for completing a bank transfer and confirming payment.",
-      "target": "frontend",
+      "id": "REQ-23",
+      "text": "Implement a conditional state migration so that if existing deployments have a single saved bankDetails record, it is migrated into the new multi-account list on upgrade without data loss.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "refine how the bank details appear during checkout"
+          "recent-messages:user-1"
         ]
       },
       "acceptanceCriteria": [
-        "A “Copy all details” button is available when bank details are present and copies a well-formatted multi-line block to the clipboard.",
-        "The dialog includes a concise numbered instruction list (e.g., transfer exact amount, keep proof, contact support for confirmation).",
-        "Existing per-field copy buttons continue to work (or are replaced only if the new experience is clearly better and still provides copy capability for all fields)."
+        "On upgrade, if old single bankDetails exists, it becomes a single entry in the new bank accounts list.",
+        "After upgrade, bank transfer retrieval continues to work and returns the migrated account(s).",
+        "Migration logic is conditional and does not overwrite an already-populated multi-account list."
       ]
     },
     {
-      "id": "REQ-21",
-      "text": "Add a prominent WhatsApp confirmation CTA inside the bank transfer details dialog that opens WhatsApp with a prefilled message containing the selected plan summary and a prompt for the customer to attach/describe their transfer proof (while keeping the existing global WhatsApp number unchanged: 09033449260).",
-      "target": "frontend",
+      "id": "REQ-24",
+      "text": "Preconfigure the app with the user-provided bank accounts so customers can immediately use bank transfer after deployment/upgrade (unless the admin has already configured a different set of accounts). Accounts to include: (1) Bank Name: OPAY, Account Name: USMAN UMAR, Account Number: 9033449260; (2) Bank Name: MONIE POINT, Account Name: USMAN UMAR, Account Number: 9033449260; (3) Bank Name: POLARIS BANK, Account Name: USMAN UMAR, Account Number: 3028545600.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "recent-messages:user-1"
         ],
         "quotes": [
-          "refine how the bank details appear during checkout"
+          "ACCNT NAME:  USMAN UMAR\n BANK NAME:   OPAY\n ACCNT NO:       9033449260",
+          "ACCNT NAME:  USMAN UMAR\n BANK NAME:   MONIE POINT\n ACCNT NO:       9033449260",
+          "ACCNT NAME:  USMAN UMAR\n BANK NAME:   POLARIS BANK\n ACCNT NO:       3028545600"
         ]
       },
       "acceptanceCriteria": [
-        "The bank transfer dialog includes a button/link that opens a WhatsApp chat to 09033449260 with a prefilled message that includes the plan’s network, plan name, data, and price.",
-        "The WhatsApp CTA is only shown when bank details are available and a plan has been selected via the “Pay via Bank Transfer” action.",
-        "The existing “Order via WhatsApp” flow on plan cards remains unchanged and continues to work."
+        "If no bank accounts are configured yet, the backend returns exactly the three specified accounts.",
+        "If the admin has already saved bank accounts, the backend does not overwrite them with defaults."
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "text": "Update the frontend React Query hooks and types so the app reads and saves a list of bank transfer accounts (instead of a single bankDetails object), following the existing patterns in frontend/src/hooks/useQueries.ts.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages:user-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The bank transfer query hook returns an array/list of bank accounts (or null/empty state if unavailable).",
+        "The bank transfer save mutation accepts an array/list of bank accounts and invalidates the appropriate query keys on success.",
+        "No changes are made to immutable frontend paths listed in SYSTEM_CONTEXT.frontend.immutablePaths."
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "text": "Update the admin bank transfer setup UI to manage multiple bank accounts: allow adding, editing, and removing bank accounts; validate required fields (bank name, account name, account number) for each entry; and save the full list to the backend. All user-facing text must be in English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages:user-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin UI shows the current list of configured bank accounts (preconfigured defaults should appear if admin has not changed them).",
+        "Admin can add a new bank account entry and remove an existing entry before saving.",
+        "Validation prevents saving if any bank account entry is missing bank name, account name, or account number, with English error messages.",
+        "Saving updates backend state and the UI shows a clear English success confirmation."
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "text": "Update the customer-facing bank transfer details dialog to support selecting which bank account to pay into when multiple accounts exist, and ensure all copy actions and displayed details use the selected account. All user-facing text must be in English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages:user-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When multiple accounts are available, the dialog provides an obvious selection control (e.g., tabs or radio group) to choose OPAY vs MONIE POINT vs POLARIS BANK (and any future accounts).",
+        "The displayed Bank Name / Account Name / Account Number fields reflect the currently selected account.",
+        "“Copy All Details” copies the currently selected account’s details (plus IBAN/BIC if present).",
+        "If only one account exists, the dialog behaves like before (no required selection step)."
+      ]
+    },
+    {
+      "id": "REQ-28",
+      "text": "Ensure the WhatsApp bank-transfer confirmation CTA continues to work with the multi-account flow, and include the selected bank name in the prefilled confirmation message (while keeping the WhatsApp number unchanged: 09033449260).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages:user-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The WhatsApp confirmation link still opens WhatsApp to 09033449260.",
+        "The prefilled message includes the plan summary (as currently implemented) and additionally includes the selected bank name (e.g., “Paid into: OPAY”).",
+        "The CTA remains available and functional for every network-specific plan and any selected bank account."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or anything in frontend/src/components/ui (compose instead).",
-    "Keep all user-facing text in English.",
-    "Do not change the WhatsApp phone number (must remain 09033449260)."
+    "Use English for any user-facing text.",
+    "Respect single-actor backend architecture (all Motoko logic in backend/main.mo).",
+    "Do not edit any frontend files under SYSTEM_CONTEXT.frontend.immutablePaths.",
+    "Keep the existing global WhatsApp number unchanged: 09033449260.",
+    "Follow the existing React Query patterns in frontend/src/hooks/useQueries.ts for fetching/saving configuration."
   ],
   "nonGoals": [
-    "Do not add new payment providers or replace Stripe checkout.",
-    "Do not implement backend changes for bank transfer (this is a UI/UX refinement only).",
-    "Do not introduce real-time payment verification for bank transfers."
+    "Do not change Stripe checkout behavior or Stripe configuration UX beyond what is necessary to keep the app compiling.",
+    "Do not add third-party authentication providers (Internet Identity only).",
+    "Do not introduce external databases or additional backend services.",
+    "Do not redesign the landing page sections unrelated to bank transfer configuration/selection."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

@@ -8,15 +8,16 @@ import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
 import OutCall "http-outcalls/outcall";
 import Runtime "mo:core/Runtime";
+import Migration "migration";
+import Array "mo:core/Array";
 
+(with migration = Migration.run)
 actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
 
   // User profiles
-  public type UserProfile = {
-    name : Text;
-  };
+  public type UserProfile = { name : Text };
 
   let userProfiles = Map.empty<Principal, UserProfile>();
 
@@ -43,8 +44,6 @@ actor {
 
   // Stripe integration
   var configuration : ?Stripe.StripeConfiguration = null;
-
-  // Track session ownership for authorization
   let sessionOwners = Map.empty<Text, Principal>();
 
   public query func isStripeConfigured() : async Bool {
@@ -60,18 +59,16 @@ actor {
 
   func getStripeConfiguration() : Stripe.StripeConfiguration {
     switch (configuration) {
-      case (null) { Runtime.trap("Stripe needs be first configured") };
+      case (null) { Runtime.trap("Stripe needs to be first configured") };
       case (?value) { value };
     };
   };
 
-  // Adapter function for Stripe
-  public query ({ caller }) func transform(input : OutCall.TransformationInput) : async OutCall.TransformationOutput {
+  public query func transform(input : OutCall.TransformationInput) : async OutCall.TransformationOutput {
     OutCall.transform(input);
   };
 
   public shared ({ caller }) func getStripeSessionStatus(sessionId : Text) : async Stripe.StripeSessionStatus {
-    // Verify the caller owns this session or is an admin
     switch (sessionOwners.get(sessionId)) {
       case (null) { Runtime.trap("Session not found") };
       case (?owner) {
@@ -142,7 +139,7 @@ actor {
     sessionId;
   };
 
-  // Bank transfer details
+  // Bank transfer details (supporting multiple accounts)
   public type BankDetails = {
     bankName : Text;
     accountName : Text;
@@ -152,19 +149,44 @@ actor {
     bic : ?Text;
   };
 
-  var bankDetails : ?BankDetails = null;
+  var bankAccounts : [var BankDetails] = [
+    {
+      bankName = "OPAY";
+      accountName = "USMAN UMAR";
+      accountNumber = "9033449260";
+      note = null;
+      iban = null;
+      bic = null;
+    },
+    {
+      bankName = "MONIE POINT";
+      accountName = "USMAN UMAR";
+      accountNumber = "9033449260";
+      note = null;
+      iban = null;
+      bic = null;
+    },
+    {
+      bankName = "POLARIS BANK";
+      accountName = "USMAN UMAR";
+      accountNumber = "3028545600";
+      note = null;
+      iban = null;
+      bic = null;
+    },
+  ].toVarArray<BankDetails>();
 
-  public shared ({ caller }) func saveBankDetails(details : BankDetails) : async () {
+  public shared ({ caller }) func saveBankAccounts(accounts : [BankDetails]) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
-      Runtime.trap("Unauthorized: Only admins can save bank details");
+      Runtime.trap("Unauthorized: Only admins can save bank accounts");
     };
-    bankDetails := ?details;
+    bankAccounts := accounts.toVarArray();
   };
 
-  public query ({ caller }) func getBankRequirements() : async ?BankDetails {
+  public query ({ caller }) func getBankAccounts() : async [BankDetails] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only authenticated users can view bank details");
+      Runtime.trap("Unauthorized: Only authenticated users can view bank accounts");
     };
-    bankDetails;
+    bankAccounts.toArray();
   };
 };

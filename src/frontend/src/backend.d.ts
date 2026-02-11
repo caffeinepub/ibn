@@ -75,7 +75,7 @@ export interface backendInterface {
     createCheckoutSession(items: Array<ShoppingItem>, successUrl: string, cancelUrl: string): Promise<string>;
     createSinglePlanCheckoutSession(planId: string, successUrl: string, cancelUrl: string): Promise<string>;
     getAllDataPlans(): Promise<Array<DataPlan>>;
-    getBankRequirements(): Promise<BankDetails | null>;
+    getBankAccounts(): Promise<Array<BankDetails>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getDataPlan(id: string): Promise<DataPlan | null>;
@@ -84,7 +84,7 @@ export interface backendInterface {
     highestToLowestPrice(): Promise<Array<string>>;
     isCallerAdmin(): Promise<boolean>;
     isStripeConfigured(): Promise<boolean>;
-    saveBankDetails(details: BankDetails): Promise<void>;
+    saveBankAccounts(accounts: Array<BankDetails>): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     setStripeConfiguration(config: StripeConfiguration): Promise<void>;
     transform(input: TransformationInput): Promise<TransformationOutput>;

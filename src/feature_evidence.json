@@ -2,8 +2,50 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-customer-facing-bank-transfer-flow-so-the-selected-plan-context-network-plan-name-data-amount-and-price-is-passed-into-the-bank-transfer-details-dialog-and-displayed-clearly-at-the-top-of-the-dialog-as-a-short-order-summary-block",
-      "featureTitle": "Update the customer-facing bank transfer flow so the selected plan context (network, plan name, data amount, and price) is passed into the bank transfer details dialog and displayed clearly at the top of the dialog as a short \"Order Summary\" block.",
+      "featureId": "feature-update-the-frontend-react-query-hooks-and-types-so-the-app-reads-and-saves-a-list-of-bank-transfer-accounts-instead-of-a-single-bankdetails-object-following-the-existing-patterns-in-frontend-src-hooks-usequeries-ts",
+      "featureTitle": "Update the frontend React Query hooks and types so the app reads and saves a list of bank transfer accounts (instead of a single bankDetails object), following the existing patterns in frontend/src/hooks/useQueries.ts.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "stripe@3.0.0",
+        "http-outcalls@3.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-25"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-admin-bank-transfer-setup-ui-to-manage-multiple-bank-accounts-allow-adding-editing-and-removing-bank-accounts-validate-required-fields-bank-name-account-name-account-number-for-each-entry-and-save-the-full-list-to-the-backend-all-user-facing-text-must-be-in-english",
+      "featureTitle": "Update the admin bank transfer setup UI to manage multiple bank accounts: allow adding, editing, and removing bank accounts; validate required fields (bank name, account name, account number) for each entry; and save the full list to the backend. All user-facing text must be in English.",
+      "files": [
+        "frontend/src/components/payments/BankTransferAdminSetup.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "stripe@3.0.0",
+        "http-outcalls@3.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-26"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-customer-facing-bank-transfer-details-dialog-to-support-selecting-which-bank-account-to-pay-into-when-multiple-accounts-exist-and-ensure-all-copy-actions-and-displayed-details-use-the-selected-account-all-user-facing-text-must-be-in-english",
+      "featureTitle": "Update the customer-facing bank transfer details dialog to support selecting which bank account to pay into when multiple accounts exist, and ensure all copy actions and displayed details use the selected account. All user-facing text must be in English.",
       "files": [
         "frontend/src/components/DataPlansSection.tsx",
         "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
@@ -19,36 +61,14 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-19"
+        "REQ-27"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-improve-the-bank-transfer-details-dialog-ux-to-reduce-friction-add-a-single-copy-all-details-action-copies-bank-name-account-name-account-number-and-any-optional-iban-bic-and-provide-clear-step-by-step-instructions-in-english-for-completing-a-bank-transfer-and-confirming-payment",
-      "featureTitle": "Improve the bank transfer details dialog UX to reduce friction: add a single \"Copy all details\" action (copies bank name, account name, account number, and any optional IBAN/BIC) and provide clear step-by-step instructions in English for completing a bank transfer and confirming payment.",
+      "featureId": "feature-ensure-the-whatsapp-bank-transfer-confirmation-cta-continues-to-work-with-the-multi-account-flow-and-include-the-selected-bank-name-in-the-prefilled-confirmation-message-while-keeping-the-whatsapp-number-unchanged-09033449260",
+      "featureTitle": "Ensure the WhatsApp bank-transfer confirmation CTA continues to work with the multi-account flow, and include the selected bank name in the prefilled confirmation message (while keeping the WhatsApp number unchanged: 09033449260).",
       "files": [
-        "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "stripe@3.0.0",
-        "http-outcalls@3.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-20"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-prominent-whatsapp-confirmation-cta-inside-the-bank-transfer-details-dialog-that-opens-whatsapp-with-a-prefilled-message-containing-the-selected-plan-summary-and-a-prompt-for-the-customer-to-attach-describe-their-transfer-proof-while-keeping-the-existing-global-whatsapp-number-unchanged-09033449260",
-      "featureTitle": "Add a prominent WhatsApp confirmation CTA inside the bank transfer details dialog that opens WhatsApp with a prefilled message containing the selected plan summary and a prompt for the customer to attach/describe their transfer proof (while keeping the existing global WhatsApp number unchanged: 09033449260).",
-      "files": [
-        "frontend/src/components/DataPlansSection.tsx",
         "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
         "frontend/src/lib/whatsapp.ts"
       ],
@@ -63,7 +83,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-21"
+        "REQ-28"
       ],
       "confidence": "high"
     }

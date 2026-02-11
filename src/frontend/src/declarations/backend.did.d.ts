@@ -70,7 +70,7 @@ export interface _SERVICE {
     string
   >,
   'getAllDataPlans' : ActorMethod<[], Array<DataPlan>>,
-  'getBankRequirements' : ActorMethod<[], [] | [BankDetails]>,
+  'getBankAccounts' : ActorMethod<[], Array<BankDetails>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getDataPlan' : ActorMethod<[string], [] | [DataPlan]>,
@@ -79,7 +79,7 @@ export interface _SERVICE {
   'highestToLowestPrice' : ActorMethod<[], Array<string>>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'isStripeConfigured' : ActorMethod<[], boolean>,
-  'saveBankDetails' : ActorMethod<[BankDetails], undefined>,
+  'saveBankAccounts' : ActorMethod<[Array<BankDetails>], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'setStripeConfiguration' : ActorMethod<[StripeConfiguration], undefined>,
   'transform' : ActorMethod<[TransformationInput], TransformationOutput>,

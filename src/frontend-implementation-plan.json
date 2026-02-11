@@ -1,68 +1,86 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Polish bank transfer details dialog with order summary, improved copy UX, and WhatsApp confirmation CTA",
+  "title": "Multi-bank-account bank transfer support (frontend hooks, admin setup UI, customer selection, WhatsApp message)",
   "requirements": [
     {
-      "id": "REQ-19",
-      "summary": "Pass the clicked plan context into the bank transfer details dialog and render it as a clear Order Summary block at the top.",
+      "id": "REQ-25",
+      "summary": "Update React Query hooks and types to read/save a list of bank transfer accounts (array) using existing hook patterns.",
       "acceptanceCriteria": [
-        "When a user clicks “Pay via Bank Transfer” on a specific plan card, the bank transfer dialog shows an order summary that matches the clicked plan (network, plan title, data, and displayed price).",
-        "The dialog continues to display the configured bank details fields as before.",
-        "No changes are made to any paths listed in frontend.immutablePaths."
+        "The bank transfer query hook returns an array/list of bank accounts (or null/empty state if unavailable).",
+        "The bank transfer save mutation accepts an array/list of bank accounts and invalidates the appropriate query keys on success.",
+        "No changes are made to immutable frontend paths listed in SYSTEM_CONTEXT.frontend.immutablePaths."
       ],
       "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Replace the single-record bank transfer hooks with list-based hooks following the existing React Query patterns in this file: implement a bank accounts query that calls the backend capability for fetching bank accounts (returns an array) and a save mutation that sends the full array and invalidates the bank accounts query key on success. Ensure naming/keys are consistent and remove/retire the old single-bankDetails query key usage in favor of a list key."
+        }
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "summary": "Update the admin bank transfer setup dialog to add/edit/remove multiple bank accounts with per-entry validation and English success/error messaging.",
+      "acceptanceCriteria": [
+        "Admin UI shows the current list of configured bank accounts (preconfigured defaults should appear if admin has not changed them).",
+        "Admin can add a new bank account entry and remove an existing entry before saving.",
+        "Validation prevents saving if any bank account entry is missing bank name, account name, or account number, with English error messages.",
+        "Saving updates backend state and the UI shows a clear English success confirmation."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/payments/BankTransferAdminSetup.tsx",
+          "operation": "modify",
+          "description": "Refactor the admin UI from a single BankDetails form into a multi-entry editor backed by an in-memory array of accounts. Use shadcn-ui form inputs (Input/Label/Textarea/Alert/Button) to render a repeated set of fields per account, with controls to add a new account and remove an existing one; verify the component's usage instructions before implementing. Wire the form to the updated list-based hooks (fetch existing list, save full list). Add per-entry validation (bank name, account name, account number required) with English error messages that indicate which entry needs attention, and show a clear English success confirmation on save."
+        },
+        {
+          "path": "frontend/src/components/IBNHeader.tsx",
+          "operation": "modify",
+          "description": "Confirm the existing Admin Settings -> Bank Transfer Settings dialog continues to open the admin setup UI and still functions after the admin setup refactor (no new routes). Update only if needed due to renamed hooks/props used by the refactored bank transfer admin setup."
+        }
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "summary": "Update the customer bank transfer details dialog to support selecting among multiple bank accounts and apply selection to displayed fields and copy actions.",
+      "acceptanceCriteria": [
+        "When multiple accounts are available, the dialog provides an obvious selection control (e.g., tabs or radio group) to choose OPAY vs MONIE POINT vs POLARIS BANK (and any future accounts).",
+        "The displayed Bank Name / Account Name / Account Number fields reflect the currently selected account.",
+        "“Copy All Details” copies the currently selected account’s details (plus IBAN/BIC if present).",
+        "If only one account exists, the dialog behaves like before (no required selection step)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
+          "operation": "modify",
+          "description": "Change the dialog to accept a list of bank accounts instead of a single bankDetails object, manage a selected account state (default to the first entry), and render a clear selection control when multiple accounts exist. Use a shadcn-ui selection component such as Tabs or RadioGroup (whichever is available in the project) to switch the selected account; verify the component's usage instructions before implementing. Ensure all displayed bank fields and all copy-to-clipboard actions (including “Copy All Details”) operate on the currently selected account, and preserve prior behavior when only a single account is present."
+        },
         {
           "path": "frontend/src/components/DataPlansSection.tsx",
           "operation": "modify",
-          "description": "Track the currently selected plan summary (network, plan title, data amount, displayed price) when the user clicks “Pay via Bank Transfer”, and pass it into the BankTransferDetailsDialog as a new prop. Ensure this is wired from the specific plan card that was clicked. Use existing shadcn-ui Button composition already present; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-          "operation": "modify",
-          "description": "Extend BankTransferDetailsDialog to accept an optional order summary prop and render a compact \"Order Summary\" block at the top of the dialog content (above bank details). Keep all existing bank details fields and the unavailable-state behavior intact. Use existing shadcn-ui Dialog/Alert/Button building blocks (compose only; do not modify ui components); verify the component's usage instructions before implementing."
+          "description": "Update bank transfer availability logic and dialog wiring to use the list-based bank accounts hook (array). Pass the accounts list into the bank transfer details dialog along with the existing selected plan summary, ensuring the dialog opens and functions for any plan as before."
         }
       ]
     },
     {
-      "id": "REQ-20",
-      "summary": "Reduce friction in the bank transfer dialog by adding a “Copy all details” action and clear numbered instructions in English, while retaining per-field copy capability.",
+      "id": "REQ-28",
+      "summary": "Keep the WhatsApp bank-transfer confirmation CTA functional and include the selected bank name in the prefilled message while preserving the WhatsApp number.",
       "acceptanceCriteria": [
-        "A “Copy all details” button is available when bank details are present and copies a well-formatted multi-line block to the clipboard.",
-        "The dialog includes a concise numbered instruction list (e.g., transfer exact amount, keep proof, contact support for confirmation).",
-        "Existing per-field copy buttons continue to work (or are replaced only if the new experience is clearly better and still provides copy capability for all fields)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-          "operation": "modify",
-          "description": "Add a single prominent \"Copy all details\" action when bankDetails is present. Implement formatting as a multi-line block that includes bank name, account name, account number, and conditionally IBAN/BIC when available. Keep existing per-field copy buttons working. Add a concise numbered instruction list in English for completing the transfer and confirming payment. Use existing shadcn-ui Button/Alert components via composition; verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-21",
-      "summary": "Add a WhatsApp confirmation CTA inside the bank transfer dialog that opens WhatsApp to the existing number with a prefilled message containing the selected plan summary and a proof prompt.",
-      "acceptanceCriteria": [
-        "The bank transfer dialog includes a button/link that opens a WhatsApp chat to 09033449260 with a prefilled message that includes the plan’s network, plan name, data, and price.",
-        "The WhatsApp CTA is only shown when bank details are available and a plan has been selected via the “Pay via Bank Transfer” action.",
-        "The existing “Order via WhatsApp” flow on plan cards remains unchanged and continues to work."
+        "The WhatsApp confirmation link still opens WhatsApp to 09033449260.",
+        "The prefilled message includes the plan summary (as currently implemented) and additionally includes the selected bank name (e.g., “Paid into: OPAY”).",
+        "The CTA remains available and functional for every network-specific plan and any selected bank account."
       ],
       "file_operations": [
         {
           "path": "frontend/src/lib/whatsapp.ts",
           "operation": "modify",
-          "description": "Add a dedicated helper to build a WhatsApp URL for bank-transfer payment confirmation that reuses the existing WHATSAPP_NUMBER and URL formatting logic, and supports a prefilled message containing the selected plan summary plus a prompt to attach/describe transfer proof. Keep getWhatsAppOrderUrl behavior unchanged."
+          "description": "Extend the bank transfer confirmation URL helper to accept the selected bank name and append it to the prefilled message (e.g., add a line like “Paid into: <Bank Name>”). Keep the global WhatsApp number constant (09033449260) and reuse the existing WhatsApp URL generation logic."
         },
         {
           "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
           "operation": "modify",
-          "description": "Add a prominent WhatsApp confirmation CTA inside the dialog that uses the new WhatsApp helper to open chat to 09033449260 with a prefilled confirmation message. Only render this CTA when both bankDetails is present and an order summary was provided (i.e., user came from “Pay via Bank Transfer” on a plan card). Use existing shadcn-ui Button (asChild link pattern where appropriate) via composition; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/DataPlansSection.tsx",
-          "operation": "modify",
-          "description": "Ensure the dialog receives the selected plan summary only when opened from the “Pay via Bank Transfer” action, so the WhatsApp confirmation CTA gating condition is met without affecting the existing “Order via WhatsApp” link on plan cards. Use existing shadcn-ui Button composition already present; verify the component's usage instructions before implementing."
+          "description": "Update the WhatsApp confirmation CTA to call the updated WhatsApp helper with the currently selected bank account’s bank name, ensuring the CTA remains available for any plan summary and uses the selected account in the message."
         }
       ]
     }

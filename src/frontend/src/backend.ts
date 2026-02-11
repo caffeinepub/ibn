@@ -158,7 +158,7 @@ export interface backendInterface {
     createCheckoutSession(items: Array<ShoppingItem>, successUrl: string, cancelUrl: string): Promise<string>;
     createSinglePlanCheckoutSession(planId: string, successUrl: string, cancelUrl: string): Promise<string>;
     getAllDataPlans(): Promise<Array<DataPlan>>;
-    getBankRequirements(): Promise<BankDetails | null>;
+    getBankAccounts(): Promise<Array<BankDetails>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getDataPlan(id: string): Promise<DataPlan | null>;
@@ -167,7 +167,7 @@ export interface backendInterface {
     highestToLowestPrice(): Promise<Array<string>>;
     isCallerAdmin(): Promise<boolean>;
     isStripeConfigured(): Promise<boolean>;
-    saveBankDetails(details: BankDetails): Promise<void>;
+    saveBankAccounts(accounts: Array<BankDetails>): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     setStripeConfiguration(config: StripeConfiguration): Promise<void>;
     transform(input: TransformationInput): Promise<TransformationOutput>;
@@ -259,18 +259,18 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async getBankRequirements(): Promise<BankDetails | null> {
+    async getBankAccounts(): Promise<Array<BankDetails>> {
         if (this.processError) {
             try {
-                const result = await this.actor.getBankRequirements();
-                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+                const result = await this.actor.getBankAccounts();
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getBankRequirements();
-            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+            const result = await this.actor.getBankAccounts();
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async getCallerUserProfile(): Promise<UserProfile | null> {
@@ -385,17 +385,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async saveBankDetails(arg0: BankDetails): Promise<void> {
+    async saveBankAccounts(arg0: Array<BankDetails>): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.saveBankDetails(to_candid_BankDetails_n14(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor.saveBankAccounts(to_candid_vec_n14(this._uploadFile, this._downloadFile, arg0));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.saveBankDetails(to_candid_BankDetails_n14(this._uploadFile, this._downloadFile, arg0));
+            const result = await this.actor.saveBankAccounts(to_candid_vec_n14(this._uploadFile, this._downloadFile, arg0));
             return result;
         }
     }
@@ -453,9 +453,6 @@ function from_candid_UserRole_n8(_uploadFile: (file: ExternalBlob) => Promise<Ui
 }
 function from_candid_opt_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_DataPlan]): DataPlan | null {
     return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_BankDetails]): BankDetails | null {
-    return value.length === 0 ? null : from_candid_BankDetails_n4(_uploadFile, _downloadFile, value[0]);
 }
 function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
     return value.length === 0 ? null : value[0];
@@ -537,13 +534,16 @@ function from_candid_variant_n9(_uploadFile: (file: ExternalBlob) => Promise<Uin
 }): UserRole {
     return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
 }
-function to_candid_BankDetails_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: BankDetails): _BankDetails {
-    return to_candid_record_n15(_uploadFile, _downloadFile, value);
+function from_candid_vec_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_BankDetails>): Array<BankDetails> {
+    return value.map((x)=>from_candid_BankDetails_n4(_uploadFile, _downloadFile, x));
+}
+function to_candid_BankDetails_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: BankDetails): _BankDetails {
+    return to_candid_record_n16(_uploadFile, _downloadFile, value);
 }
 function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
     return to_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function to_candid_record_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function to_candid_record_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     bic?: string;
     iban?: string;
     note?: string;
@@ -581,6 +581,9 @@ function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8
     } : value == UserRole.guest ? {
         guest: null
     } : value;
+}
+function to_candid_vec_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<BankDetails>): Array<_BankDetails> {
+    return value.map((x)=>to_candid_BankDetails_n15(_uploadFile, _downloadFile, x));
 }
 export interface CreateActorOptions {
     agent?: Agent;

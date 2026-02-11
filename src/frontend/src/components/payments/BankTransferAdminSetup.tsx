@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, CheckCircle } from 'lucide-react';
-import { useSaveBankDetails, useGetBankDetails } from '@/hooks/useQueries';
+import { Loader2, CheckCircle, Plus, Trash2 } from 'lucide-react';
+import { useSaveBankAccounts, useGetBankAccounts } from '@/hooks/useQueries';
 import { DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import type { BankDetails } from '@/backend';
 
@@ -14,60 +14,95 @@ interface BankTransferAdminSetupProps {
 }
 
 export function BankTransferAdminSetup({ onComplete }: BankTransferAdminSetupProps) {
-  const { data: existingDetails, isLoading: loadingDetails } = useGetBankDetails();
-  const saveBankDetails = useSaveBankDetails();
+  const { data: existingAccounts, isLoading: loadingAccounts } = useGetBankAccounts();
+  const saveBankAccounts = useSaveBankAccounts();
 
-  const [bankName, setBankName] = useState(existingDetails?.bankName || '');
-  const [accountName, setAccountName] = useState(existingDetails?.accountName || '');
-  const [accountNumber, setAccountNumber] = useState(existingDetails?.accountNumber || '');
-  const [note, setNote] = useState(existingDetails?.note || '');
-  const [iban, setIban] = useState(existingDetails?.iban || '');
-  const [bic, setBic] = useState(existingDetails?.bic || '');
+  const [accounts, setAccounts] = useState<BankDetails[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  // Update form when existing details load
-  if (existingDetails && !bankName && !loadingDetails) {
-    setBankName(existingDetails.bankName);
-    setAccountName(existingDetails.accountName);
-    setAccountNumber(existingDetails.accountNumber);
-    setNote(existingDetails.note || '');
-    setIban(existingDetails.iban || '');
-    setBic(existingDetails.bic || '');
-  }
+  // Initialize accounts when data loads
+  useEffect(() => {
+    if (existingAccounts && existingAccounts.length > 0) {
+      setAccounts(existingAccounts);
+    } else if (existingAccounts && existingAccounts.length === 0) {
+      // Start with one empty account if none exist
+      setAccounts([{
+        bankName: '',
+        accountName: '',
+        accountNumber: '',
+        note: undefined,
+        iban: undefined,
+        bic: undefined,
+      }]);
+    }
+  }, [existingAccounts]);
+
+  const addAccount = () => {
+    setAccounts([...accounts, {
+      bankName: '',
+      accountName: '',
+      accountNumber: '',
+      note: undefined,
+      iban: undefined,
+      bic: undefined,
+    }]);
+  };
+
+  const removeAccount = (index: number) => {
+    if (accounts.length === 1) {
+      setError('You must have at least one bank account');
+      return;
+    }
+    setAccounts(accounts.filter((_, i) => i !== index));
+  };
+
+  const updateAccount = (index: number, field: keyof BankDetails, value: string) => {
+    const updated = [...accounts];
+    updated[index] = {
+      ...updated[index],
+      [field]: value.trim() || undefined,
+    };
+    setAccounts(updated);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccess(false);
 
-    // Validate required fields
-    if (!bankName.trim()) {
-      setError('Please enter the bank name');
-      return;
-    }
+    // Validate all accounts
+    for (let i = 0; i < accounts.length; i++) {
+      const account = accounts[i];
+      
+      if (!account.bankName?.trim()) {
+        setError(`Account ${i + 1}: Please enter the bank name`);
+        return;
+      }
 
-    if (!accountName.trim()) {
-      setError('Please enter the account name');
-      return;
-    }
+      if (!account.accountName?.trim()) {
+        setError(`Account ${i + 1}: Please enter the account name`);
+        return;
+      }
 
-    if (!accountNumber.trim()) {
-      setError('Please enter the account number');
-      return;
+      if (!account.accountNumber?.trim()) {
+        setError(`Account ${i + 1}: Please enter the account number`);
+        return;
+      }
     }
 
     try {
-      const details: BankDetails = {
-        bankName: bankName.trim(),
-        accountName: accountName.trim(),
-        accountNumber: accountNumber.trim(),
-        note: note.trim() || undefined,
-        iban: iban.trim() || undefined,
-        bic: bic.trim() || undefined,
-      };
+      // Clean up accounts before saving
+      const cleanedAccounts = accounts.map(account => ({
+        bankName: account.bankName.trim(),
+        accountName: account.accountName.trim(),
+        accountNumber: account.accountNumber.trim(),
+        note: account.note?.trim() || undefined,
+        iban: account.iban?.trim() || undefined,
+        bic: account.bic?.trim() || undefined,
+      }));
 
-      await saveBankDetails.mutateAsync(details);
+      await saveBankAccounts.mutateAsync(cleanedAccounts);
       
       setSuccess(true);
       
@@ -75,95 +110,130 @@ export function BankTransferAdminSetup({ onComplete }: BankTransferAdminSetupPro
         onComplete?.();
       }, 2000);
     } catch (err: any) {
-      console.error('Bank details save error:', err);
-      setError(err.message || 'Failed to save bank details. Please try again.');
+      console.error('Bank accounts save error:', err);
+      setError(err.message || 'Failed to save bank accounts. Please try again.');
     }
   };
+
+  if (loadingAccounts) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
       <DialogHeader>
         <DialogTitle>Configure Bank Transfer Details</DialogTitle>
         <DialogDescription>
-          Set up your bank account details for customers who want to pay via bank transfer.
+          Set up your bank account details for customers who want to pay via bank transfer. You can add multiple accounts.
         </DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="bankName">Bank Name *</Label>
-          <Input
-            id="bankName"
-            type="text"
-            placeholder="e.g., First Bank of Nigeria"
-            value={bankName}
-            onChange={(e) => setBankName(e.target.value)}
-            disabled={saveBankDetails.isPending || loadingDetails}
-          />
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {accounts.map((account, index) => (
+          <div key={index} className="space-y-4 p-4 border rounded-lg relative">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-semibold text-sm">Account {index + 1}</h3>
+              {accounts.length > 1 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeAccount(index)}
+                  className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="accountName">Account Name *</Label>
-          <Input
-            id="accountName"
-            type="text"
-            placeholder="e.g., IBN Data Services"
-            value={accountName}
-            onChange={(e) => setAccountName(e.target.value)}
-            disabled={saveBankDetails.isPending || loadingDetails}
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor={`bankName-${index}`}>Bank Name *</Label>
+              <Input
+                id={`bankName-${index}`}
+                type="text"
+                placeholder="e.g., OPAY"
+                value={account.bankName || ''}
+                onChange={(e) => updateAccount(index, 'bankName', e.target.value)}
+                disabled={saveBankAccounts.isPending}
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="accountNumber">Account Number *</Label>
-          <Input
-            id="accountNumber"
-            type="text"
-            placeholder="e.g., 1234567890"
-            value={accountNumber}
-            onChange={(e) => setAccountNumber(e.target.value)}
-            disabled={saveBankDetails.isPending || loadingDetails}
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor={`accountName-${index}`}>Account Name *</Label>
+              <Input
+                id={`accountName-${index}`}
+                type="text"
+                placeholder="e.g., USMAN UMAR"
+                value={account.accountName || ''}
+                onChange={(e) => updateAccount(index, 'accountName', e.target.value)}
+                disabled={saveBankAccounts.isPending}
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="iban">IBAN (Optional)</Label>
-          <Input
-            id="iban"
-            type="text"
-            placeholder="e.g., GB29 NWBK 6016 1331 9268 19"
-            value={iban}
-            onChange={(e) => setIban(e.target.value)}
-            disabled={saveBankDetails.isPending || loadingDetails}
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor={`accountNumber-${index}`}>Account Number *</Label>
+              <Input
+                id={`accountNumber-${index}`}
+                type="text"
+                placeholder="e.g., 9033449260"
+                value={account.accountNumber || ''}
+                onChange={(e) => updateAccount(index, 'accountNumber', e.target.value)}
+                disabled={saveBankAccounts.isPending}
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="bic">BIC/SWIFT Code (Optional)</Label>
-          <Input
-            id="bic"
-            type="text"
-            placeholder="e.g., NWBKGB2L"
-            value={bic}
-            onChange={(e) => setBic(e.target.value)}
-            disabled={saveBankDetails.isPending || loadingDetails}
-          />
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor={`iban-${index}`}>IBAN (Optional)</Label>
+              <Input
+                id={`iban-${index}`}
+                type="text"
+                placeholder="e.g., GB29 NWBK 6016 1331 9268 19"
+                value={account.iban || ''}
+                onChange={(e) => updateAccount(index, 'iban', e.target.value)}
+                disabled={saveBankAccounts.isPending}
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="note">Additional Instructions (Optional)</Label>
-          <Textarea
-            id="note"
-            placeholder="e.g., Please include your phone number in the transfer description"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            disabled={saveBankDetails.isPending || loadingDetails}
-            rows={3}
-          />
-          <p className="text-xs text-muted-foreground">
-            Any special instructions for customers making bank transfers
-          </p>
-        </div>
+            <div className="space-y-2">
+              <Label htmlFor={`bic-${index}`}>BIC/SWIFT Code (Optional)</Label>
+              <Input
+                id={`bic-${index}`}
+                type="text"
+                placeholder="e.g., NWBKGB2L"
+                value={account.bic || ''}
+                onChange={(e) => updateAccount(index, 'bic', e.target.value)}
+                disabled={saveBankAccounts.isPending}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor={`note-${index}`}>Additional Instructions (Optional)</Label>
+              <Textarea
+                id={`note-${index}`}
+                placeholder="e.g., Please include your phone number in the transfer description"
+                value={account.note || ''}
+                onChange={(e) => updateAccount(index, 'note', e.target.value)}
+                disabled={saveBankAccounts.isPending}
+                rows={2}
+              />
+            </div>
+          </div>
+        ))}
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={addAccount}
+          disabled={saveBankAccounts.isPending}
+          className="w-full gap-2"
+        >
+          <Plus className="h-4 w-4" />
+          Add Another Account
+        </Button>
 
         {error && (
           <Alert variant="destructive">
@@ -182,10 +252,10 @@ export function BankTransferAdminSetup({ onComplete }: BankTransferAdminSetupPro
 
         <Button
           type="submit"
-          disabled={saveBankDetails.isPending || success || loadingDetails}
+          disabled={saveBankAccounts.isPending || success}
           className="w-full"
         >
-          {saveBankDetails.isPending ? (
+          {saveBankAccounts.isPending ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
               Saving...
@@ -196,7 +266,7 @@ export function BankTransferAdminSetup({ onComplete }: BankTransferAdminSetupPro
               Saved
             </>
           ) : (
-            'Save Bank Details'
+            'Save Bank Accounts'
           )}
         </Button>
       </form>

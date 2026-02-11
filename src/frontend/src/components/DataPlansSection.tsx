@@ -6,7 +6,7 @@ import { Check, Building2 } from 'lucide-react';
 import { getWhatsAppOrderUrl } from '@/lib/whatsapp';
 import { PayNowButton } from './payments/PayNowButton';
 import { BankTransferDetailsDialog } from './payments/BankTransferDetailsDialog';
-import { useGetBankDetails } from '@/hooks/useQueries';
+import { useGetBankAccounts } from '@/hooks/useQueries';
 import { MOBILE_NETWORKS, getPlansByNetwork, type MobileNetwork } from '@/data/mobileNetworkPlans';
 
 export interface PlanSummary {
@@ -20,10 +20,10 @@ export function DataPlansSection() {
   const [selectedNetwork, setSelectedNetwork] = useState<MobileNetwork>('MTN');
   const [bankTransferOpen, setBankTransferOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<PlanSummary | null>(null);
-  const { data: bankDetails, isLoading: bankDetailsLoading } = useGetBankDetails();
+  const { data: bankAccounts, isLoading: bankAccountsLoading } = useGetBankAccounts();
   const plans = getPlansByNetwork(selectedNetwork);
 
-  const isBankTransferAvailable = !bankDetailsLoading && bankDetails !== null && bankDetails !== undefined;
+  const isBankTransferAvailable = !bankAccountsLoading && bankAccounts && bankAccounts.length > 0;
 
   const handleBankTransferClick = (plan: PlanSummary) => {
     setSelectedPlan(plan);
@@ -126,7 +126,7 @@ export function DataPlansSection() {
                   </Button>
                 )}
 
-                {!isBankTransferAvailable && bankDetailsLoading && (
+                {!isBankTransferAvailable && bankAccountsLoading && (
                   <Button 
                     disabled
                     className="w-full gap-2"
@@ -167,7 +167,7 @@ export function DataPlansSection() {
       <BankTransferDetailsDialog 
         open={bankTransferOpen}
         onOpenChange={handleDialogClose}
-        bankDetails={bankDetails ?? null}
+        bankAccounts={bankAccounts ?? null}
         planSummary={selectedPlan}
       />
     </section>

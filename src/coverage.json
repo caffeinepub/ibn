@@ -1,63 +1,102 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T01:29:38.521Z",
+  "generatedAt": "2026-02-11T01:48:51.417Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 7,
+    "implemented": 4,
     "items": [
       {
-        "id": "REQ-19",
-        "summary": "Update the customer-facing bank transfer flow so the selected plan context (network, plan name, data amount, and price) is passed into the bank transfer details dialog and displayed clearly at the top of the dialog as a short \"Order Summary\" block.",
+        "id": "REQ-22",
+        "summary": "Update the backend bank transfer storage to support multiple bank accounts (not a single BankDetails record), while keeping admin-only write access and authenticated-user read access.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-23",
+        "summary": "Implement a conditional state migration so that if existing deployments have a single saved bankDetails record, it is migrated into the new multi-account list on upgrade without data loss.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-24",
+        "summary": "Preconfigure the app with the user-provided bank accounts so customers can immediately use bank transfer after deployment/upgrade (unless the admin has already configured a different set of accounts). Accounts to include: (1) Bank Name: OPAY, Account Name: USMAN UMAR, Account Number: 9033449260; (2) Bank Name: MONIE POINT, Account Name: USMAN UMAR, Account Number: 9033449260; (3) Bank Name: POLARIS BANK, Account Name: USMAN UMAR, Account Number: 3028545600.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-25",
+        "summary": "Update the frontend React Query hooks and types so the app reads and saves a list of bank transfer accounts (instead of a single bankDetails object), following the existing patterns in frontend/src/hooks/useQueries.ts.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/DataPlansSection.tsx",
-          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+          "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/DataPlansSection.tsx",
-          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+          "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
-        "id": "REQ-20",
-        "summary": "Improve the bank transfer details dialog UX to reduce friction: add a single \"Copy all details\" action (copies bank name, account name, account number, and any optional IBAN/BIC) and provide clear step-by-step instructions in English for completing a bank transfer and confirming payment.",
+        "id": "REQ-26",
+        "summary": "Update the admin bank transfer setup UI to manage multiple bank accounts: allow adding, editing, and removing bank accounts; validate required fields (bank name, account name, account number) for each entry; and save the full list to the backend. All user-facing text must be in English.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+          "frontend/src/components/payments/BankTransferAdminSetup.tsx",
+          "frontend/src/components/IBNHeader.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+          "frontend/src/components/payments/BankTransferAdminSetup.tsx"
         ]
       },
       {
-        "id": "REQ-21",
-        "summary": "Add a prominent WhatsApp confirmation CTA inside the bank transfer details dialog that opens WhatsApp with a prefilled message containing the selected plan summary and a prompt for the customer to attach/describe their transfer proof (while keeping the existing global WhatsApp number unchanged: 09033449260).",
+        "id": "REQ-27",
+        "summary": "Update the customer-facing bank transfer details dialog to support selecting which bank account to pay into when multiple accounts exist, and ensure all copy actions and displayed details use the selected account. All user-facing text must be in English.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/lib/whatsapp.ts",
           "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
           "frontend/src/components/DataPlansSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/lib/whatsapp.ts",
           "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
           "frontend/src/components/DataPlansSection.tsx"
+        ]
+      },
+      {
+        "id": "REQ-28",
+        "summary": "Ensure the WhatsApp bank-transfer confirmation CTA continues to work with the multi-account flow, and include the selected bank name in the prefilled confirmation message (while keeping the WhatsApp number unchanged: 09033449260).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/lib/whatsapp.ts",
+          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/lib/whatsapp.ts",
+          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
     "frontend/src/components/DataPlansSection.tsx",
+    "frontend/src/components/payments/BankTransferAdminSetup.tsx",
     "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
     "frontend/src/lib/whatsapp.ts",
     "project_state.json",
     "scratch/component-selection.json",

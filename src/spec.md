@@ -1,12 +1,15 @@
 # Specification
 
 ## Summary
-**Goal:** Improve the bank transfer checkout dialog to clearly reflect the selected plan, reduce copy/paste friction, and streamline payment confirmation via WhatsApp.
+**Goal:** Support multiple bank transfer accounts across backend storage and frontend UX, including default preconfigured bank details and a safe migration from the existing single-record format.
 
 **Planned changes:**
-- Pass the clicked plan context (network, plan name/title, data amount, displayed price) into the bank transfer details dialog and show it at the top as an “Order Summary” block.
-- Add a “Copy all details” action that copies a well-formatted multi-line block of bank details (bank name, account name, account number, optional IBAN/BIC) to the clipboard, while keeping (or improving without loss of capability) existing per-field copy actions.
-- Add concise, numbered English instructions in the dialog explaining how to complete a bank transfer and how to confirm payment.
-- Add a prominent WhatsApp confirmation CTA inside the dialog that opens WhatsApp to **09033449260** with a prefilled message including the selected plan summary and a prompt to attach/describe transfer proof, shown only when bank details exist and a plan was selected via “Pay via Bank Transfer”.
+- Update backend bank transfer configuration storage to use a list of bank accounts, with authenticated-user read access and admin-only write access preserved.
+- Add a conditional migration that converts an existing single saved bankDetails record into a single-entry list without overwriting an already-populated list.
+- Preconfigure the backend with three default bank accounts (OPAY / MONIE POINT / POLARIS BANK) when no admin-configured accounts exist.
+- Update frontend React Query hooks/types to fetch and save a list of bank accounts (following existing patterns in `frontend/src/hooks/useQueries.ts`).
+- Update the admin bank transfer setup UI to add/edit/remove multiple bank accounts, validate required fields in English, and save the full list with an English success confirmation.
+- Update the customer bank transfer details dialog to allow selecting an account when multiple exist and ensure displayed/copied details reflect the selected account (single-account behavior remains unchanged).
+- Ensure the WhatsApp bank-transfer confirmation CTA still targets `09033449260` and includes the selected bank name in the prefilled message.
 
-**User-visible outcome:** When paying via bank transfer, customers see a clear order summary, can copy all bank details at once, follow simple transfer instructions, and can quickly message support on WhatsApp with a prefilled confirmation message for their selected plan.
+**User-visible outcome:** Admins can manage multiple bank transfer accounts, customers can choose which account to pay into and copy the correct details, and the WhatsApp confirmation message includes the selected bank name without changing the WhatsApp number.

@@ -66,31 +66,31 @@ export function useGetStripeSessionStatus(sessionId: string | null) {
   });
 }
 
-// Bank transfer queries
-export function useGetBankDetails() {
+// Bank transfer queries - updated to support multiple accounts
+export function useGetBankAccounts() {
   const { actor, isFetching } = useActor();
 
-  return useQuery<BankDetails | null>({
-    queryKey: ['bankDetails'],
+  return useQuery<BankDetails[]>({
+    queryKey: ['bankAccounts'],
     queryFn: async () => {
       if (!actor) throw new Error('Actor not available');
-      return actor.getBankRequirements();
+      return actor.getBankAccounts();
     },
     enabled: !!actor && !isFetching,
   });
 }
 
-export function useSaveBankDetails() {
+export function useSaveBankAccounts() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (details: BankDetails) => {
+    mutationFn: async (accounts: BankDetails[]) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.saveBankDetails(details);
+      return actor.saveBankAccounts(accounts);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bankDetails'] });
+      queryClient.invalidateQueries({ queryKey: ['bankAccounts'] });
     },
   });
 }

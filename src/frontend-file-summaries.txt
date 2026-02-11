@@ -2,11 +2,11 @@
   "frontend/src/App.tsx": "Main application component with QueryClientProvider, simple path-based routing for payment success/failure pages, and conditional header/footer rendering based on current route.",
   "frontend/src/components/IBNHeader.tsx": "Sticky header with logo, admin dropdown menu for Stripe and bank transfer settings (visible only to admins), and WhatsApp contact button.",
   "frontend/src/components/LandingPage.tsx": "Complete landing page with hero, how-it-works, about, data plans, testimonials, FAQ, and CTA sections with proper section IDs for anchor navigation.",
-  "frontend/src/components/DataPlansSection.tsx": "Data plans section with network tabs and plan cards that now tracks selected plan context when \"Pay via Bank Transfer\" is clicked and passes it to the bank transfer dialog for order summary display.",
+  "frontend/src/components/DataPlansSection.tsx": "Data plans section with network tabs and plan cards that passes the array of bank accounts to the bank transfer dialog for multi-account selection and order summary display.",
   "frontend/src/components/WhatsAppCTA.tsx": "Reusable WhatsApp call-to-action button component with configurable size, number display, and pre-filled message support.",
   "frontend/src/components/IBNFooter.tsx": "Footer with brand info, quick links using smooth scroll to sections, contact details, social media icons, and Caffeine.ai attribution with UTM tracking.",
-  "frontend/src/lib/whatsapp.ts": "WhatsApp utility module with functions to generate chat URLs for general orders and bank transfer payment confirmations with pre-filled messages containing plan details.",
-  "frontend/src/hooks/useQueries.ts": "React Query hooks for Stripe configuration, checkout sessions, bank transfer details (fetch and save), and admin role checking with proper caching and invalidation.",
+  "frontend/src/lib/whatsapp.ts": "WhatsApp utility module with functions to generate chat URLs for general orders and bank transfer payment confirmations with pre-filled messages containing plan details and selected bank name.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for backend operations including Stripe configuration, checkout sessions, multi-account bank transfers (fetch and save array of accounts), and admin role checking with proper caching and invalidation.",
   "frontend/src/index.css": "Global styles with OKLCH color system featuring a vibrant orange-to-coral palette for both light and dark modes, replacing the previous blue theme.",
   "frontend/tailwind.config.js": "Tailwind configuration with Inter font, custom shadows, and design tokens aligned with the new orange/coral color palette.",
   "frontend/src/components/LandingPageSections/HowItWorksSection.tsx": "Three-step process section explaining how to choose a plan, make payment, and get connected with icon cards and numbered badges.",
@@ -17,6 +17,6 @@
   "frontend/src/components/payments/PaymentFailure.tsx": "Payment failure/cancellation page with clear messaging, retry option, and WhatsApp support contact alternative.",
   "frontend/src/components/payments/StripeAdminSetup.tsx": "Admin-only Stripe configuration dialog for setting secret key and allowed countries, with validation and success feedback.",
   "frontend/src/data/mobileNetworkPlans.ts": "Centralized data source defining all mobile networks (MTN, GLO, AIRTEL, 9MOBILE) and their respective data plans with pricing, validity, and features in a single editable structure.",
-  "frontend/src/components/payments/BankTransferAdminSetup.tsx": "Admin-only dialog component for configuring bank transfer details with form validation, prefilling existing data, and success/error feedback.",
-  "frontend/src/components/payments/BankTransferDetailsDialog.tsx": "Customer-facing bank transfer dialog that displays an order summary (when a plan is selected), bank details with individual and bulk copy functionality, numbered payment instructions, and a WhatsApp confirmation CTA."
+  "frontend/src/components/payments/BankTransferAdminSetup.tsx": "Admin-only dialog component for managing multiple bank transfer accounts with add/remove functionality, per-entry validation, and English success/error feedback.",
+  "frontend/src/components/payments/BankTransferDetailsDialog.tsx": "Customer-facing bank transfer dialog with multi-account selection via tabs, order summary display, individual and bulk copy functionality, numbered payment instructions, and WhatsApp confirmation CTA that includes the selected bank name."
 }
