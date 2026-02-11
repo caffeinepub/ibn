@@ -1,153 +1,96 @@
 {
   "kind": "build_request",
-  "title": "IBN data-selling app with professional UI and WhatsApp contact link",
+  "title": "Add configurable bank transfer payment option with admin-managed bank details",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Create a branded application shell named \"IBN\" that clearly presents the app as a professional data-selling application, including the app name in the header and page title/metadata.",
-      "target": "frontend",
+      "id": "REQ-15",
+      "text": "Add backend support for bank transfer details by introducing a BankDetails record (e.g., bank name, account name, account number, optional note) that can be saved by an admin and retrieved by the frontend for display to customers.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "i want you to build a professional DATA application for me that am going to start selling DATA and the name should be (IBN)"
+          "allow me to put my bank details for payment if customer purchase"
         ]
       },
       "acceptanceCriteria": [
-        "The app header/nav prominently displays the text \"IBN\".",
-        "Browser tab/page title includes \"IBN\".",
-        "Primary landing view communicates that IBN sells data (English copy)."
+        "Backend exposes an admin-only method to set/update bank transfer details.",
+        "Backend exposes a public query method to fetch the currently configured bank transfer details (or null/none if not configured).",
+        "Bank transfer details are persisted in canister state (survive canister upgrades).",
+        "Unauthorized callers (non-admin) cannot set/update bank transfer details (must trap with a clear error)."
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "Implement a clean landing page layout suitable for a data-selling business, including sections for: a short hero headline, a brief description, and a visible call-to-action to contact via WhatsApp for more details.",
+      "id": "REQ-16",
+      "text": "Add React Query hooks to read and (admin-only) update the bank transfer details from the backend actor, following the existing patterns used for Stripe configuration in frontend/src/hooks/useQueries.ts.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "build a professional DATA application for me that am going to start selling DATA",
-          "together with a link that will take you into my whasapp for more detalils"
+          "allow me to put my bank details for payment if customer purchase"
         ]
       },
       "acceptanceCriteria": [
-        "Landing page has distinct sections (hero + description + call-to-action).",
-        "All user-facing text is in English.",
-        "The primary call-to-action is clearly visible without scrolling on common laptop screen sizes."
+        "There is a query hook that fetches bank transfer details and caches them via React Query.",
+        "There is a mutation hook that updates bank transfer details and invalidates/refetches the cached query on success.",
+        "Hook error states are surfaced to the UI so the admin can understand failures (e.g., unauthorized, validation)."
       ]
     },
     {
-      "id": "REQ-3",
-      "text": "Add a WhatsApp contact link/button that opens WhatsApp chat for the phone number 09033449260.",
+      "id": "REQ-17",
+      "text": "Provide an admin UI to configure bank transfer details (bank name, account name, account number, optional note) in a dialog accessible from the header when the admin is logged in, without editing any immutable frontend paths.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "together with a link that will take you into my whasapp for more detalils and the number is (09033449260)"
+          "allow me to put my bank details for payment if customer purchase"
         ]
       },
       "acceptanceCriteria": [
-        "Clicking/tapping the WhatsApp button navigates to a WhatsApp chat link.",
-        "The displayed contact number is exactly \"09033449260\".",
-        "The WhatsApp link is available on both desktop and mobile layouts."
+        "When an authenticated admin opens the configuration dialog, they can enter and save bank transfer details.",
+        "The UI validates required fields (bank name, account name, account number) and shows clear English error messages for missing/invalid inputs.",
+        "On successful save, the dialog shows a success confirmation and the saved details are reflected in subsequent reads.",
+        "Non-admin users do not see the bank transfer configuration entry point in the header UI."
       ]
     },
     {
-      "id": "REQ-4",
-      "text": "Apply a coherent, professional visual theme (colors, typography, spacing, components) across the UI suitable for a commercial data-selling brand; use a consistent design system across all screens.",
+      "id": "REQ-18",
+      "text": "Add a customer-facing 'Pay via Bank Transfer' option on each data plan card that opens a modal showing the configured bank transfer details (and a short instruction block) so customers can pay by bank transfer as an alternative to Stripe and WhatsApp ordering.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-1"
         ],
         "quotes": [
-          "i want you to designe it in a very good looking"
+          "allow me to put my bank details for payment if customer purchase"
         ]
       },
       "acceptanceCriteria": [
-        "UI uses a consistent color palette, typography scale, and spacing rhythm across the app.",
-        "Buttons/links/sections share consistent styling and interaction states (hover/focus).",
-        "Design avoids default/unstyled template appearance and feels intentionally branded."
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Provide a simple \"Data Plans\" (or equivalent) section on the landing page that lists example data bundle offerings (static, editable in code) with name, price, and brief description.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "start selling DATA"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A section exists that lists at least 3 example offerings with name, price, and description.",
-        "Offerings are rendered from a single in-code data structure (not hardcoded repeatedly).",
-        "No checkout/payment is required to view offerings."
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Include a footer with basic business/contact text and a repeated WhatsApp contact link for 09033449260.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "a link that will take you into my whasapp for more detalils and the number is (09033449260)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Footer is present on the main page.",
-        "Footer contains a WhatsApp link that works and references \"09033449260\".",
-        "Footer content is in English."
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Add generated brand assets (logo and a subtle hero background/illustration) as static images and render them in the UI from the frontend public assets folder.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "the name should be (IBN) and also i want you to designe it in a very good looking"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Logo image is displayed in the header and/or hero section.",
-        "Hero background/illustration (if used) loads locally as a static asset (not via backend).",
-        "All generated images are stored under frontend/public/assets/generated and referenced from there."
+        "Each plan card offers a clear bank transfer action (e.g., a button) alongside the existing 'Pay Now' and 'Order via WhatsApp' flows.",
+        "The bank transfer modal displays bank name, account name, and account number (and optional note if set) in a readable layout, with a copy-friendly presentation (e.g., easy to select/copy).",
+        "If bank transfer details are not configured, the bank transfer action is hidden or disabled and the UI explains that bank transfer is currently unavailable (in English).",
+        "Adding the bank transfer option does not break the existing Stripe checkout flow or WhatsApp ordering flow for any network-specific plan."
       ]
     }
   ],
   "constraints": [
-    "Use English for any user-facing text.",
-    "Frontend immutable paths must not be modified: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
-    "No third-party authentication other than Internet Identity (do not add other auth providers).",
-    "Keep Motoko backend in a single main actor (do not introduce multiple backend services)."
+    "Backend must remain a single Motoko actor with all logic in backend/main.mo.",
+    "Do not edit any files under frontend/src/components/ui or any frontend immutablePaths listed in SYSTEM_CONTEXT; compose existing UI components instead.",
+    "Use English for any user-facing text."
   ],
   "nonGoals": [
-    "Implementing online payments/checkout (e.g., Stripe) unless explicitly requested later.",
-    "Implementing real-time chat or messaging inside the app.",
-    "Building an admin dashboard, inventory management, or order management unless explicitly requested later.",
-    "Integrating external databases or non-Internet-Computer hosting/deployment targets."
+    "Do not integrate any external bank/payment API for verifying bank transfers.",
+    "Do not remove or replace the existing Stripe 'Pay Now' checkout flow.",
+    "Do not add third-party authentication; continue using Internet Identity only."
   ],
   "imageRequirements": {
-    "required": [
-      "Minimal modern wordmark logo reading \"IBN\" (ibn-logo.dim_512x512.png)",
-      "Subtle abstract tech background for a hero section (ibn-hero-bg.dim_1600x900.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

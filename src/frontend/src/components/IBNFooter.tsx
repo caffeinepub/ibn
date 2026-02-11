@@ -8,6 +8,13 @@ export function IBNFooter() {
     ? encodeURIComponent(window.location.hostname) 
     : 'ibn-data';
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <footer className="border-t bg-muted/30">
       <div className="container py-12 md:py-16">
@@ -32,14 +39,20 @@ export function IBNFooter() {
             <h3 className="text-sm font-semibold">Quick Links</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#plans" className="hover:text-foreground transition-colors">
+                <button 
+                  onClick={() => scrollToSection('plans')} 
+                  className="hover:text-foreground transition-colors"
+                >
                   Data Plans
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#about" className="hover:text-foreground transition-colors">
+                <button 
+                  onClick={() => scrollToSection('about')} 
+                  className="hover:text-foreground transition-colors"
+                >
                   About Us
-                </a>
+                </button>
               </li>
               <li>
                 <a href={getWhatsAppUrl('I need help with my order')} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">

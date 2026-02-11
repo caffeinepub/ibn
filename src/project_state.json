@@ -1,11 +1,12 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
-  "summary": "Build a professional data-selling application named IBN with a polished UI and a WhatsApp contact link for more details.",
-  "architectural_notes": [],
+  "projectStateVersion": 9,
+  "summary": "Build a professional data-selling application named IBN with a polished UI, updated color/theme, WhatsApp contact link, and support for in-app payments (without requiring WhatsApp) plus additional attractive engagement features.",
+  "architectural_notes": [
+    "Support an alternative payment method: bank transfer. Provide admin-configurable bank details (account name/number/bank) that can be shown in the purchase flow (e.g., at checkout or after order creation) alongside existing payment options."
+  ],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Minimal modern wordmark logo reading \"IBN\" (ibn-logo.dim_512x512.png)\n- Subtle abstract tech background for a hero section (ibn-hero-bg.dim_1600x900.png)",
   "existing_features": [
     {
       "id": "feature-create-a-branded-application-shell-named-ibn-that-clearly-presents-the-app-as-a-professional-data-selling-application-including-the-app-name-in-the-header-and-page-title-metadata",
@@ -62,6 +63,78 @@
         "REQ-7"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-refresh-the-application-color-scheme-by-updating-the-global-tailwind-css-design-tokens-css-variables-to-a-new-coherent-palette-not-the-current-blue-cyan-look-and-ensure-the-updated-colors-apply-consistently-across-header-hero-gradients-buttons-badges-cards-and-icons",
+      "title": "Refresh the application color scheme by updating the global Tailwind CSS design tokens (CSS variables) to a new, coherent palette (not the current blue/cyan look), and ensure the updated colors apply consistently across header, hero gradients, buttons, badges, cards, and icons.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-in-app-payment-flow-so-customers-can-purchase-a-selected-data-plan-without-leaving-to-whatsapp-while-keeping-whatsapp-ordering-available-as-an-alternative",
+      "title": "Add an in-app payment flow so customers can purchase a selected data plan without leaving to WhatsApp, while keeping WhatsApp ordering available as an alternative.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enhance-the-landing-page-with-additional-attractive-customer-facing-sections-that-improve-trust-and-clarity-without-changing-the-core-purpose-of-selling-data-plans",
+      "title": "Enhance the landing page with additional attractive, customer-facing sections that improve trust and clarity, without changing the core purpose of selling data plans.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-navigation-usability-by-ensuring-existing-footer-quick-links-anchors-e-g-plans-about-correctly-scroll-to-the-corresponding-sections-on-the-landing-page",
+      "title": "Improve navigation usability by ensuring existing footer “Quick Links” anchors (e.g., #plans, #about) correctly scroll to the corresponding sections on the landing page.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-landing-page-data-plans-section-to-support-mobile-network-categories-mtn-glo-airtel-9mobile-where-each-network-has-its-own-list-of-data-bundles-and-prices-and-users-can-switch-between-networks-to-view-the-relevant-plans",
+      "title": "Update the landing page “Data Plans” section to support mobile network categories (MTN, GLO, AIRTEL, 9MOBILE) where each network has its own list of data bundles and prices, and users can switch between networks to view the relevant plans.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-existing-purchase-flows-pay-now-via-stripe-checkout-and-order-via-whatsapp-continue-to-work-for-every-network-specific-plan-and-use-the-selected-network-information-in-user-visible-messages-descriptions",
+      "title": "Ensure the existing purchase flows (Pay Now via Stripe checkout and Order via WhatsApp) continue to work for every network-specific plan and use the selected network information in user-visible messages/descriptions.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-query-hooks-to-read-and-admin-only-update-the-bank-transfer-details-from-the-backend-actor-following-the-existing-patterns-used-for-stripe-configuration-in-frontend-src-hooks-usequeries-ts",
+      "title": "Add React Query hooks to read and (admin-only) update the bank transfer details from the backend actor, following the existing patterns used for Stripe configuration in frontend/src/hooks/useQueries.ts.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-an-admin-ui-to-configure-bank-transfer-details-bank-name-account-name-account-number-optional-note-in-a-dialog-accessible-from-the-header-when-the-admin-is-logged-in-without-editing-any-immutable-frontend-paths",
+      "title": "Provide an admin UI to configure bank transfer details (bank name, account name, account number, optional note) in a dialog accessible from the header when the admin is logged in, without editing any immutable frontend paths.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-customer-facing-pay-via-bank-transfer-option-on-each-data-plan-card-that-opens-a-modal-showing-the-configured-bank-transfer-details-and-a-short-instruction-block-so-customers-can-pay-by-bank-transfer-as-an-alternative-to-stripe-and-whatsapp-ordering",
+      "title": "Add a customer-facing 'Pay via Bank Transfer' option on each data plan card that opens a modal showing the configured bank transfer details (and a short instruction block) so customers can pay by bank transfer as an alternative to Stripe and WhatsApp ordering.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -87,6 +160,52 @@
       "id": "AR-4",
       "summary": "Add a WhatsApp contact link (09033449260) for more details",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Update/change the app color scheme (visual theme refresh)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Allow customers to make payments directly داخل التطبيق (in-app payment flow) without going to WhatsApp",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Add more attractive features to improve the app experience/appeal (engagement/marketing enhancements)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Implement backend support for the in-app payment flow in the single Motoko actor (backend/main.mo), including creating a payment session for a selected plan and confirming payment status in a way that does not require exposing any secret keys in the frontend.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add mobile network categories (MTN, GLO, AIRTEL, 9MOBILE) with separate data plan bundles and prices per network",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Add a bank transfer payment option by allowing the business to configure and display bank account details for customers to pay when purchasing a data plan",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add backend support for bank transfer details by introducing a BankDetails record (e.g., bank name, account name, account number, optional note) that can be saved by an admin and retrieved by the frontend for display to customers.",
+      "reqIds": [
+        "REQ-15"
+      ],
       "status": "pending"
     }
   ],

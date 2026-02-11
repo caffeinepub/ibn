@@ -1,182 +1,70 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "IBN professional data-selling landing page with WhatsApp contact CTA",
+  "title": "Configurable bank transfer option (admin-managed) with customer modal display",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Create an IBN-branded application shell with header branding and page metadata that positions the app as a professional data-selling business.",
+      "id": "REQ-16",
+      "summary": "Add React Query hooks to fetch and admin-update bank transfer details via the backend actor, following existing Stripe hook patterns.",
       "acceptanceCriteria": [
-        "The app header/nav prominently displays the text \"IBN\".",
-        "Browser tab/page title includes \"IBN\".",
-        "Primary landing view communicates that IBN sells data (English copy)."
+        "There is a query hook that fetches bank transfer details and caches them via React Query.",
+        "There is a mutation hook that updates bank transfer details and invalidates/refetches the cached query on success.",
+        "Hook error states are surfaced to the UI so the admin can understand failures (e.g., unauthorized, validation)."
       ],
       "file_operations": [
         {
-          "path": "frontend/index.html",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Ensure document title and basic metadata include \"IBN\" and reflect a professional data-selling application (English)."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "create",
-          "description": "Create the root app component that renders an IBN-branded application shell (header + landing content + footer) and sets up the main layout structure."
-        },
-        {
-          "path": "frontend/src/components/IBNHeader.tsx",
-          "operation": "create",
-          "description": "Add a reusable header component that prominently displays \"IBN\" and supports rendering the generated logo asset. Use shadcn-ui primitives (e.g., Button) for consistent styling; verify the component's usage instructions before implementing."
+          "description": "Add React Query hooks for bank transfer details: a cached query hook calling the backend capability to fetch bank details (getBankRequirements) and a mutation hook calling the backend capability to save bank details (saveBankDetails) with cache invalidation on success; ensure hook errors are returned to consumers so UI can render clear messages."
         }
       ]
     },
     {
-      "id": "REQ-2",
-      "summary": "Implement a clean landing page layout with hero, description, and above-the-fold WhatsApp call-to-action.",
+      "id": "REQ-17",
+      "summary": "Add an admin-only header entry point that opens a dialog to configure and save bank transfer details with validation and clear success/error feedback.",
       "acceptanceCriteria": [
-        "Landing page has distinct sections (hero + description + call-to-action).",
-        "All user-facing text is in English.",
-        "The primary call-to-action is clearly visible without scrolling on common laptop screen sizes."
+        "When an authenticated admin opens the configuration dialog, they can enter and save bank transfer details.",
+        "The UI validates required fields (bank name, account name, account number) and shows clear English error messages for missing/invalid inputs.",
+        "On successful save, the dialog shows a success confirmation and the saved details are reflected in subsequent reads.",
+        "Non-admin users do not see the bank transfer configuration entry point in the header UI."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/LandingPage.tsx",
-          "operation": "create",
-          "description": "Implement a single-page landing layout with distinct hero, brief description, and a prominent WhatsApp CTA visible above the fold. Use shadcn-ui components (e.g., Button, Card) for consistent structure and spacing; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Wire the landing page component into the app so it is the primary view users see."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Add a WhatsApp contact button/link that opens a chat for 09033449260 across desktop and mobile layouts.",
-      "acceptanceCriteria": [
-        "Clicking/tapping the WhatsApp button navigates to a WhatsApp chat link.",
-        "The displayed contact number is exactly \"09033449260\".",
-        "The WhatsApp link is available on both desktop and mobile layouts."
-      ],
-      "file_operations": [
+          "description": "Add a small React Query hook to determine whether the current authenticated caller is an admin (via backend capability isCallerAdmin) so the header can reliably hide admin-only bank detail configuration for non-admin users."
+        },
         {
-          "path": "frontend/src/lib/whatsapp.ts",
+          "path": "frontend/src/components/payments/BankTransferAdminSetup.tsx",
           "operation": "create",
-          "description": "Add a small utility to centralize the WhatsApp phone number (\"09033449260\") and build the WhatsApp chat URL used throughout the UI."
-        },
-        {
-          "path": "frontend/src/components/WhatsAppCTA.tsx",
-          "operation": "create",
-          "description": "Create a reusable WhatsApp CTA component (button/link) that displays the number exactly as \"09033449260\" and navigates to the WhatsApp chat link. Use shadcn-ui Button for consistent interactions and focus/hover states; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Use the shared WhatsAppCTA component in the hero section so the primary CTA is prominent on both desktop and mobile layouts."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Apply a coherent professional visual theme (colors, typography, spacing, interaction states) consistently across the UI.",
-      "acceptanceCriteria": [
-        "UI uses a consistent color palette, typography scale, and spacing rhythm across the app.",
-        "Buttons/links/sections share consistent styling and interaction states (hover/focus).",
-        "Design avoids default/unstyled template appearance and feels intentionally branded."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/index.css",
-          "operation": "create",
-          "description": "Define global theme tokens (CSS variables used by Tailwind/shadcn), base typography, and consistent spacing defaults to achieve a professional branded look (no changes to immutable files)."
-        },
-        {
-          "path": "frontend/tailwind.config.js",
-          "operation": "modify",
-          "description": "Extend/adjust the Tailwind theme (e.g., brand color tokens, font families) to support a consistent IBN design system across components and sections."
-        },
-        {
-          "path": "frontend/src/components/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Apply consistent section styling, typography hierarchy, and responsive spacing using the established theme. Use shadcn-ui components where appropriate to maintain a consistent design system; verify the component's usage instructions before implementing."
+          "description": "Create an admin configuration form component for BankDetails (bankName, accountName, accountNumber required; note optional) that uses existing shadcn-ui form primitives (e.g., Button, Input, Label, Alert) and the new bank detail query/mutation hooks to prefill, validate, save, and show success/error states. Use shadcn-ui Dialog subcomponents for headings where appropriate. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/components/IBNHeader.tsx",
           "operation": "modify",
-          "description": "Align header styling with the global theme, ensuring consistent typography, spacing, and interaction states (e.g., focus-visible styles on links/buttons)."
+          "description": "Add an admin-only header button/menu entry that opens a shadcn-ui Dialog containing the new BankTransferAdminSetup component; ensure it only renders when the user is authenticated and the admin-check hook returns true. Compose with existing shadcn-ui Dialog/Button components (do not edit any files under frontend/src/components/ui). Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-5",
-      "summary": "Add a static, code-editable Data Plans section listing at least 3 example offerings (name, price, description).",
+      "id": "REQ-18",
+      "summary": "Add a customer-facing 'Pay via Bank Transfer' action on each plan card that opens a modal showing configured bank details and instructions, without breaking existing Stripe/WhatsApp flows.",
       "acceptanceCriteria": [
-        "A section exists that lists at least 3 example offerings with name, price, and description.",
-        "Offerings are rendered from a single in-code data structure (not hardcoded repeatedly).",
-        "No checkout/payment is required to view offerings."
+        "Each plan card offers a clear bank transfer action (e.g., a button) alongside the existing 'Pay Now' and 'Order via WhatsApp' flows.",
+        "The bank transfer modal displays bank name, account name, and account number (and optional note if set) in a readable layout, with a copy-friendly presentation (e.g., easy to select/copy).",
+        "If bank transfer details are not configured, the bank transfer action is hidden or disabled and the UI explains that bank transfer is currently unavailable (in English).",
+        "Adding the bank transfer option does not break the existing Stripe checkout flow or WhatsApp ordering flow for any network-specific plan."
       ],
       "file_operations": [
+        {
+          "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
+          "operation": "create",
+          "description": "Create a reusable customer modal component that uses shadcn-ui Dialog (and optional Alert) to present bank transfer details plus a short English instruction block; render bank name/account name/account number prominently with copy-friendly/selectable text presentation and show the optional note only when provided. If details are null/unavailable, show an English 'Bank transfer is currently unavailable' message. Verify the component's usage instructions before implementing."
+        },
         {
           "path": "frontend/src/components/DataPlansSection.tsx",
-          "operation": "create",
-          "description": "Create a Data Plans section that renders at least 3 offerings from a single in-code array (name, price, description). Use shadcn-ui Card components (or equivalent) for consistent presentation; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/LandingPage.tsx",
           "operation": "modify",
-          "description": "Wire the Data Plans section into the landing page below the hero/description to support browsing offerings without any checkout flow."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Add a footer with basic business/contact text and a repeated WhatsApp link for 09033449260.",
-      "acceptanceCriteria": [
-        "Footer is present on the main page.",
-        "Footer contains a WhatsApp link that works and references \"09033449260\".",
-        "Footer content is in English."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/IBNFooter.tsx",
-          "operation": "create",
-          "description": "Create a footer component with English business/contact copy and a repeated WhatsApp link using the shared WhatsAppCTA/link behavior. Use shadcn-ui primitives for consistent typography/link styling; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wire the footer into the app shell so it appears on the main page beneath the landing content."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "Add generated brand assets (IBN logo and hero background) as static public images and render them in the UI.",
-      "acceptanceCriteria": [
-        "Logo image is displayed in the header and/or hero section.",
-        "Hero background/illustration (if used) loads locally as a static asset (not via backend).",
-        "All generated images are stored under frontend/public/assets/generated and referenced from there."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/ibn-logo.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the generated IBN wordmark logo asset as a static file at the required path."
-        },
-        {
-          "path": "frontend/public/assets/generated/ibn-hero-bg.dim_1600x900.png",
-          "operation": "create",
-          "description": "Add the generated subtle abstract tech hero background asset as a static file at the required path."
-        },
-        {
-          "path": "frontend/src/components/IBNHeader.tsx",
-          "operation": "modify",
-          "description": "Render the logo image from frontend/public/assets/generated/ibn-logo.dim_512x512.png in the header alongside the \"IBN\" brand text."
-        },
-        {
-          "path": "frontend/src/components/LandingPage.tsx",
-          "operation": "modify",
-          "description": "Render the hero background/illustration using the local static asset frontend/public/assets/generated/ibn-hero-bg.dim_1600x900.png (e.g., as a decorative background behind the hero section) while keeping text readable and professional."
+          "description": "Add a 'Pay via Bank Transfer' action to each plan card alongside the existing PayNowButton and WhatsApp button; wire it to open the new BankTransferDetailsDialog and source its data from the bank details query hook. If bank details are not configured, disable or hide the action and show an English explanation without affecting existing Stripe checkout or WhatsApp ordering flows. Compose using existing shadcn-ui Button/Dialog components (do not edit any files under frontend/src/components/ui). Verify the component's usage instructions before implementing."
         }
       ]
     }

@@ -18,3 +18,18 @@ export function getWhatsAppUrl(message?: string): string {
   
   return baseUrl;
 }
+
+/**
+ * Generates a WhatsApp order URL with network and plan details
+ * @param options Order details including network, plan name, data, and price
+ * @returns WhatsApp URL with pre-filled order message
+ */
+export function getWhatsAppOrderUrl(options: {
+  network: string;
+  planName: string;
+  data: string;
+  price: string;
+}): string {
+  const message = `Hello! I want to purchase the following data plan:\n\nNetwork: ${options.network}\nPlan: ${options.planName}\nData: ${options.data}\nPrice: ${options.price}\n\nPlease assist me with this order.`;
+  return getWhatsAppUrl(message);
+}

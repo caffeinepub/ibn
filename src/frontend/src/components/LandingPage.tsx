@@ -1,5 +1,8 @@
 import { DataPlansSection } from './DataPlansSection';
 import { WhatsAppCTA } from './WhatsAppCTA';
+import { HowItWorksSection } from './LandingPageSections/HowItWorksSection';
+import { TestimonialsSection } from './LandingPageSections/TestimonialsSection';
+import { FaqSection } from './LandingPageSections/FaqSection';
 import { Wifi, Zap, Shield, TrendingUp } from 'lucide-react';
 
 export function LandingPage() {
@@ -48,8 +51,11 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <HowItWorksSection />
+
       {/* About Section */}
-      <section className="border-b bg-muted/30">
+      <section id="about" className="border-b bg-muted/30 scroll-mt-16">
         <div className="container py-16 md:py-20">
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center justify-center rounded-full bg-primary/10 p-3 mb-6">
@@ -67,6 +73,12 @@ export function LandingPage() {
 
       {/* Data Plans Section */}
       <DataPlansSection />
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
+
+      {/* FAQ Section */}
+      <FaqSection />
 
       {/* CTA Section */}
       <section className="border-t bg-gradient-to-br from-primary/5 via-background to-accent/5">

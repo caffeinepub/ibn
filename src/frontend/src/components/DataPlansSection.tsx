@@ -1,81 +1,24 @@
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check } from 'lucide-react';
-import { getWhatsAppUrl } from '@/lib/whatsapp';
-
-interface DataPlan {
-  id: string;
-  name: string;
-  data: string;
-  price: string;
-  validity: string;
-  features: string[];
-  popular?: boolean;
-}
-
-const dataPlans: DataPlan[] = [
-  {
-    id: 'starter',
-    name: 'Starter Plan',
-    data: '2GB',
-    price: '₦500',
-    validity: '7 Days',
-    features: [
-      'Perfect for light browsing',
-      'Social media access',
-      'Email & messaging',
-      'Instant activation'
-    ]
-  },
-  {
-    id: 'standard',
-    name: 'Standard Plan',
-    data: '5GB',
-    price: '₦1,200',
-    validity: '30 Days',
-    features: [
-      'Great for daily use',
-      'HD video streaming',
-      'Social media & browsing',
-      'Work from home ready',
-      'Priority support'
-    ],
-    popular: true
-  },
-  {
-    id: 'premium',
-    name: 'Premium Plan',
-    data: '10GB',
-    price: '₦2,000',
-    validity: '30 Days',
-    features: [
-      'Heavy usage coverage',
-      '4K video streaming',
-      'Gaming & downloads',
-      'Multiple devices',
-      'VIP support'
-    ]
-  },
-  {
-    id: 'unlimited',
-    name: 'Business Plan',
-    data: '20GB',
-    price: '₦3,500',
-    validity: '30 Days',
-    features: [
-      'Business-grade data',
-      'Unlimited streaming',
-      'Video conferencing',
-      'Cloud services',
-      'Dedicated support'
-    ]
-  }
-];
+import { Check, Building2 } from 'lucide-react';
+import { getWhatsAppOrderUrl } from '@/lib/whatsapp';
+import { PayNowButton } from './payments/PayNowButton';
+import { BankTransferDetailsDialog } from './payments/BankTransferDetailsDialog';
+import { useGetBankDetails } from '@/hooks/useQueries';
+import { MOBILE_NETWORKS, getPlansByNetwork, type MobileNetwork } from '@/data/mobileNetworkPlans';
 
 export function DataPlansSection() {
+  const [selectedNetwork, setSelectedNetwork] = useState<MobileNetwork>('MTN');
+  const [bankTransferOpen, setBankTransferOpen] = useState(false);
+  const { data: bankDetails, isLoading: bankDetailsLoading } = useGetBankDetails();
+  const plans = getPlansByNetwork(selectedNetwork);
+
+  const isBankTransferAvailable = !bankDetailsLoading && bankDetails !== null && bankDetails !== undefined;
+
   return (
-    <section className="py-16 md:py-20">
+    <section id="plans" className="py-16 md:py-20 scroll-mt-16">
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
@@ -86,8 +29,25 @@ export function DataPlansSection() {
           </p>
         </div>
 
+        {/* Network Selector */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex rounded-lg border border-border bg-background p-1 gap-1">
+            {MOBILE_NETWORKS.map((network) => (
+              <Button
+                key={network}
+                variant={selectedNetwork === network ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setSelectedNetwork(network)}
+                className="min-w-[90px]"
+              >
+                {network}
+              </Button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {dataPlans.map((plan) => (
+          {plans.map((plan) => (
             <Card 
               key={plan.id} 
               className={`relative flex flex-col ${plan.popular ? 'border-primary shadow-lg scale-105' : ''}`}
@@ -99,7 +59,7 @@ export function DataPlansSection() {
               )}
               
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-xl">{plan.name}</CardTitle>
+                <CardTitle className="text-xl">{plan.title}</CardTitle>
                 <CardDescription>{plan.validity} validity</CardDescription>
               </CardHeader>
               
@@ -119,18 +79,56 @@ export function DataPlansSection() {
                 </ul>
               </CardContent>
               
-              <CardFooter>
+              <CardFooter className="flex flex-col gap-2">
+                <PayNowButton 
+                  networkName={plan.network}
+                  planName={plan.title}
+                  planData={plan.data}
+                  priceInCents={plan.priceInCents}
+                  variant={plan.popular ? 'default' : 'outline'}
+                />
+                
+                {isBankTransferAvailable && (
+                  <Button 
+                    onClick={() => setBankTransferOpen(true)}
+                    className="w-full gap-2"
+                    variant="secondary"
+                    size="sm"
+                  >
+                    <Building2 className="h-4 w-4" />
+                    Pay via Bank Transfer
+                  </Button>
+                )}
+
+                {!isBankTransferAvailable && bankDetailsLoading && (
+                  <Button 
+                    disabled
+                    className="w-full gap-2"
+                    variant="secondary"
+                    size="sm"
+                  >
+                    <Building2 className="h-4 w-4" />
+                    Loading...
+                  </Button>
+                )}
+                
                 <Button 
                   asChild
                   className="w-full"
-                  variant={plan.popular ? 'default' : 'outline'}
+                  variant="ghost"
+                  size="sm"
                 >
                   <a 
-                    href={getWhatsAppUrl(`I want to purchase the ${plan.name} - ${plan.data} for ${plan.price}`)} 
+                    href={getWhatsAppOrderUrl({
+                      network: plan.network,
+                      planName: plan.title,
+                      data: plan.data,
+                      price: plan.price
+                    })} 
                     target="_blank" 
                     rel="noopener noreferrer"
                   >
-                    Order Now
+                    Order via WhatsApp
                   </a>
                 </Button>
               </CardFooter>
@@ -138,6 +136,13 @@ export function DataPlansSection() {
           ))}
         </div>
       </div>
+
+      {/* Bank Transfer Details Dialog */}
+      <BankTransferDetailsDialog 
+        open={bankTransferOpen}
+        onOpenChange={setBankTransferOpen}
+        bankDetails={bankDetails ?? null}
+      />
     </section>
   );
 }

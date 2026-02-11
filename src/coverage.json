@@ -1,116 +1,59 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T00:30:02.990Z",
+  "generatedAt": "2026-02-11T01:23:58.107Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 7,
-    "implemented": 7,
+    "total": 4,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-1",
-        "summary": "Create a branded application shell named \"IBN\" that clearly presents the app as a professional data-selling application, including the app name in the header and page title/metadata.",
+        "id": "REQ-15",
+        "summary": "Add backend support for bank transfer details by introducing a BankDetails record (e.g., bank name, account name, account number, optional note) that can be saved by an admin and retrieved by the frontend for display to customers.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-16",
+        "summary": "Add React Query hooks to read and (admin-only) update the bank transfer details from the backend actor, following the existing patterns used for Stripe configuration in frontend/src/hooks/useQueries.ts.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/index.html",
-          "frontend/src/App.tsx",
-          "frontend/src/components/IBNHeader.tsx"
+          "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/index.html",
-          "frontend/src/App.tsx",
-          "frontend/src/components/IBNHeader.tsx"
+          "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
-        "id": "REQ-2",
-        "summary": "Implement a clean landing page layout suitable for a data-selling business, including sections for: a short hero headline, a brief description, and a visible call-to-action to contact via WhatsApp for more details.",
+        "id": "REQ-17",
+        "summary": "Provide an admin UI to configure bank transfer details (bank name, account name, account number, optional note) in a dialog accessible from the header when the admin is logged in, without editing any immutable frontend paths.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/LandingPage.tsx",
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/LandingPage.tsx",
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Add a WhatsApp contact link/button that opens WhatsApp chat for the phone number 09033449260.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/lib/whatsapp.ts",
-          "frontend/src/components/WhatsAppCTA.tsx",
-          "frontend/src/components/LandingPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/lib/whatsapp.ts",
-          "frontend/src/components/WhatsAppCTA.tsx",
-          "frontend/src/components/LandingPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Apply a coherent, professional visual theme (colors, typography, spacing, components) across the UI suitable for a commercial data-selling brand; use a consistent design system across all screens.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/tailwind.config.js",
-          "frontend/src/components/LandingPage.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/payments/BankTransferAdminSetup.tsx",
           "frontend/src/components/IBNHeader.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/index.css",
-          "frontend/tailwind.config.js",
-          "frontend/src/components/LandingPage.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/payments/BankTransferAdminSetup.tsx",
           "frontend/src/components/IBNHeader.tsx"
         ]
       },
       {
-        "id": "REQ-5",
-        "summary": "Provide a simple \"Data Plans\" (or equivalent) section on the landing page that lists example data bundle offerings (static, editable in code) with name, price, and brief description.",
+        "id": "REQ-18",
+        "summary": "Add a customer-facing 'Pay via Bank Transfer' option on each data plan card that opens a modal showing the configured bank transfer details (and a short instruction block) so customers can pay by bank transfer as an alternative to Stripe and WhatsApp ordering.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/DataPlansSection.tsx",
-          "frontend/src/components/LandingPage.tsx"
+          "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
+          "frontend/src/components/DataPlansSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/DataPlansSection.tsx",
-          "frontend/src/components/LandingPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-6",
-        "summary": "Include a footer with basic business/contact text and a repeated WhatsApp contact link for 09033449260.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/IBNFooter.tsx",
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/IBNFooter.tsx",
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-7",
-        "summary": "Add generated brand assets (logo and a subtle hero background/illustration) as static images and render them in the UI from the frontend public assets folder.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/assets/generated/ibn-logo.dim_512x512.png",
-          "frontend/public/assets/generated/ibn-hero-bg.dim_1600x900.png",
-          "frontend/src/components/IBNHeader.tsx",
-          "frontend/src/components/LandingPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/public/assets/generated/ibn-logo.dim_512x512.png",
-          "frontend/public/assets/generated/ibn-hero-bg.dim_1600x900.png",
-          "frontend/src/components/IBNHeader.tsx",
-          "frontend/src/components/LandingPage.tsx"
+          "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
+          "frontend/src/components/DataPlansSection.tsx"
         ]
       }
     ]
@@ -118,105 +61,18 @@
   "changedFiles": [
     "backend/main.mo",
     "build-request.json",
-    "build-template/Dockerfile",
-    "build-template/LICENSE",
-    "build-template/README.md",
-    "build-template/deploy.sh",
-    "build-template/icp.yaml",
-    "build-template/package.json",
-    "build-template/pnpm-lock.yaml",
-    "build-template/pnpm-workspace.yaml",
-    "build-template/scripts/prune-unused-images.js",
-    "build-template/scripts/resize-images.js",
-    "build-template/src/backend/canister.yaml",
-    "build-template/src/backend/system-idl/aaaaa-aa.did",
-    "build-template/src/frontend/canister.yaml",
-    "build-template/src/frontend/components.json",
-    "build-template/src/frontend/env.json",
-    "build-template/src/frontend/eslint-rules/no-bigint-in-query-keys.js",
-    "build-template/src/frontend/eslint-rules/require-internet-identity-provider.js",
-    "build-template/src/frontend/eslint.config.js",
-    "build-template/src/frontend/package.json",
-    "build-template/src/frontend/postcss.config.js",
-    "build-template/src/frontend/src/components/ui/accordion.tsx",
-    "build-template/src/frontend/src/components/ui/alert-dialog.tsx",
-    "build-template/src/frontend/src/components/ui/alert.tsx",
-    "build-template/src/frontend/src/components/ui/aspect-ratio.tsx",
-    "build-template/src/frontend/src/components/ui/avatar.tsx",
-    "build-template/src/frontend/src/components/ui/badge.tsx",
-    "build-template/src/frontend/src/components/ui/breadcrumb.tsx",
-    "build-template/src/frontend/src/components/ui/button.tsx",
-    "build-template/src/frontend/src/components/ui/calendar.tsx",
-    "build-template/src/frontend/src/components/ui/card.tsx",
-    "build-template/src/frontend/src/components/ui/carousel.tsx",
-    "build-template/src/frontend/src/components/ui/chart.tsx",
-    "build-template/src/frontend/src/components/ui/checkbox.tsx",
-    "build-template/src/frontend/src/components/ui/collapsible.tsx",
-    "build-template/src/frontend/src/components/ui/command.tsx",
-    "build-template/src/frontend/src/components/ui/context-menu.tsx",
-    "build-template/src/frontend/src/components/ui/dialog.tsx",
-    "build-template/src/frontend/src/components/ui/drawer.tsx",
-    "build-template/src/frontend/src/components/ui/dropdown-menu.tsx",
-    "build-template/src/frontend/src/components/ui/form.tsx",
-    "build-template/src/frontend/src/components/ui/hover-card.tsx",
-    "build-template/src/frontend/src/components/ui/input-otp.tsx",
-    "build-template/src/frontend/src/components/ui/input.tsx",
-    "build-template/src/frontend/src/components/ui/label.tsx",
-    "build-template/src/frontend/src/components/ui/menubar.tsx",
-    "build-template/src/frontend/src/components/ui/navigation-menu.tsx",
-    "build-template/src/frontend/src/components/ui/pagination.tsx",
-    "build-template/src/frontend/src/components/ui/popover.tsx",
-    "build-template/src/frontend/src/components/ui/progress.tsx",
-    "build-template/src/frontend/src/components/ui/radio-group.tsx",
-    "build-template/src/frontend/src/components/ui/resizable.tsx",
-    "build-template/src/frontend/src/components/ui/scroll-area.tsx",
-    "build-template/src/frontend/src/components/ui/select.tsx",
-    "build-template/src/frontend/src/components/ui/separator.tsx",
-    "build-template/src/frontend/src/components/ui/sheet.tsx",
-    "build-template/src/frontend/src/components/ui/sidebar.tsx",
-    "build-template/src/frontend/src/components/ui/skeleton.tsx",
-    "build-template/src/frontend/src/components/ui/slider.tsx",
-    "build-template/src/frontend/src/components/ui/sonner.tsx",
-    "build-template/src/frontend/src/components/ui/switch.tsx",
-    "build-template/src/frontend/src/components/ui/table.tsx",
-    "build-template/src/frontend/src/components/ui/tabs.tsx",
-    "build-template/src/frontend/src/components/ui/textarea.tsx",
-    "build-template/src/frontend/src/components/ui/toggle-group.tsx",
-    "build-template/src/frontend/src/components/ui/toggle.tsx",
-    "build-template/src/frontend/src/components/ui/tooltip.tsx",
-    "build-template/src/frontend/src/hooks/use-mobile.tsx",
-    "build-template/src/frontend/src/lib/utils.ts",
-    "build-template/src/frontend/tsconfig.json",
-    "build-template/src/frontend/vite.config.js",
-    "build-template/tsconfig.json",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/index.css",
-    "frontend/index.html",
-    "frontend/public/assets/generated/ibn-hero-bg.dim_1600x900.png",
-    "frontend/public/assets/generated/ibn-logo.dim_512x512.png",
-    "frontend/src/App.tsx",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
     "frontend/src/components/DataPlansSection.tsx",
-    "frontend/src/components/IBNFooter.tsx",
     "frontend/src/components/IBNHeader.tsx",
-    "frontend/src/components/LandingPage.tsx",
-    "frontend/src/components/WhatsAppCTA.tsx",
-    "frontend/src/config.ts",
+    "frontend/src/components/payments/BankTransferAdminSetup.tsx",
+    "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
     "frontend/src/declarations/backend.did.d.ts",
     "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
     "frontend/src/hooks/useQueries.ts",
-    "frontend/src/index.css",
-    "frontend/src/lib/whatsapp.ts",
-    "frontend/src/main.tsx",
-    "frontend/src/ui-summary.json",
-    "frontend/src/utils/StorageClient.ts",
-    "frontend/tailwind.config.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

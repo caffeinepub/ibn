@@ -1,15 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Create a professional, branded landing page for “IBN” that presents a data-selling business and provides a clear WhatsApp contact call-to-action.
+**Goal:** Add a configurable “Pay via Bank Transfer” payment option, with admin-managed bank details stored in the backend and displayed to customers.
 
 **Planned changes:**
-- Add an application shell branded as “IBN”, including header branding and page title/metadata.
-- Build a clean landing page with hero headline, brief description, and a prominent WhatsApp contact CTA visible without scrolling on common laptop screens.
-- Add a WhatsApp link/button that opens a chat for the number **09033449260**, available on desktop and mobile layouts.
-- Add a “Data Plans” section listing at least 3 example offerings (name, price, description) rendered from a single in-code data structure.
-- Add a footer with basic business/contact text and a repeated WhatsApp link for **09033449260**.
-- Include locally-served generated brand assets (logo and subtle hero background/illustration) stored under `frontend/public/assets/generated` and rendered in the UI.
-- Apply a coherent, consistent professional visual theme across the UI (colors, typography, spacing, component styles).
+- Backend: Add a persisted `BankDetails` record (bank name, account name, account number, optional note) and expose (1) an admin-only update method and (2) a public read method that returns the current details or none.
+- Frontend: Add React Query hooks to fetch and (admin-only) update bank transfer details, following existing Stripe configuration hook patterns, including error handling.
+- Frontend: Add an admin-only header entry point that opens a dialog to create/update bank transfer details with required-field validation and clear English messages.
+- Frontend: Add a “Pay via Bank Transfer” action on each data plan card that opens a modal showing the configured bank details and brief instructions; hide/disable the action with an English explanation when details are not configured.
 
-**User-visible outcome:** Users see a polished IBN homepage that clearly advertises data bundle offerings and can tap/click a WhatsApp button (and footer link) to contact **09033449260** for details.
+**User-visible outcome:** Admins can set/update bank transfer details in the app, and customers can choose a bank transfer option on plan cards to view the payment details (when available) without affecting existing Stripe or WhatsApp flows.
