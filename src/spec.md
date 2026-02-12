@@ -1,15 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Support multiple bank transfer accounts across backend storage and frontend UX, including default preconfigured bank details and a safe migration from the existing single-record format.
+**Goal:** Prepare the IBN PWA for Google Play Store packaging readiness via Trusted Web Activity (TWA) by adding Digital Asset Links support, improving the in-app publishing checklist, and ensuring required Play Store assets are correctly referenced and cached.
 
 **Planned changes:**
-- Update backend bank transfer configuration storage to use a list of bank accounts, with authenticated-user read access and admin-only write access preserved.
-- Add a conditional migration that converts an existing single saved bankDetails record into a single-entry list without overwriting an already-populated list.
-- Preconfigure the backend with three default bank accounts (OPAY / MONIE POINT / POLARIS BANK) when no admin-configured accounts exist.
-- Update frontend React Query hooks/types to fetch and save a list of bank accounts (following existing patterns in `frontend/src/hooks/useQueries.ts`).
-- Update the admin bank transfer setup UI to add/edit/remove multiple bank accounts, validate required fields in English, and save the full list with an English success confirmation.
-- Update the customer bank transfer details dialog to allow selecting an account when multiple exist and ensure displayed/copied details reflect the selected account (single-account behavior remains unchanged).
-- Ensure the WhatsApp bank-transfer confirmation CTA still targets `09033449260` and includes the selected bank name in the prefilled message.
+- Add and serve a static Digital Asset Links file at `/.well-known/assetlinks.json` with placeholder values/instructions for `package_name` and `sha256_cert_fingerprints`.
+- Update the in-app “Publish to Google Play Store” section with a concrete Bubblewrap/PWABuilder checklist, explicitly referencing `/.well-known/assetlinks.json` and `{window.location.origin}/manifest.webmanifest`.
+- Ensure Play Store listing assets exist under `frontend/public/assets/generated/`, keep the manifest referencing the 192x192 and 512x512 icons, and reference the feature graphic path in the guide.
+- Update `frontend/public/sw.js` precache list to include `/assets/generated/ibn-feature-graphic.dim_1024x500.png` while keeping the existing caching behavior and offline fallback.
 
-**User-visible outcome:** Admins can manage multiple bank transfer accounts, customers can choose which account to pay into and copy the correct details, and the WhatsApp confirmation message includes the selected bank name without changing the WhatsApp number.
+**User-visible outcome:** Users can follow an updated in-app Play Store publishing checklist, and the app serves the required TWA verification file and Play Store assets (including offline availability of the feature graphic) needed for Bubblewrap/PWABuilder packaging.

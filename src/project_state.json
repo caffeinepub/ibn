@@ -1,195 +1,41 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 13,
-  "summary": "Build a professional data-selling application named IBN with a polished UI, updated color/theme, WhatsApp contact link, and support for in-app payments (without requiring WhatsApp) plus additional attractive engagement features.",
-  "architectural_notes": [
-    "Support an alternative payment method: bank transfer. Provide admin-configurable bank details (account name/number/bank) that can be shown in the purchase flow (e.g., at checkout or after order creation) alongside existing payment options.",
-    "Bank transfer configuration should support multiple bank accounts (each with bank name, account name, account number, optional note) rather than a single BankDetails record, since the business provided multiple bank options (OPAY, Moniepoint, Polaris)."
-  ],
+  "projectStateVersion": 3,
+  "summary": "Project includes preparing an Android app build for Play Store packaging and testing.",
+  "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- App icon with a bold \"IBN\" mark and warm orange/coral palette (ibn-app-icon.dim_512x512.png)\n- App icon variant for smaller launcher sizes, simplified and high-contrast (ibn-app-icon.dim_192x192.png)\n- Clean, modern Google Play feature graphic with warm orange/coral gradient (ibn-feature-graphic.dim_1024x500.png)",
   "existing_features": [
     {
-      "id": "feature-create-a-branded-application-shell-named-ibn-that-clearly-presents-the-app-as-a-professional-data-selling-application-including-the-app-name-in-the-header-and-page-title-metadata",
-      "title": "Create a branded application shell named \"IBN\" that clearly presents the app as a professional data-selling application, including the app name in the header and page title/metadata.",
+      "id": "feature-add-a-digital-asset-links-file-for-trusted-web-activity-verification-by-creating-and-serving-a-static-file-at-well-known-assetlinks-json-i-e-frontend-public-well-known-assetlinks-json-with-clear-placeholder-values-for-package-name-and-signing-certificate-fingerprint",
+      "title": "Add a Digital Asset Links file for Trusted Web Activity verification by creating and serving a static file at `/.well-known/assetlinks.json` (i.e., `frontend/public/.well-known/assetlinks.json`) with clear placeholder values for package name and signing certificate fingerprint.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-implement-a-clean-landing-page-layout-suitable-for-a-data-selling-business-including-sections-for-a-short-hero-headline-a-brief-description-and-a-visible-call-to-action-to-contact-via-whatsapp-for-more-details",
-      "title": "Implement a clean landing page layout suitable for a data-selling business, including sections for: a short hero headline, a brief description, and a visible call-to-action to contact via WhatsApp for more details.",
+      "id": "feature-update-the-in-app-publish-to-google-play-store-section-to-include-a-concrete-checklist-specifically-for-generating-an-android-package-aab-apk-via-bubblewrap-pwabuilder-and-configuring-digital-asset-links-explicitly-referencing-the-hosted-path-well-known-assetlinks-json-and-the-app-manifest-url-origin-manifest-webmanifest",
+      "title": "Update the in-app \"Publish to Google Play Store\" section to include a concrete checklist specifically for generating an Android package (AAB/APK) via Bubblewrap/PWABuilder and configuring Digital Asset Links, explicitly referencing the hosted path `/.well-known/assetlinks.json` and the app manifest URL `{origin}/manifest.webmanifest`.",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-a-whatsapp-contact-link-button-that-opens-whatsapp-chat-for-the-phone-number-09033449260",
-      "title": "Add a WhatsApp contact link/button that opens WhatsApp chat for the phone number 09033449260.",
+      "id": "feature-ensure-play-store-listing-assets-are-present-as-static-files-under-frontend-public-assets-generated-including-app-icons-and-a-play-feature-graphic-and-reference-them-where-appropriate-manifest-for-icons-guide-text-for-feature-graphic-location",
+      "title": "Ensure Play Store listing assets are present as static files under `frontend/public/assets/generated/`, including app icons and a Play feature graphic, and reference them where appropriate (manifest for icons; guide text for feature graphic location).",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-apply-a-coherent-professional-visual-theme-colors-typography-spacing-components-across-the-ui-suitable-for-a-commercial-data-selling-brand-use-a-consistent-design-system-across-all-screens",
-      "title": "Apply a coherent, professional visual theme (colors, typography, spacing, components) across the UI suitable for a commercial data-selling brand; use a consistent design system across all screens.",
+      "id": "feature-update-the-service-worker-precache-list-to-include-the-generated-play-store-feature-graphic-so-it-is-available-offline-alongside-existing-generated-icons-without-changing-caching-strategy",
+      "title": "Update the service worker precache list to include the generated Play Store feature graphic so it is available offline alongside existing generated icons (without changing caching strategy).",
       "reqIds": [
         "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-provide-a-simple-data-plans-or-equivalent-section-on-the-landing-page-that-lists-example-data-bundle-offerings-static-editable-in-code-with-name-price-and-brief-description",
-      "title": "Provide a simple \"Data Plans\" (or equivalent) section on the landing page that lists example data bundle offerings (static, editable in code) with name, price, and brief description.",
-      "reqIds": [
-        "REQ-5"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-include-a-footer-with-basic-business-contact-text-and-a-repeated-whatsapp-contact-link-for-09033449260",
-      "title": "Include a footer with basic business/contact text and a repeated WhatsApp contact link for 09033449260.",
-      "reqIds": [
-        "REQ-6"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-generated-brand-assets-logo-and-a-subtle-hero-background-illustration-as-static-images-and-render-them-in-the-ui-from-the-frontend-public-assets-folder",
-      "title": "Add generated brand assets (logo and a subtle hero background/illustration) as static images and render them in the UI from the frontend public assets folder.",
-      "reqIds": [
-        "REQ-7"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-refresh-the-application-color-scheme-by-updating-the-global-tailwind-css-design-tokens-css-variables-to-a-new-coherent-palette-not-the-current-blue-cyan-look-and-ensure-the-updated-colors-apply-consistently-across-header-hero-gradients-buttons-badges-cards-and-icons",
-      "title": "Refresh the application color scheme by updating the global Tailwind CSS design tokens (CSS variables) to a new, coherent palette (not the current blue/cyan look), and ensure the updated colors apply consistently across header, hero gradients, buttons, badges, cards, and icons.",
-      "reqIds": [
-        "REQ-8"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-an-in-app-payment-flow-so-customers-can-purchase-a-selected-data-plan-without-leaving-to-whatsapp-while-keeping-whatsapp-ordering-available-as-an-alternative",
-      "title": "Add an in-app payment flow so customers can purchase a selected data plan without leaving to WhatsApp, while keeping WhatsApp ordering available as an alternative.",
-      "reqIds": [
-        "REQ-9"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-enhance-the-landing-page-with-additional-attractive-customer-facing-sections-that-improve-trust-and-clarity-without-changing-the-core-purpose-of-selling-data-plans",
-      "title": "Enhance the landing page with additional attractive, customer-facing sections that improve trust and clarity, without changing the core purpose of selling data plans.",
-      "reqIds": [
-        "REQ-11"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-improve-navigation-usability-by-ensuring-existing-footer-quick-links-anchors-e-g-plans-about-correctly-scroll-to-the-corresponding-sections-on-the-landing-page",
-      "title": "Improve navigation usability by ensuring existing footer “Quick Links” anchors (e.g., #plans, #about) correctly scroll to the corresponding sections on the landing page.",
-      "reqIds": [
-        "REQ-12"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-landing-page-data-plans-section-to-support-mobile-network-categories-mtn-glo-airtel-9mobile-where-each-network-has-its-own-list-of-data-bundles-and-prices-and-users-can-switch-between-networks-to-view-the-relevant-plans",
-      "title": "Update the landing page “Data Plans” section to support mobile network categories (MTN, GLO, AIRTEL, 9MOBILE) where each network has its own list of data bundles and prices, and users can switch between networks to view the relevant plans.",
-      "reqIds": [
-        "REQ-13"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-ensure-the-existing-purchase-flows-pay-now-via-stripe-checkout-and-order-via-whatsapp-continue-to-work-for-every-network-specific-plan-and-use-the-selected-network-information-in-user-visible-messages-descriptions",
-      "title": "Ensure the existing purchase flows (Pay Now via Stripe checkout and Order via WhatsApp) continue to work for every network-specific plan and use the selected network information in user-visible messages/descriptions.",
-      "reqIds": [
-        "REQ-14"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-react-query-hooks-to-read-and-admin-only-update-the-bank-transfer-details-from-the-backend-actor-following-the-existing-patterns-used-for-stripe-configuration-in-frontend-src-hooks-usequeries-ts",
-      "title": "Add React Query hooks to read and (admin-only) update the bank transfer details from the backend actor, following the existing patterns used for Stripe configuration in frontend/src/hooks/useQueries.ts.",
-      "reqIds": [
-        "REQ-16"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-provide-an-admin-ui-to-configure-bank-transfer-details-bank-name-account-name-account-number-optional-note-in-a-dialog-accessible-from-the-header-when-the-admin-is-logged-in-without-editing-any-immutable-frontend-paths",
-      "title": "Provide an admin UI to configure bank transfer details (bank name, account name, account number, optional note) in a dialog accessible from the header when the admin is logged in, without editing any immutable frontend paths.",
-      "reqIds": [
-        "REQ-17"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-customer-facing-pay-via-bank-transfer-option-on-each-data-plan-card-that-opens-a-modal-showing-the-configured-bank-transfer-details-and-a-short-instruction-block-so-customers-can-pay-by-bank-transfer-as-an-alternative-to-stripe-and-whatsapp-ordering",
-      "title": "Add a customer-facing 'Pay via Bank Transfer' option on each data plan card that opens a modal showing the configured bank transfer details (and a short instruction block) so customers can pay by bank transfer as an alternative to Stripe and WhatsApp ordering.",
-      "reqIds": [
-        "REQ-18"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-customer-facing-bank-transfer-flow-so-the-selected-plan-context-network-plan-name-data-amount-and-price-is-passed-into-the-bank-transfer-details-dialog-and-displayed-clearly-at-the-top-of-the-dialog-as-a-short-order-summary-block",
-      "title": "Update the customer-facing bank transfer flow so the selected plan context (network, plan name, data amount, and price) is passed into the bank transfer details dialog and displayed clearly at the top of the dialog as a short \"Order Summary\" block.",
-      "reqIds": [
-        "REQ-19"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-improve-the-bank-transfer-details-dialog-ux-to-reduce-friction-add-a-single-copy-all-details-action-copies-bank-name-account-name-account-number-and-any-optional-iban-bic-and-provide-clear-step-by-step-instructions-in-english-for-completing-a-bank-transfer-and-confirming-payment",
-      "title": "Improve the bank transfer details dialog UX to reduce friction: add a single \"Copy all details\" action (copies bank name, account name, account number, and any optional IBAN/BIC) and provide clear step-by-step instructions in English for completing a bank transfer and confirming payment.",
-      "reqIds": [
-        "REQ-20"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-prominent-whatsapp-confirmation-cta-inside-the-bank-transfer-details-dialog-that-opens-whatsapp-with-a-prefilled-message-containing-the-selected-plan-summary-and-a-prompt-for-the-customer-to-attach-describe-their-transfer-proof-while-keeping-the-existing-global-whatsapp-number-unchanged-09033449260",
-      "title": "Add a prominent WhatsApp confirmation CTA inside the bank transfer details dialog that opens WhatsApp with a prefilled message containing the selected plan summary and a prompt for the customer to attach/describe their transfer proof (while keeping the existing global WhatsApp number unchanged: 09033449260).",
-      "reqIds": [
-        "REQ-21"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-frontend-react-query-hooks-and-types-so-the-app-reads-and-saves-a-list-of-bank-transfer-accounts-instead-of-a-single-bankdetails-object-following-the-existing-patterns-in-frontend-src-hooks-usequeries-ts",
-      "title": "Update the frontend React Query hooks and types so the app reads and saves a list of bank transfer accounts (instead of a single bankDetails object), following the existing patterns in frontend/src/hooks/useQueries.ts.",
-      "reqIds": [
-        "REQ-25"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-admin-bank-transfer-setup-ui-to-manage-multiple-bank-accounts-allow-adding-editing-and-removing-bank-accounts-validate-required-fields-bank-name-account-name-account-number-for-each-entry-and-save-the-full-list-to-the-backend-all-user-facing-text-must-be-in-english",
-      "title": "Update the admin bank transfer setup UI to manage multiple bank accounts: allow adding, editing, and removing bank accounts; validate required fields (bank name, account name, account number) for each entry; and save the full list to the backend. All user-facing text must be in English.",
-      "reqIds": [
-        "REQ-26"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-customer-facing-bank-transfer-details-dialog-to-support-selecting-which-bank-account-to-pay-into-when-multiple-accounts-exist-and-ensure-all-copy-actions-and-displayed-details-use-the-selected-account-all-user-facing-text-must-be-in-english",
-      "title": "Update the customer-facing bank transfer details dialog to support selecting which bank account to pay into when multiple accounts exist, and ensure all copy actions and displayed details use the selected account. All user-facing text must be in English.",
-      "reqIds": [
-        "REQ-27"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-ensure-the-whatsapp-bank-transfer-confirmation-cta-continues-to-work-with-the-multi-account-flow-and-include-the-selected-bank-name-in-the-prefilled-confirmation-message-while-keeping-the-whatsapp-number-unchanged-09033449260",
-      "title": "Ensure the WhatsApp bank-transfer confirmation CTA continues to work with the multi-account flow, and include the selected bank name in the prefilled confirmation message (while keeping the WhatsApp number unchanged: 09033449260).",
-      "reqIds": [
-        "REQ-28"
       ],
       "version": 1
     }
@@ -197,113 +43,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Create a professional data-selling application for selling DATA (IBN)",
+      "summary": "Prepare build for Google Play Store packaging (release bundle/APK, signing, and related packaging steps).",
       "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Brand the application with the name \"IBN\"",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Design the app with a very good-looking, professional UI",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Add a WhatsApp contact link (09033449260) for more details",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-5",
-      "summary": "Update/change the app color scheme (visual theme refresh)",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-6",
-      "summary": "Allow customers to make payments directly داخل التطبيق (in-app payment flow) without going to WhatsApp",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-7",
-      "summary": "Add more attractive features to improve the app experience/appeal (engagement/marketing enhancements)",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-10",
-      "summary": "Implement backend support for the in-app payment flow in the single Motoko actor (backend/main.mo), including creating a payment session for a selected plan and confirming payment status in a way that does not require exposing any secret keys in the frontend.",
-      "reqIds": [
-        "REQ-10"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-11",
-      "summary": "Add mobile network categories (MTN, GLO, AIRTEL, 9MOBILE) with separate data plan bundles and prices per network",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-12",
-      "summary": "Add a bank transfer payment option by allowing the business to configure and display bank account details for customers to pay when purchasing a data plan",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-13",
-      "summary": "Add backend support for bank transfer details by introducing a BankDetails record (e.g., bank name, account name, account number, optional note) that can be saved by an admin and retrieved by the frontend for display to customers.",
-      "reqIds": [
-        "REQ-15"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-14",
-      "summary": "Refine/improve how bank transfer details are presented to customers during checkout/purchase flow (UI/UX polish for bank details modal/section)",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-15",
-      "summary": "Support configuring and displaying multiple bank transfer accounts (e.g., OPAY, Moniepoint, Polaris) so customers can choose which bank details to use",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-16",
-      "summary": "Update the backend bank transfer storage to support multiple bank accounts (not a single BankDetails record), while keeping admin-only write access and authenticated-user read access.",
-      "reqIds": [
-        "REQ-22"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-17",
-      "summary": "Implement a conditional state migration so that if existing deployments have a single saved bankDetails record, it is migrated into the new multi-account list on upgrade without data loss.",
-      "reqIds": [
-        "REQ-23"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-18",
-      "summary": "Preconfigure the app with the user-provided bank accounts so customers can immediately use bank transfer after deployment/upgrade (unless the admin has already configured a different set of accounts). Accounts to include: (1) Bank Name: OPAY, Account Name: USMAN UMAR, Account Number: 9033449260; (2) Bank Name: MONIE POINT, Account Name: USMAN UMAR, Account Number: 9033449260; (3) Bank Name: POLARIS BANK, Account Name: USMAN UMAR, Account Number: 3028545600.",
-      "reqIds": [
-        "REQ-24"
-      ],
       "status": "pending"
     }
   ],
-  "gameProjectType": "none",
-  "projectName": "IBN",
+  "projectName": "Finalize Google Play Store packaging readiness for the IBN PWA (TWA)",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

@@ -1,0 +1,39 @@
+{
+  "name": "IBN - Mobile Data Services",
+  "short_name": "IBN",
+  "description": "Your trusted partner for affordable and reliable mobile data services",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/generated/ibn-app-icon.dim_192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/generated/ibn-app-icon.dim_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "shopping"],
+  "shortcuts": [
+    {
+      "name": "View Data Plans",
+      "short_name": "Plans",
+      "description": "Browse available data plans",
+      "url": "/#plans",
+      "icons": [
+        {
+          "src": "/assets/generated/ibn-app-icon.dim_192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

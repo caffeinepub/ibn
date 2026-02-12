@@ -55,6 +55,14 @@ export function IBNFooter() {
                 </button>
               </li>
               <li>
+                <button 
+                  onClick={() => scrollToSection('play-store-publishing')} 
+                  className="hover:text-foreground transition-colors"
+                >
+                  Publish to Play Store
+                </button>
+              </li>
+              <li>
                 <a href={getWhatsAppUrl('I need help with my order')} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
                   Support
                 </a>

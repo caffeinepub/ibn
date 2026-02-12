@@ -1,103 +1,79 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T01:48:51.417Z",
+  "generatedAt": "2026-02-12T23:51:00.800Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 7,
+    "total": 4,
     "implemented": 4,
     "items": [
       {
-        "id": "REQ-22",
-        "summary": "Update the backend bank transfer storage to support multiple bank accounts (not a single BankDetails record), while keeping admin-only write access and authenticated-user read access.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-23",
-        "summary": "Implement a conditional state migration so that if existing deployments have a single saved bankDetails record, it is migrated into the new multi-account list on upgrade without data loss.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-24",
-        "summary": "Preconfigure the app with the user-provided bank accounts so customers can immediately use bank transfer after deployment/upgrade (unless the admin has already configured a different set of accounts). Accounts to include: (1) Bank Name: OPAY, Account Name: USMAN UMAR, Account Number: 9033449260; (2) Bank Name: MONIE POINT, Account Name: USMAN UMAR, Account Number: 9033449260; (3) Bank Name: POLARIS BANK, Account Name: USMAN UMAR, Account Number: 3028545600.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-25",
-        "summary": "Update the frontend React Query hooks and types so the app reads and saves a list of bank transfer accounts (instead of a single bankDetails object), following the existing patterns in frontend/src/hooks/useQueries.ts.",
+        "id": "REQ-1",
+        "summary": "Add a Digital Asset Links file for Trusted Web Activity verification by creating and serving a static file at `/.well-known/assetlinks.json` (i.e., `frontend/public/.well-known/assetlinks.json`) with clear placeholder values for package name and signing certificate fingerprint.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/public/.well-known/assetlinks.json"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/public/.well-known/assetlinks.json"
         ]
       },
       {
-        "id": "REQ-26",
-        "summary": "Update the admin bank transfer setup UI to manage multiple bank accounts: allow adding, editing, and removing bank accounts; validate required fields (bank name, account name, account number) for each entry; and save the full list to the backend. All user-facing text must be in English.",
+        "id": "REQ-2",
+        "summary": "Update the in-app \"Publish to Google Play Store\" section to include a concrete checklist specifically for generating an Android package (AAB/APK) via Bubblewrap/PWABuilder and configuring Digital Asset Links, explicitly referencing the hosted path `/.well-known/assetlinks.json` and the app manifest URL `{origin}/manifest.webmanifest`.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/payments/BankTransferAdminSetup.tsx",
-          "frontend/src/components/IBNHeader.tsx"
+          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/payments/BankTransferAdminSetup.tsx"
+          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
         ]
       },
       {
-        "id": "REQ-27",
-        "summary": "Update the customer-facing bank transfer details dialog to support selecting which bank account to pay into when multiple accounts exist, and ensure all copy actions and displayed details use the selected account. All user-facing text must be in English.",
+        "id": "REQ-3",
+        "summary": "Ensure Play Store listing assets are present as static files under `frontend/public/assets/generated/`, including app icons and a Play feature graphic, and reference them where appropriate (manifest for icons; guide text for feature graphic location).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-          "frontend/src/components/DataPlansSection.tsx"
+          "frontend/public/assets/generated/ibn-app-icon.dim_192x192.png",
+          "frontend/public/assets/generated/ibn-app-icon.dim_512x512.png",
+          "frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png",
+          "frontend/public/manifest.webmanifest",
+          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-          "frontend/src/components/DataPlansSection.tsx"
+          "frontend/public/assets/generated/ibn-app-icon.dim_192x192.png",
+          "frontend/public/assets/generated/ibn-app-icon.dim_512x512.png",
+          "frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png",
+          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
         ]
       },
       {
-        "id": "REQ-28",
-        "summary": "Ensure the WhatsApp bank-transfer confirmation CTA continues to work with the multi-account flow, and include the selected bank name in the prefilled confirmation message (while keeping the WhatsApp number unchanged: 09033449260).",
+        "id": "REQ-4",
+        "summary": "Update the service worker precache list to include the generated Play Store feature graphic so it is available offline alongside existing generated icons (without changing caching strategy).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/lib/whatsapp.ts",
-          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+          "frontend/public/sw.js"
         ],
         "matchedFiles": [
-          "frontend/src/lib/whatsapp.ts",
-          "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+          "frontend/public/sw.js"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/DataPlansSection.tsx",
-    "frontend/src/components/payments/BankTransferAdminSetup.tsx",
-    "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/lib/whatsapp.ts",
+    "frontend/public/.well-known/assetlinks.json",
+    "frontend/public/assets/generated/ibn-app-icon.dim_192x192.png",
+    "frontend/public/assets/generated/ibn-app-icon.dim_512x512.png",
+    "frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png",
+    "frontend/public/sw.js",
+    "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-frontend-react-query-hooks-and-types-so-the-app-reads-and-saves-a-list-of-bank-transfer-accounts-instead-of-a-single-bankdetails-object-following-the-existing-patterns-in-frontend-src-hooks-usequeries-ts",
-      "featureTitle": "Update the frontend React Query hooks and types so the app reads and saves a list of bank transfer accounts (instead of a single bankDetails object), following the existing patterns in frontend/src/hooks/useQueries.ts.",
+      "featureId": "feature-add-a-digital-asset-links-file-for-trusted-web-activity-verification-by-creating-and-serving-a-static-file-at-well-known-assetlinks-json-i-e-frontend-public-well-known-assetlinks-json-with-clear-placeholder-values-for-package-name-and-signing-certificate-fingerprint",
+      "featureTitle": "Add a Digital Asset Links file for Trusted Web Activity verification by creating and serving a static file at `/.well-known/assetlinks.json` (i.e., `frontend/public/.well-known/assetlinks.json`) with clear placeholder values for package name and signing certificate fingerprint.",
       "files": [
-        "frontend/src/hooks/useQueries.ts"
+        "frontend/public/.well-known/assetlinks.json"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -18,15 +18,15 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-25"
+        "REQ-1"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-admin-bank-transfer-setup-ui-to-manage-multiple-bank-accounts-allow-adding-editing-and-removing-bank-accounts-validate-required-fields-bank-name-account-name-account-number-for-each-entry-and-save-the-full-list-to-the-backend-all-user-facing-text-must-be-in-english",
-      "featureTitle": "Update the admin bank transfer setup UI to manage multiple bank accounts: allow adding, editing, and removing bank accounts; validate required fields (bank name, account name, account number) for each entry; and save the full list to the backend. All user-facing text must be in English.",
+      "featureId": "feature-update-the-in-app-publish-to-google-play-store-section-to-include-a-concrete-checklist-specifically-for-generating-an-android-package-aab-apk-via-bubblewrap-pwabuilder-and-configuring-digital-asset-links-explicitly-referencing-the-hosted-path-well-known-assetlinks-json-and-the-app-manifest-url-origin-manifest-webmanifest",
+      "featureTitle": "Update the in-app \"Publish to Google Play Store\" section to include a concrete checklist specifically for generating an Android package (AAB/APK) via Bubblewrap/PWABuilder and configuring Digital Asset Links, explicitly referencing the hosted path `/.well-known/assetlinks.json` and the app manifest URL `{origin}/manifest.webmanifest`.",
       "files": [
-        "frontend/src/components/payments/BankTransferAdminSetup.tsx"
+        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -39,16 +39,15 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-26"
+        "REQ-2"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-customer-facing-bank-transfer-details-dialog-to-support-selecting-which-bank-account-to-pay-into-when-multiple-accounts-exist-and-ensure-all-copy-actions-and-displayed-details-use-the-selected-account-all-user-facing-text-must-be-in-english",
-      "featureTitle": "Update the customer-facing bank transfer details dialog to support selecting which bank account to pay into when multiple accounts exist, and ensure all copy actions and displayed details use the selected account. All user-facing text must be in English.",
+      "featureId": "feature-ensure-play-store-listing-assets-are-present-as-static-files-under-frontend-public-assets-generated-including-app-icons-and-a-play-feature-graphic-and-reference-them-where-appropriate-manifest-for-icons-guide-text-for-feature-graphic-location",
+      "featureTitle": "Ensure Play Store listing assets are present as static files under `frontend/public/assets/generated/`, including app icons and a Play feature graphic, and reference them where appropriate (manifest for icons; guide text for feature graphic location).",
       "files": [
-        "frontend/src/components/DataPlansSection.tsx",
-        "frontend/src/components/payments/BankTransferDetailsDialog.tsx"
+        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -61,16 +60,15 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-27"
+        "REQ-3"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-ensure-the-whatsapp-bank-transfer-confirmation-cta-continues-to-work-with-the-multi-account-flow-and-include-the-selected-bank-name-in-the-prefilled-confirmation-message-while-keeping-the-whatsapp-number-unchanged-09033449260",
-      "featureTitle": "Ensure the WhatsApp bank-transfer confirmation CTA continues to work with the multi-account flow, and include the selected bank name in the prefilled confirmation message (while keeping the WhatsApp number unchanged: 09033449260).",
+      "featureId": "feature-update-the-service-worker-precache-list-to-include-the-generated-play-store-feature-graphic-so-it-is-available-offline-alongside-existing-generated-icons-without-changing-caching-strategy",
+      "featureTitle": "Update the service worker precache list to include the generated Play Store feature graphic so it is available offline alongside existing generated icons (without changing caching strategy).",
       "files": [
-        "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-        "frontend/src/lib/whatsapp.ts"
+        "frontend/public/sw.js"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -83,7 +81,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-28"
+        "REQ-4"
       ],
       "confidence": "high"
     }

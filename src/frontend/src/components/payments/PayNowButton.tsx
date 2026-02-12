@@ -31,8 +31,9 @@ export function PayNowButton({ networkName, planName, planData, priceInCents, va
 
     try {
       const baseUrl = `${window.location.protocol}//${window.location.host}`;
-      const successUrl = `${baseUrl}/payment-success`;
-      const cancelUrl = `${baseUrl}/payment-failure`;
+      // Use hash-based routes for TWA compatibility
+      const successUrl = `${baseUrl}/#/payment-success`;
+      const cancelUrl = `${baseUrl}/#/payment-failure`;
 
       const items = [{
         productName: `${networkName} ${planData} Data Plan`,

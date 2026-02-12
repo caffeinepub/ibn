@@ -8,23 +8,29 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 
 function App() {
-  // Simple path-based routing for payment pages
-  const path = window.location.pathname;
+  // Hash-based routing for payment pages (TWA-compatible)
+  const hash = window.location.hash;
+  const route = hash.startsWith('#/') ? hash.substring(2) : '';
+
+  // Determine which page to show based on hash route
+  const isPaymentSuccess = route === 'payment-success';
+  const isPaymentFailure = route === 'payment-failure';
+  const showHeaderFooter = !isPaymentSuccess && !isPaymentFailure;
 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
-        {path !== '/payment-success' && path !== '/payment-failure' && <IBNHeader />}
+        {showHeaderFooter && <IBNHeader />}
         <main className="flex-1">
-          {path === '/payment-success' ? (
+          {isPaymentSuccess ? (
             <PaymentSuccess />
-          ) : path === '/payment-failure' ? (
+          ) : isPaymentFailure ? (
             <PaymentFailure />
           ) : (
             <LandingPage />
           )}
         </main>
-        {path !== '/payment-success' && path !== '/payment-failure' && <IBNFooter />}
+        {showHeaderFooter && <IBNFooter />}
       </div>
     </QueryClientProvider>
   );

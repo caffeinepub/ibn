@@ -3,19 +3,21 @@ import { CheckCircle, Loader2, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGetStripeSessionStatus } from '@/hooks/useQueries';
+import { getUrlParameter } from '@/utils/urlParams';
 
 export function PaymentSuccess() {
   const [sessionId, setSessionId] = useState<string | null>(null);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('session_id');
+    // Support both regular query params and hash-based query params
+    const id = getUrlParameter('session_id');
     setSessionId(id);
   }, []);
 
   const { data: sessionStatus, isLoading, error } = useGetStripeSessionStatus(sessionId);
 
   const handleGoHome = () => {
+    window.location.hash = '';
     window.location.href = '/';
   };
 

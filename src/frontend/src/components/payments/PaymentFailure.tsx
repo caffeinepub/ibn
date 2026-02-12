@@ -5,6 +5,7 @@ import { getWhatsAppUrl } from '@/lib/whatsapp';
 
 export function PaymentFailure() {
   const handleGoHome = () => {
+    window.location.hash = '';
     window.location.href = '/';
   };
 

@@ -1,149 +1,98 @@
 {
   "kind": "build_request",
-  "title": "Support multiple bank transfer accounts and preconfigure provided bank details",
+  "title": "Finalize Google Play Store packaging readiness for the IBN PWA (TWA)",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-22",
-      "text": "Update the backend bank transfer storage to support multiple bank accounts (not a single BankDetails record), while keeping admin-only write access and authenticated-user read access.",
-      "target": "backend",
+      "id": "REQ-1",
+      "text": "Add a Digital Asset Links file for Trusted Web Activity verification by creating and serving a static file at `/.well-known/assetlinks.json` (i.e., `frontend/public/.well-known/assetlinks.json`) with clear placeholder values for package name and signing certificate fingerprint.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages:user-1"
+          "msg-3"
         ],
         "quotes": [
-          "ACCNT NAME:  USMAN UMAR\n BANK NAME:   OPAY\n ACCNT NO:       9033449260 ...\n BANK NAME:   MONIE POINT\n ACCNT NO:       9033449260 ...\n BANK NAME:   POLARIS BANK\n ACCNT NO:       3028545600"
+          "yes i want"
         ]
       },
       "acceptanceCriteria": [
-        "Backend exposes a query method that returns a list/array of bank accounts to authenticated users.",
-        "Backend exposes an admin-only method to save/update the full list of bank accounts.",
-        "Existing authorization behavior is preserved: only admins can modify; only authenticated users can view.",
-        "No additional backend actors/services are introduced (single-actor architecture preserved)."
+        "A file exists at `frontend/public/.well-known/assetlinks.json` and is served at `/.well-known/assetlinks.json` by the deployed app.",
+        "The JSON is valid and includes the standard `delegate_permission/common.handle_all_urls` relation with placeholders/instructions for `package_name` and `sha256_cert_fingerprints`.",
+        "No backend changes are required to serve the file (it is a static asset)."
       ]
     },
     {
-      "id": "REQ-23",
-      "text": "Implement a conditional state migration so that if existing deployments have a single saved bankDetails record, it is migrated into the new multi-account list on upgrade without data loss.",
-      "target": "backend",
+      "id": "REQ-2",
+      "text": "Update the in-app \"Publish to Google Play Store\" section to include a concrete checklist specifically for generating an Android package (AAB/APK) via Bubblewrap/PWABuilder and configuring Digital Asset Links, explicitly referencing the hosted path `/.well-known/assetlinks.json` and the app manifest URL `{origin}/manifest.webmanifest`.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages:user-1"
-        ]
-      },
-      "acceptanceCriteria": [
-        "On upgrade, if old single bankDetails exists, it becomes a single entry in the new bank accounts list.",
-        "After upgrade, bank transfer retrieval continues to work and returns the migrated account(s).",
-        "Migration logic is conditional and does not overwrite an already-populated multi-account list."
-      ]
-    },
-    {
-      "id": "REQ-24",
-      "text": "Preconfigure the app with the user-provided bank accounts so customers can immediately use bank transfer after deployment/upgrade (unless the admin has already configured a different set of accounts). Accounts to include: (1) Bank Name: OPAY, Account Name: USMAN UMAR, Account Number: 9033449260; (2) Bank Name: MONIE POINT, Account Name: USMAN UMAR, Account Number: 9033449260; (3) Bank Name: POLARIS BANK, Account Name: USMAN UMAR, Account Number: 3028545600.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "recent-messages:user-1"
+          "msg-2",
+          "msg-3"
         ],
         "quotes": [
-          "ACCNT NAME:  USMAN UMAR\n BANK NAME:   OPAY\n ACCNT NO:       9033449260",
-          "ACCNT NAME:  USMAN UMAR\n BANK NAME:   MONIE POINT\n ACCNT NO:       9033449260",
-          "ACCNT NAME:  USMAN UMAR\n BANK NAME:   POLARIS BANK\n ACCNT NO:       3028545600"
+          "Do you want me to continue preparing it for Play Store packaging?",
+          "yes i want"
         ]
       },
       "acceptanceCriteria": [
-        "If no bank accounts are configured yet, the backend returns exactly the three specified accounts.",
-        "If the admin has already saved bank accounts, the backend does not overwrite them with defaults."
+        "The Play Store publishing guide mentions `/.well-known/assetlinks.json` and explains that the values must be filled in after choosing a package name and signing key.",
+        "The guide explicitly references `{window.location.origin}/manifest.webmanifest` as the manifest input and keeps all user-facing text in English.",
+        "The section remains accessible from the existing landing page flow (no broken imports/routes)."
       ]
     },
     {
-      "id": "REQ-25",
-      "text": "Update the frontend React Query hooks and types so the app reads and saves a list of bank transfer accounts (instead of a single bankDetails object), following the existing patterns in frontend/src/hooks/useQueries.ts.",
+      "id": "REQ-3",
+      "text": "Ensure Play Store listing assets are present as static files under `frontend/public/assets/generated/`, including app icons and a Play feature graphic, and reference them where appropriate (manifest for icons; guide text for feature graphic location).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages:user-1"
+          "msg-3"
+        ],
+        "quotes": [
+          "yes i want"
         ]
       },
       "acceptanceCriteria": [
-        "The bank transfer query hook returns an array/list of bank accounts (or null/empty state if unavailable).",
-        "The bank transfer save mutation accepts an array/list of bank accounts and invalidates the appropriate query keys on success.",
-        "No changes are made to immutable frontend paths listed in SYSTEM_CONTEXT.frontend.immutablePaths."
+        "The required images exist under `frontend/public/assets/generated/` with the exact filenames specified in this build request.",
+        "`frontend/public/manifest.webmanifest` continues to reference the 192x192 and 512x512 icons under `/assets/generated/`.",
+        "The Play Store guide references `/assets/generated/ibn-feature-graphic.dim_1024x500.png` as the feature graphic location."
       ]
     },
     {
-      "id": "REQ-26",
-      "text": "Update the admin bank transfer setup UI to manage multiple bank accounts: allow adding, editing, and removing bank accounts; validate required fields (bank name, account name, account number) for each entry; and save the full list to the backend. All user-facing text must be in English.",
+      "id": "REQ-4",
+      "text": "Update the service worker precache list to include the generated Play Store feature graphic so it is available offline alongside existing generated icons (without changing caching strategy).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages:user-1"
+          "msg-3"
+        ],
+        "quotes": [
+          "yes i want"
         ]
       },
       "acceptanceCriteria": [
-        "Admin UI shows the current list of configured bank accounts (preconfigured defaults should appear if admin has not changed them).",
-        "Admin can add a new bank account entry and remove an existing entry before saving.",
-        "Validation prevents saving if any bank account entry is missing bank name, account name, or account number, with English error messages.",
-        "Saving updates backend state and the UI shows a clear English success confirmation."
-      ]
-    },
-    {
-      "id": "REQ-27",
-      "text": "Update the customer-facing bank transfer details dialog to support selecting which bank account to pay into when multiple accounts exist, and ensure all copy actions and displayed details use the selected account. All user-facing text must be in English.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "recent-messages:user-1"
-        ]
-      },
-      "acceptanceCriteria": [
-        "When multiple accounts are available, the dialog provides an obvious selection control (e.g., tabs or radio group) to choose OPAY vs MONIE POINT vs POLARIS BANK (and any future accounts).",
-        "The displayed Bank Name / Account Name / Account Number fields reflect the currently selected account.",
-        "“Copy All Details” copies the currently selected account’s details (plus IBAN/BIC if present).",
-        "If only one account exists, the dialog behaves like before (no required selection step)."
-      ]
-    },
-    {
-      "id": "REQ-28",
-      "text": "Ensure the WhatsApp bank-transfer confirmation CTA continues to work with the multi-account flow, and include the selected bank name in the prefilled confirmation message (while keeping the WhatsApp number unchanged: 09033449260).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "recent-messages:user-1"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The WhatsApp confirmation link still opens WhatsApp to 09033449260.",
-        "The prefilled message includes the plan summary (as currently implemented) and additionally includes the selected bank name (e.g., “Paid into: OPAY”).",
-        "The CTA remains available and functional for every network-specific plan and any selected bank account."
+        "`frontend/public/sw.js` precaches `/assets/generated/ibn-feature-graphic.dim_1024x500.png`.",
+        "Existing precache entries and network-first behavior remain intact.",
+        "The app still serves `offline.html` as a navigation fallback when offline."
       ]
     }
   ],
   "constraints": [
-    "Use English for any user-facing text.",
-    "Respect single-actor backend architecture (all Motoko logic in backend/main.mo).",
-    "Do not edit any frontend files under SYSTEM_CONTEXT.frontend.immutablePaths.",
-    "Keep the existing global WhatsApp number unchanged: 09033449260.",
-    "Follow the existing React Query patterns in frontend/src/hooks/useQueries.ts for fetching/saving configuration."
+    "Do not edit files under `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`, or anything in `frontend/src/components/ui`.",
+    "Keep all backend logic in the single Motoko actor (`backend/main.mo`); only add a migration if persistent state schema changes are required (not expected for these changes)."
   ],
   "nonGoals": [
-    "Do not change Stripe checkout behavior or Stripe configuration UX beyond what is necessary to keep the app compiling.",
-    "Do not add third-party authentication providers (Internet Identity only).",
-    "Do not introduce external databases or additional backend services.",
-    "Do not redesign the landing page sections unrelated to bank transfer configuration/selection."
+    "Actually generating/signing an Android APK/AAB within the codebase or CI (this project will only provide the web assets and instructions needed for Bubblewrap/PWABuilder).",
+    "Integrating third-party authentication providers beyond Internet Identity.",
+    "Adding new payment providers or changing Stripe/bank transfer logic."
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "App icon with a bold \"IBN\" mark and warm orange/coral palette (ibn-app-icon.dim_512x512.png)",
+      "App icon variant for smaller launcher sizes, simplified and high-contrast (ibn-app-icon.dim_192x192.png)",
+      "Clean, modern Google Play feature graphic with warm orange/coral gradient (ibn-feature-graphic.dim_1024x500.png)"
+    ],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

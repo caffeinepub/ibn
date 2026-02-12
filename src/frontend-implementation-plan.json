@@ -1,86 +1,89 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Multi-bank-account bank transfer support (frontend hooks, admin setup UI, customer selection, WhatsApp message)",
+  "title": "Google Play Store packaging readiness for IBN PWA (TWA) — frontend assets & guide updates",
   "requirements": [
     {
-      "id": "REQ-25",
-      "summary": "Update React Query hooks and types to read/save a list of bank transfer accounts (array) using existing hook patterns.",
+      "id": "REQ-1",
+      "summary": "Serve a static Digital Asset Links file at `/.well-known/assetlinks.json` with placeholders for TWA verification.",
       "acceptanceCriteria": [
-        "The bank transfer query hook returns an array/list of bank accounts (or null/empty state if unavailable).",
-        "The bank transfer save mutation accepts an array/list of bank accounts and invalidates the appropriate query keys on success.",
-        "No changes are made to immutable frontend paths listed in SYSTEM_CONTEXT.frontend.immutablePaths."
+        "A file exists at `frontend/public/.well-known/assetlinks.json` and is served at `/.well-known/assetlinks.json` by the deployed app.",
+        "The JSON is valid and includes the standard `delegate_permission/common.handle_all_urls` relation with placeholders/instructions for `package_name` and `sha256_cert_fingerprints`.",
+        "No backend changes are required to serve the file (it is a static asset)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Replace the single-record bank transfer hooks with list-based hooks following the existing React Query patterns in this file: implement a bank accounts query that calls the backend capability for fetching bank accounts (returns an array) and a save mutation that sends the full array and invalidates the bank accounts query key on success. Ensure naming/keys are consistent and remove/retire the old single-bankDetails query key usage in favor of a list key."
+          "path": "frontend/public/.well-known/assetlinks.json",
+          "operation": "create",
+          "description": "Create a valid Digital Asset Links JSON file for TWA with `relation: [\"delegate_permission/common.handle_all_urls\"]` and clear placeholder/instruction text for `target.android_app.package_name` and `target.android_app.sha256_cert_fingerprints` values."
         }
       ]
     },
     {
-      "id": "REQ-26",
-      "summary": "Update the admin bank transfer setup dialog to add/edit/remove multiple bank accounts with per-entry validation and English success/error messaging.",
+      "id": "REQ-2",
+      "summary": "Update the in-app Play Store publishing guide with a concrete Bubblewrap/PWABuilder checklist referencing manifest and assetlinks URLs.",
       "acceptanceCriteria": [
-        "Admin UI shows the current list of configured bank accounts (preconfigured defaults should appear if admin has not changed them).",
-        "Admin can add a new bank account entry and remove an existing entry before saving.",
-        "Validation prevents saving if any bank account entry is missing bank name, account name, or account number, with English error messages.",
-        "Saving updates backend state and the UI shows a clear English success confirmation."
+        "The Play Store publishing guide mentions `/.well-known/assetlinks.json` and explains that the values must be filled in after choosing a package name and signing key.",
+        "The guide explicitly references `{window.location.origin}/manifest.webmanifest` as the manifest input and keeps all user-facing text in English.",
+        "The section remains accessible from the existing landing page flow (no broken imports/routes)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/payments/BankTransferAdminSetup.tsx",
+          "path": "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
           "operation": "modify",
-          "description": "Refactor the admin UI from a single BankDetails form into a multi-entry editor backed by an in-memory array of accounts. Use shadcn-ui form inputs (Input/Label/Textarea/Alert/Button) to render a repeated set of fields per account, with controls to add a new account and remove an existing one; verify the component's usage instructions before implementing. Wire the form to the updated list-based hooks (fetch existing list, save full list). Add per-entry validation (bank name, account name, account number required) with English error messages that indicate which entry needs attention, and show a clear English success confirmation on save."
-        },
-        {
-          "path": "frontend/src/components/IBNHeader.tsx",
-          "operation": "modify",
-          "description": "Confirm the existing Admin Settings -> Bank Transfer Settings dialog continues to open the admin setup UI and still functions after the admin setup refactor (no new routes). Update only if needed due to renamed hooks/props used by the refactored bank transfer admin setup."
+          "description": "Revise the existing 'Publish to Google Play Store' content into a concrete step-by-step checklist for Bubblewrap/PWABuilder including: manifest input as `${window.location.origin}/manifest.webmanifest`, Digital Asset Links hosted path `/.well-known/assetlinks.json`, and guidance that `package_name` and `sha256_cert_fingerprints` are filled after selecting package name + signing key. Keep all user-facing text in English. Use existing shadcn-ui building blocks already imported (Card/Alert/Button) to present the checklist; verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-27",
-      "summary": "Update the customer bank transfer details dialog to support selecting among multiple bank accounts and apply selection to displayed fields and copy actions.",
+      "id": "REQ-3",
+      "summary": "Ensure required Play Store listing images exist under `frontend/public/assets/generated/` and are referenced appropriately (manifest icons + guide feature graphic path).",
       "acceptanceCriteria": [
-        "When multiple accounts are available, the dialog provides an obvious selection control (e.g., tabs or radio group) to choose OPAY vs MONIE POINT vs POLARIS BANK (and any future accounts).",
-        "The displayed Bank Name / Account Name / Account Number fields reflect the currently selected account.",
-        "“Copy All Details” copies the currently selected account’s details (plus IBAN/BIC if present).",
-        "If only one account exists, the dialog behaves like before (no required selection step)."
+        "The required images exist under `frontend/public/assets/generated/` with the exact filenames specified in this build request.",
+        "`frontend/public/manifest.webmanifest` continues to reference the 192x192 and 512x512 icons under `/assets/generated/`.",
+        "The Play Store guide references `/assets/generated/ibn-feature-graphic.dim_1024x500.png` as the feature graphic location."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-          "operation": "modify",
-          "description": "Change the dialog to accept a list of bank accounts instead of a single bankDetails object, manage a selected account state (default to the first entry), and render a clear selection control when multiple accounts exist. Use a shadcn-ui selection component such as Tabs or RadioGroup (whichever is available in the project) to switch the selected account; verify the component's usage instructions before implementing. Ensure all displayed bank fields and all copy-to-clipboard actions (including “Copy All Details”) operate on the currently selected account, and preserve prior behavior when only a single account is present."
+          "path": "frontend/public/assets/generated/ibn-app-icon.dim_192x192.png",
+          "operation": "create",
+          "description": "Add the required generated app icon asset file at `frontend/public/assets/generated/ibn-app-icon.dim_192x192.png` (static Play Store / launcher icon)."
         },
         {
-          "path": "frontend/src/components/DataPlansSection.tsx",
+          "path": "frontend/public/assets/generated/ibn-app-icon.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the required generated app icon asset file at `frontend/public/assets/generated/ibn-app-icon.dim_512x512.png` (static Play Store / launcher icon)."
+        },
+        {
+          "path": "frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png",
+          "operation": "create",
+          "description": "Add the required generated Play feature graphic asset file at `frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png` (static Play Store listing graphic)."
+        },
+        {
+          "path": "frontend/public/manifest.webmanifest",
           "operation": "modify",
-          "description": "Update bank transfer availability logic and dialog wiring to use the list-based bank accounts hook (array). Pass the accounts list into the bank transfer details dialog along with the existing selected plan summary, ensuring the dialog opens and functions for any plan as before."
+          "description": "Verify/maintain that the manifest continues to reference `/assets/generated/ibn-app-icon.dim_192x192.png` and `/assets/generated/ibn-app-icon.dim_512x512.png` for the 192x192 and 512x512 icons (no changes beyond ensuring correctness)."
+        },
+        {
+          "path": "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
+          "operation": "modify",
+          "description": "Update the Play Store publishing guide text to explicitly reference the feature graphic file location as `/assets/generated/ibn-feature-graphic.dim_1024x500.png`. Use existing shadcn-ui content structure already in this section; verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-28",
-      "summary": "Keep the WhatsApp bank-transfer confirmation CTA functional and include the selected bank name in the prefilled message while preserving the WhatsApp number.",
+      "id": "REQ-4",
+      "summary": "Add the Play Store feature graphic to the service worker precache list without changing caching strategy or offline fallback behavior.",
       "acceptanceCriteria": [
-        "The WhatsApp confirmation link still opens WhatsApp to 09033449260.",
-        "The prefilled message includes the plan summary (as currently implemented) and additionally includes the selected bank name (e.g., “Paid into: OPAY”).",
-        "The CTA remains available and functional for every network-specific plan and any selected bank account."
+        "`frontend/public/sw.js` precaches `/assets/generated/ibn-feature-graphic.dim_1024x500.png`.",
+        "Existing precache entries and network-first behavior remain intact.",
+        "The app still serves `offline.html` as a navigation fallback when offline."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/lib/whatsapp.ts",
+          "path": "frontend/public/sw.js",
           "operation": "modify",
-          "description": "Extend the bank transfer confirmation URL helper to accept the selected bank name and append it to the prefilled message (e.g., add a line like “Paid into: <Bank Name>”). Keep the global WhatsApp number constant (09033449260) and reuse the existing WhatsApp URL generation logic."
-        },
-        {
-          "path": "frontend/src/components/payments/BankTransferDetailsDialog.tsx",
-          "operation": "modify",
-          "description": "Update the WhatsApp confirmation CTA to call the updated WhatsApp helper with the currently selected bank account’s bank name, ensuring the CTA remains available for any plan summary and uses the selected account in the message."
+          "description": "Add `/assets/generated/ibn-feature-graphic.dim_1024x500.png` to the existing `PRECACHE_ASSETS` list. Keep the current network-first fetch handling and the `offline.html` navigation fallback unchanged."
         }
       ]
     }

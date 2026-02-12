@@ -59,6 +59,7 @@ export interface StripeConfiguration {
 }
 export interface UserProfile {
     name: string;
+    phone?: string;
 }
 export interface http_header {
     value: string;

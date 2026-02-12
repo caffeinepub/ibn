@@ -33,7 +33,10 @@ export const BankDetails = IDL.Record({
   'accountName' : IDL.Text,
   'accountNumber' : IDL.Text,
 });
-export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const UserProfile = IDL.Record({
+  'name' : IDL.Text,
+  'phone' : IDL.Opt(IDL.Text),
+});
 export const StripeSessionStatus = IDL.Variant({
   'completed' : IDL.Record({
     'userPrincipal' : IDL.Opt(IDL.Text),
@@ -130,7 +133,10 @@ export const idlFactory = ({ IDL }) => {
     'accountName' : IDL.Text,
     'accountNumber' : IDL.Text,
   });
-  const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  const UserProfile = IDL.Record({
+    'name' : IDL.Text,
+    'phone' : IDL.Opt(IDL.Text),
+  });
   const StripeSessionStatus = IDL.Variant({
     'completed' : IDL.Record({
       'userPrincipal' : IDL.Opt(IDL.Text),
