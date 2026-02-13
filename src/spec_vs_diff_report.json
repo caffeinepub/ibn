@@ -1,86 +1,36 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-13T00:35:40.535Z",
-  "summary": "REQ-1 appears implemented via a new Privacy Policy page and a footer link using hash routing. REQ-5 appears partially implemented in the in-app Play Store publishing section (manifest/assetlinks/privacy URLs shown), but evidence is truncated for required visual assets in the checklist. REQ-2 is missing evidence of the required deployable `assetlinks.json` file and placeholder documentation. REQ-3 and REQ-4 cannot be fully verified from the truncated docs/script; key acceptance criteria (consistency checks, explicit placeholder replacement instructions, SHA-256 printing, and aligned next steps) are not evidenced.",
+  "generatedAt": "2026-02-13T00:52:10.714Z",
+  "summary": "Diff updates multiple Play Store guidance surfaces to Version 14 (in-app section, docs, static HTML guide, scripts README, and project_state). However, due to truncation, it’s not fully verifiable that the static guide renders origin-derived URLs at runtime and that the Bubblewrap script prints the required absolute artifact paths and explicit assetlinks redeploy next steps.",
   "missing_requirements": [
     {
       "id": "REQ-2",
-      "requirement": "Keep `frontend/public/.well-known/assetlinks.json` deployable at `{origin}/.well-known/assetlinks.json` and document replacing `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT`.",
-      "reason": "The diff summary shows documentation file `frontend/public/.well-known/ASSETLINKS_SETUP.md`, but does not show the required `frontend/public/.well-known/assetlinks.json` file being present/added/modified, nor evidence that the docs explicitly mention the two exact placeholder strings to replace.",
+      "requirement": "Ensure the static guide at `/play-store-build-guide.html` renders correct origin-derived URLs at runtime (manifest, assetlinks, privacy policy).",
+      "reason": "The HTML guide shows `{origin}/...` placeholders in the visible snippet, but the diff excerpt is truncated before any JavaScript (if present) that would replace these with `${window.location.origin}/...`. Without seeing that runtime substitution code, the AC cannot be confirmed from the provided diff summary.",
       "evidence": [
-        "frontend/public/.well-known/ASSETLINKS_SETUP.md (truncated; no placeholder evidence shown)",
-        "File diff summary: no entry for frontend/public/.well-known/assetlinks.json"
+        "frontend/public/play-store-build-guide.html"
       ]
     },
     {
       "id": "REQ-3",
-      "requirement": "Ensure `frontend/PLAY_STORE_BUILD.md` and the in-app “Publish to Google Play Store” section are consistent with repo scripts and asset filenames/paths (manifest URL, asset links URL, icon filenames, feature graphic path).",
-      "reason": "While `PlayStorePublishingSection` computes manifest/assetlinks URLs from `window.location.origin`, the build guide is truncated mid-section and the in-app section is truncated before showing all referenced assets. The diff does not provide enough evidence that the guide and UI are verified consistent with the repo scripts/asset filenames (including `/assets/generated/...`) and that any outdated paths were corrected.",
+      "requirement": "Harden `frontend/scripts/twa/bubblewrap-release.sh` to reliably produce a signed AAB (and APK when available) and print absolute paths to artifacts plus explicit next steps to update `frontend/public/.well-known/assetlinks.json` placeholders and redeploy.",
+      "reason": "The script excerpt shows prerequisite checks, prompts, output directory selection, init, and start of build, but is truncated before any section that (a) prints absolute paths to the generated `.aab`/`.apk` and (b) prints explicit instructions to replace `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT` in `frontend/public/.well-known/assetlinks.json` and redeploy. Therefore the acceptance criteria cannot be verified from the provided snippet.",
       "evidence": [
-        "frontend/PLAY_STORE_BUILD.md (truncated in provided diff)",
-        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx (truncated)"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "requirement": "Harden `frontend/scripts/twa/bubblewrap-release.sh` to reliably produce signed APK and AAB, print computed SHA-256 fingerprint, and print aligned next steps for updating `assetlinks.json` placeholders and redeploying the frontend.",
-      "reason": "The script shows deterministic output directories and checks for expected artifact locations, but the provided diff is truncated before any SHA-256 extraction/printing and before the final 'next steps' messaging. Therefore, the acceptance criteria about printing the SHA-256 fingerprint and reiterating exact placeholders and aligned next steps are not evidenced.",
-      "evidence": [
-        "frontend/scripts/twa/bubblewrap-release.sh (truncated)",
-        "frontend/scripts/twa/README.md (describes behavior, but actual script output evidence is truncated)"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "requirement": "Checklist includes manifest URL, assetlinks URL, privacy policy URL, and required Play Store visual assets (feature graphic + screenshots).",
-      "reason": "The in-app checklist clearly includes manifest/assetlinks/privacy policy URLs, but the diff is truncated right as the checklist continues, so the presence of the required visual assets list inside the checklist cannot be confirmed from the provided evidence.",
-      "evidence": [
-        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx (truncated at checklist continuation)"
+        "frontend/scripts/twa/bubblewrap-release.sh"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Global visual/theme overhaul (new OKLCH orange/coral palette) and Tailwind token changes.",
-      "reason": "Not requested by any requirement; requirements focus on Play Store/TWA packaging artifacts, docs, checklist, and privacy policy routing/link.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions modifications to frontend/src/index.css and frontend/tailwind.config.js)"
-      ]
-    },
-    {
-      "description": "New/expanded landing page content sections (How it works, testimonials, FAQ) beyond Play Store publishing requirements.",
-      "reason": "Not requested; REQs are specifically about privacy policy page, asset links setup/docs, packaging guide/script hardening, and checklist.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions HowItWorksSection.tsx, TestimonialsSection.tsx, FaqSection.tsx changes)"
-      ]
-    },
-    {
-      "description": "Changes/additions related to bank transfer multi-account selection and WhatsApp utilities/messages.",
-      "reason": "Not requested as part of Play Store/TWA packaging scope.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions DataPlansSection.tsx passing bank accounts, frontend/src/lib/whatsapp.ts changes)"
-      ]
-    },
-    {
-      "description": "Expanded React Query hooks for backend operations (Stripe, bank transfers, admin checks, registration status, caller profile).",
-      "reason": "Not requested; also risks drifting into new functionality unrelated to Play Store packaging.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions frontend/src/hooks/useQueries.ts changes)"
-      ]
-    }
-  ],
-  "confidence": 0.66,
+  "hallucinated_features": [],
+  "confidence": 0.6,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/PLAY_STORE_BUILD.md",
     "frontend/public/.well-known/ASSETLINKS_SETUP.md",
+    "frontend/public/play-store-build-guide.html",
     "frontend/scripts/twa/README.md",
     "frontend/scripts/twa/bubblewrap-release.sh",
-    "frontend/src/App.tsx",
-    "frontend/src/components/IBNFooter.tsx",
     "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
-    "frontend/src/pages/PrivacyPolicyPage.tsx",
     "project_state.json"
   ]
 }

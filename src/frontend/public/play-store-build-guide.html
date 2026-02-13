@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Store Build Guide - IBN Version 14</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ff6b35;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        .version-badge {
+            display: inline-block;
+            background: #ff6b35;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #ff6b35;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .alert {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .alert strong {
+            color: #856404;
+        }
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .step {
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff6b35;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Google Play Store Build Guide</h1>
+        <span class="version-badge">Version 14</span>
+        <p><strong>Complete guide for packaging and publishing your IBN app to the Google Play Store</strong></p>
+
+        <div class="alert">
+            <strong>Important:</strong> Publishing to the Play Store is a manual process. This guide walks you through packaging your web app as a Trusted Web Activity (TWA) and submitting it to Google Play Console.
+        </div>
+
+        <h2>Required Input URLs</h2>
+        <p>You will need these URLs during the packaging process:</p>
+        <ul>
+            <li><strong>Manifest URL:</strong> <code id="manifest-url">{origin}/manifest.webmanifest</code></li>
+            <li><strong>Digital Asset Links URL:</strong> <code id="assetlinks-url">{origin}/.well-known/assetlinks.json</code></li>
+            <li><strong>Privacy Policy URL:</strong> <code id="privacy-url">{origin}/#privacy-policy</code></li>
+        </ul>
+
+        <h2>Prerequisites</h2>
+        <div class="step">
+            <h3>1. Google Play Console Account</h3>
+            <p>Sign up at <a href="https://play.google.com/console" target="_blank" rel="noopener noreferrer">play.google.com/console</a> (one-time $25 registration fee)</p>
+
+            <h3>2. Required Visual Assets</h3>
+            <p>All assets are already prepared in your repository:</p>
+            <ul>
+                <li>App icons (192x192 and 512x512): <code>frontend/public/assets/generated/ibn-app-icon.dim_192x192.png</code> and <code>ibn-app-icon.dim_512x512.png</code></li>
+                <li>Feature graphic (1024x500): <code>frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png</code></li>
+                <li>Screenshots (1080x1920): <code>frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png</code> and <code>playstore-screenshot-2.dim_1080x1920.png</code></li>
+            </ul>
+
+            <h3>3. Privacy Policy</h3>
+            <p>Available at: <code id="privacy-url-2">{origin}/#privacy-policy</code></p>
+        </div>
+
+        <h2>Packaging Options</h2>
+        <p>Choose one of these tools to package your web app as a TWA:</p>
+
+        <div class="step">
+            <h3>Option A: Bubblewrap (Recommended for developers)</h3>
+            <p>Google's official CLI tool. Requires Node.js and Android SDK.</p>
+            <p><strong>Quick start using the helper script for Version 14:</strong></p>
+            <pre><code>cd frontend/scripts/twa
+./bubblewrap-release.sh</code></pre>
+            <p>The script is located at: <code>frontend/scripts/twa/bubblewrap-release.sh</code></p>
+            <p>It will prompt you for:</p>
+            <ul>
+                <li>Your deployed app URL (origin)</li>
+                <li>Android package name (e.g., <code>com.yourcompany.ibn</code>)</li>
+            </ul>
+            <p>The script will automatically:</p>
+            <ul>
+                <li>Initialize the Bubblewrap project</li>
+                <li>Generate or reuse a signing key</li>
+                <li>Build the AAB and APK files</li>
+                <li>Extract the SHA-256 fingerprint</li>
+                <li>Print the full paths to generated artifacts</li>
+                <li>Provide clear next steps for Digital Asset Links configuration</li>
+            </ul>
+
+            <h3>Option B: PWABuilder (Easiest for beginners)</h3>
+            <p>Web-based tool with visual interface:</p>
+            <ol>
+                <li>Visit <a href="https://www.pwabuilder.com/" target="_blank" rel="noopener noreferrer">pwabuilder.com</a></li>
+                <li>Enter your manifest URL: <code id="manifest-url-2">{origin}/manifest.webmanifest</code></li>
+                <li>Click "Package for Stores" and select "Android"</li>
+                <li>Download the generated AAB or APK file</li>
+            </ol>
+        </div>
+
+        <h2>Digital Asset Links Configuration</h2>
+        <div class="alert">
+            <strong>Critical Step:</strong> You must update the Digital Asset Links file with your actual Android package name and SHA-256 certificate fingerprint.
+        </div>
+
+        <div class="step">
+            <h3>File Location</h3>
+            <p><code>frontend/public/.well-known/assetlinks.json</code></p>
+
+            <h3>Two Placeholders to Replace</h3>
+            <ol>
+                <li><strong>REPLACE_WITH_YOUR_PACKAGE_NAME</strong> - Your Android package name (e.g., <code>com.yourcompany.ibn</code>)</li>
+                <li><strong>REPLACE_WITH_YOUR_SHA256_FINGERPRINT</strong> - The SHA-256 fingerprint from your signing key</li>
+            </ol>
+
+            <h3>Extracting SHA-256 Fingerprint</h3>
+            <p>If you used the Bubblewrap helper script, it will print the fingerprint for you. Otherwise, extract it manually:</p>
+            <pre><code>keytool -list -v -keystore your-keystore.keystore -alias your-key-alias</code></pre>
+            <p>Look for the "SHA256:" line in the output (format: XX:XX:XX:...).</p>
+
+            <h3>After Updating</h3>
+            <p>Redeploy your frontend so the updated file is accessible at: <code id="assetlinks-url-2">{origin}/.well-known/assetlinks.json</code></p>
+            <p>Verify deployment using Google's tester: <a href="https://developers.google.com/digital-asset-links/tools/generator" target="_blank" rel="noopener noreferrer">Digital Asset Links Tester</a></p>
+        </div>
+
+        <h2>Upload to Google Play Console</h2>
+        <div class="step">
+            <ol>
+                <li>Go to <a href="https://play.google.com/console" target="_blank" rel="noopener noreferrer">Google Play Console</a></li>
+                <li>Create a new app or select an existing one</li>
+                <li>Navigate to "Release" → "Production" → "Create new release"</li>
+                <li>Upload your AAB file (Android App Bundle)</li>
+                <li>Complete the store listing with:
+                    <ul>
+                        <li>App description and screenshots</li>
+                        <li>Feature graphic from: <code>frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png</code></li>
+                        <li>Privacy Policy URL: <code id="privacy-url-3">{origin}/#privacy-policy</code></li>
+                    </ul>
+                </li>
+                <li>Submit for review</li>
+            </ol>
+        </div>
+
+        <h2>Troubleshooting</h2>
+        <div class="info-box">
+            <h3>Common Issues</h3>
+            <ul>
+                <li><strong>Digital Asset Links verification failed:</strong> Ensure <code>assetlinks.json</code> is accessible at the deployed URL and contains the correct package name and fingerprint</li>
+                <li><strong>App not opening correctly:</strong> Verify your manifest URL is accessible and contains valid JSON</li>
+                <li><strong>Build errors:</strong> Check that you have the required Android SDK and build tools installed</li>
+            </ul>
+        </div>
+
+        <h2>Additional Resources</h2>
+        <ul>
+            <li><a href="https://github.com/GoogleChromeLabs/bubblewrap" target="_blank" rel="noopener noreferrer">Bubblewrap Documentation</a></li>
+            <li><a href="https://www.pwabuilder.com/" target="_blank" rel="noopener noreferrer">PWABuilder</a></li>
+            <li><a href="https://developer.android.com/training/app-links/verify-android-applinks" target="_blank" rel="noopener noreferrer">Android App Links Documentation</a></li>
+            <li><a href="https://developers.google.com/digital-asset-links/tools/generator" target="_blank" rel="noopener noreferrer">Digital Asset Links Tester</a></li>
+        </ul>
+
+        <p style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 0.9em;">
+            <strong>Version 14 Release</strong> - For detailed technical documentation, see <code>frontend/PLAY_STORE_BUILD.md</code> and <code>frontend/scripts/twa/README.md</code> in your repository.
+        </p>
+    </div>
+
+    <script>
+        // Replace {origin} placeholders with actual origin
+        const origin = window.location.origin;
+        document.querySelectorAll('#manifest-url, #manifest-url-2').forEach(el => {
+            el.textContent = `${origin}/manifest.webmanifest`;
+        });
+        document.querySelectorAll('#assetlinks-url, #assetlinks-url-2').forEach(el => {
+            el.textContent = `${origin}/.well-known/assetlinks.json`;
+        });
+        document.querySelectorAll('#privacy-url, #privacy-url-2, #privacy-url-3').forEach(el => {
+            el.textContent = `${origin}/#privacy-policy`;
+        });
+    </script>
+</body>
+</html>

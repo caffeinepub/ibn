@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, LogOut, User, Phone, UserPlus } from 'lucide-react';
-import { navigateToHash, navigateToHome } from '@/utils/hashRoute';
+import { navigateToHash, navigateHome } from '@/utils/hashRoute';
 
 export function DashboardPage() {
   const { clear, identity } = useInternetIdentity();
@@ -122,7 +122,7 @@ export function DashboardPage() {
 
             <div className="pt-4 border-t">
               <Button
-                onClick={() => navigateToHome()}
+                onClick={() => navigateHome()}
                 variant="default"
                 className="w-full"
               >

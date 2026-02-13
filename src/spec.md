@@ -1,13 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Prepare the frontend for a TWA release by adding required Play Store submission URLs, ensuring Digital Asset Links are deployable and documented, and making the build + checklist workflow reliable and consistent.
+**Goal:** Prepare Version 14 guidance and tooling for Google Play Store (TWA) submission, ensuring in-app build guide links and origin-derived URLs are correct.
 
 **Planned changes:**
-- Add a publicly accessible Privacy Policy page (English placeholder content acceptable) and add a persistent “Privacy Policy” link in the app UI.
-- Ensure `frontend/public/.well-known/assetlinks.json` is deployed at `/.well-known/assetlinks.json`, and document exactly which placeholders must be replaced (Android package name and SHA-256 fingerprint) before submission.
-- Review and update `frontend/PLAY_STORE_BUILD.md` and the in-app “Publish to Google Play Store” section so URLs, paths, and asset filenames match the repo (manifest URL, assetlinks URL, icons, feature graphic path).
-- Harden `frontend/scripts/twa/bubblewrap-release.sh` so it reliably outputs a signed APK (testing) and an AAB (Play Console), and prints actionable next steps including the computed SHA-256 fingerprint and the exact `assetlinks.json` placeholders to replace.
-- Add a Play Store pre-submission checklist (in docs and/or the in-app publishing section) covering: manifest URL, assetlinks URL, privacy policy URL, and required Play Store visual assets/screenshots.
+- Update all Play Store packaging/release documentation and in-app guidance to reference Version 14 (replacing Version 13) while keeping existing URLs, paths, and filenames unchanged unless inaccurate.
+- Ensure the in-app “View Complete Build Guide” action in the Play Store publishing section opens the static `/play-store-build-guide.html` in production and that the guide renders origin-derived URLs for the manifest, assetlinks, and privacy policy at runtime.
+- Harden `frontend/scripts/twa/bubblewrap-release.sh` so it reliably outputs a signed AAB (and APK when available), prints absolute output paths, and includes explicit next steps for updating `frontend/public/.well-known/assetlinks.json` placeholders and redeploying the frontend.
 
-**User-visible outcome:** The app exposes stable URLs needed for Play Store submission (privacy policy, manifest, asset links), and the repo provides clear, consistent documentation and scripts to generate TWA release artifacts and complete a pre-submission checklist.
+**User-visible outcome:** Users preparing the Play Store release can open the complete build guide from within the app, see correct origin-based URLs, and run an improved Bubblewrap release script to generate submission artifacts and follow clear next steps for asset links and redeployment.

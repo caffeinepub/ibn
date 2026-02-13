@@ -2,12 +2,14 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-publicly-accessible-privacy-policy-page-in-the-frontend-and-ensure-it-can-be-used-as-the-play-store-privacy-policy-url-include-clear-english-content-placeholder-text-is-acceptable-and-make-it-reachable-from-the-app-ui-e-g-footer-link",
-      "featureTitle": "Add a publicly accessible Privacy Policy page in the frontend and ensure it can be used as the Play Store “Privacy Policy URL”. Include clear English content (placeholder text is acceptable) and make it reachable from the app UI (e.g., footer link).",
+      "featureId": "feature-update-the-play-store-packaging-release-guidance-to-explicitly-reference-version-14-not-version-13-everywhere-it-appears-in-project-state-and-repository-documentation-while-keeping-all-existing-urls-paths-and-filenames-unchanged-unless-they-are-inaccurate",
+      "featureTitle": "Update the Play Store packaging/release guidance to explicitly reference Version 14 (not Version 13) everywhere it appears in project state and repository documentation, while keeping all existing URLs, paths, and filenames unchanged unless they are inaccurate.",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/IBNFooter.tsx",
-        "frontend/src/pages/PrivacyPolicyPage.tsx"
+        "frontend/PLAY_STORE_BUILD.md",
+        "frontend/public/.well-known/ASSETLINKS_SETUP.md",
+        "frontend/public/play-store-build-guide.html",
+        "frontend/scripts/twa/README.md",
+        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -25,10 +27,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-finalize-the-digital-asset-links-setup-flow-for-twa-verification-by-making-it-explicit-and-actionable-in-repo-keep-frontend-public-well-known-assetlinks-json-deployable-at-origin-well-known-assetlinks-json-and-document-exactly-which-two-values-must-be-replaced-android-package-name-and-sha-256-fingerprint-before-play-store-submission",
-      "featureTitle": "Finalize the Digital Asset Links setup flow for TWA verification by making it explicit and actionable in-repo: keep `frontend/public/.well-known/assetlinks.json` deployable at `{origin}/.well-known/assetlinks.json` and document exactly which two values must be replaced (Android package name and SHA-256 fingerprint) before Play Store submission.",
+      "featureId": "feature-ensure-the-in-app-view-complete-build-guide-action-in-the-play-store-publishing-section-continues-to-open-the-static-guide-at-play-store-build-guide-html-in-production-builds-and-that-the-guide-renders-correct-origin-derived-urls-at-runtime-manifest-assetlinks-privacy-policy",
+      "featureTitle": "Ensure the in-app \"View Complete Build Guide\" action in the Play Store publishing section continues to open the static guide at `/play-store-build-guide.html` in production builds, and that the guide renders correct origin-derived URLs at runtime (manifest, assetlinks, privacy policy).",
       "files": [
-        "frontend/public/.well-known/ASSETLINKS_SETUP.md"
+        "frontend/public/play-store-build-guide.html",
+        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -46,30 +49,8 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-ensure-the-play-store-packaging-guide-is-complete-and-directly-usable-from-the-repository-verify-that-frontend-play-store-build-md-and-the-in-app-publish-to-google-play-store-section-remain-consistent-with-the-actual-repo-scripts-and-asset-filenames-paths-manifest-url-asset-links-url-icon-filenames-feature-graphic-path-update-the-guide-content-if-any-instructions-or-paths-are-outdated",
-      "featureTitle": "Ensure the Play Store packaging guide is complete and directly usable from the repository: verify that `frontend/PLAY_STORE_BUILD.md` and the in-app “Publish to Google Play Store” section remain consistent with the actual repo scripts and asset filenames/paths (manifest URL, asset links URL, icon filenames, feature graphic path). Update the guide content if any instructions or paths are outdated.",
-      "files": [
-        "frontend/PLAY_STORE_BUILD.md",
-        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "stripe@3.0.0",
-        "http-outcalls@3.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-harden-the-bubblewrap-release-helper-script-workflow-so-that-it-reliably-produces-the-expected-outputs-signed-apk-for-testing-and-aab-for-play-console-upload-and-prints-correct-actionable-next-steps-for-updating-assetlinks-json-and-redeploying-the-frontend",
-      "featureTitle": "Harden the Bubblewrap release helper script workflow so that it reliably produces the expected outputs (signed APK for testing and AAB for Play Console upload) and prints correct, actionable next steps for updating `assetlinks.json` and redeploying the frontend.",
+      "featureId": "feature-harden-the-bubblewrap-helper-script-workflow-frontend-scripts-twa-bubblewrap-release-sh-for-the-version-14-play-store-submission-flow-so-it-reliably-produces-a-signed-aab-for-play-console-and-when-available-an-apk-for-testing-and-prints-explicit-next-steps-for-updating-frontend-public-well-known-assetlinks-json-and-redeploying-the-frontend",
+      "featureTitle": "Harden the Bubblewrap helper script workflow (`frontend/scripts/twa/bubblewrap-release.sh`) for the Version 14 Play Store submission flow so it reliably produces a signed AAB (for Play Console) and, when available, an APK (for testing), and prints explicit next steps for updating `frontend/public/.well-known/assetlinks.json` and redeploying the frontend.",
       "files": [
         "frontend/scripts/twa/README.md",
         "frontend/scripts/twa/bubblewrap-release.sh"
@@ -85,29 +66,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-play-store-pre-submission-checklist-section-in-the-app-or-docs-that-explicitly-lists-what-must-be-ready-before-uploading-the-aab-e-g-verified-manifest-url-verified-assetlinks-url-privacy-policy-url-required-graphics-screenshots",
-      "featureTitle": "Add a Play Store pre-submission checklist section in the app or docs that explicitly lists what must be ready before uploading the AAB (e.g., verified manifest URL, verified assetlinks URL, privacy policy URL, required graphics/screenshots).",
-      "files": [
-        "frontend/PLAY_STORE_BUILD.md",
-        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "stripe@3.0.0",
-        "http-outcalls@3.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
+        "REQ-3"
       ],
       "confidence": "high"
     }

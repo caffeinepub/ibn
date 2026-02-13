@@ -1,58 +1,36 @@
-# TWA Build Workflow Helper
+# TWA (Trusted Web Activity) Build Helper - Version 14
 
-This directory contains helper scripts and documentation for building a Trusted Web Activity (TWA) package for Google Play Store submission.
+This directory contains helper scripts and documentation for packaging your web app as a Trusted Web Activity (TWA) for the Google Play Store.
 
-## Quick Reference
+## Required Input URLs
 
-### Required Inputs
+Before starting, you'll need these URLs from your deployed app:
 
-Before starting, gather these exact values from your deployed application:
+- **Manifest URL:** `{origin}/manifest.webmanifest`
+- **Digital Asset Links URL:** `{origin}/.well-known/assetlinks.json`
+- **Privacy Policy URL:** `{origin}/#privacy-policy`
 
-1. **App Origin URL**: Your deployed app's base URL
-   - Example: `https://your-app.icp0.io`
+Replace `{origin}` with your deployed app's origin (e.g., `https://your-app.com`).
 
-2. **Manifest URL**: `{origin}/manifest.webmanifest`
-   - Example: `https://your-app.icp0.io/manifest.webmanifest`
-   - Verify it's accessible in your browser
+## Environment Prerequisites
 
-3. **Digital Asset Links URL**: `{origin}/.well-known/assetlinks.json`
-   - Example: `https://your-app.icp0.io/.well-known/assetlinks.json`
-   - File location: `frontend/public/.well-known/assetlinks.json`
+- **Node.js** (v14 or later)
+- **Android SDK** (for Bubblewrap)
+- **Java JDK** (for signing)
 
-4. **Privacy Policy URL**: `{origin}/#privacy-policy`
-   - Example: `https://your-app.icp0.io/#privacy-policy`
-   - Required by Google Play Store
+## Bubblewrap Helper Script
 
-### Environment Prerequisites
+### What It Does
 
-#### For Bubblewrap (CLI)
+The `bubblewrap-release.sh` script automates the TWA build process for Version 14:
 
-- **Node.js**: Version 14 or higher
-- **Java JDK**: Version 8 or higher
-- **Android SDK**: Required for building APK/AAB
-  - Install via [Android Studio](https://developer.android.com/studio) or standalone SDK tools
-  - Set `ANDROID_HOME` environment variable
+1. Prompts for your deployed app URL and Android package name
+2. Initializes a Bubblewrap project (or reuses existing)
+3. Generates or reuses a signing key
+4. Builds both AAB (Android App Bundle) and APK files
+5. Extracts the SHA-256 certificate fingerprint
+6. Prints absolute paths to all generated artifacts
+7. Provides clear next steps for Digital Asset Links configuration
 
-#### For PWABuilder (Web UI)
-
-- **Web Browser**: Any modern browser
-- No local setup required
-
----
-
-## Using the Bubblewrap Helper Script
-
-### What the Script Does
-
-The `bubblewrap-release.sh` script automates the entire TWA build workflow:
-
-1. **Checks prerequisites**: Verifies that Bubblewrap, keytool, and optionally ANDROID_HOME are available
-2. **Prompts for inputs**: Asks for your app origin URL and Android package name
-3. **Handles signing keys**: Either generates a new keystore or uses an existing one
-4. **Initializes TWA project**: Runs `bubblewrap init` with your manifest URL in a predictable output directory
-5. **Builds release artifacts**: Generates both AAB (for Play Store) and APK (for testing) files
-6. **Extracts SHA-256 fingerprint**: Automatically extracts the fingerprint from your signing key
-7. **Prints clear next steps**: Shows exact file paths and the placeholders to replace in `assetlinks.json`
-
-### Step 1: Make the Script Executable
+### Usage
 

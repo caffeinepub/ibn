@@ -1,114 +1,72 @@
 {
   "kind": "build_request",
-  "title": "Prepare TWA release build artifacts and Play Store submission checklist",
+  "title": "Prepare Version 14 for Google Play Store (TWA) submission",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add a publicly accessible Privacy Policy page in the frontend and ensure it can be used as the Play Store “Privacy Policy URL”. Include clear English content (placeholder text is acceptable) and make it reachable from the app UI (e.g., footer link).",
+      "text": "Update the Play Store packaging/release guidance to explicitly reference Version 14 (not Version 13) everywhere it appears in project state and repository documentation, while keeping all existing URLs, paths, and filenames unchanged unless they are inaccurate.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "done! now let proceed to upload the nex step on playstore"
+          "yes go ahead"
         ]
       },
       "acceptanceCriteria": [
-        "A Privacy Policy page is accessible via a stable URL path/route in the deployed app.",
-        "The footer (or another persistent navigation area) includes a “Privacy Policy” link that opens the page.",
-        "All page text is in English."
+        "No documentation pages or in-app guidance refer to Version 13 as the current release target; they refer to Version 14.",
+        "All referenced URLs remain in the `{origin}/...` form, and all referenced repository paths match real filenames/paths in the repo (e.g., `frontend/public/play-store-build-guide.html`, `frontend/public/.well-known/assetlinks.json`, `frontend/public/manifest.webmanifest`)."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Finalize the Digital Asset Links setup flow for TWA verification by making it explicit and actionable in-repo: keep `frontend/public/.well-known/assetlinks.json` deployable at `{origin}/.well-known/assetlinks.json` and document exactly which two values must be replaced (Android package name and SHA-256 fingerprint) before Play Store submission.",
+      "text": "Ensure the in-app \"View Complete Build Guide\" action in the Play Store publishing section continues to open the static guide at `/play-store-build-guide.html` in production builds, and that the guide renders correct origin-derived URLs at runtime (manifest, assetlinks, privacy policy).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "done! now let proceed to upload the nex step on playstore"
+          "yes go ahead"
         ]
       },
       "acceptanceCriteria": [
-        "`/.well-known/assetlinks.json` is present under `frontend/public/.well-known/` and is included in the built/deployed static assets.",
-        "Documentation clearly instructs replacing `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT` with real values after signing key generation.",
-        "A developer can open `{origin}/.well-known/assetlinks.json` in the browser and see valid JSON (after replacing placeholders)."
+        "Clicking the button opens `/play-store-build-guide.html` successfully in a production build.",
+        "On the guide page, the displayed Manifest URL is `${window.location.origin}/manifest.webmanifest`, the Digital Asset Links URL is `${window.location.origin}/.well-known/assetlinks.json`, and the Privacy Policy URL is `${window.location.origin}/#privacy-policy`."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Ensure the Play Store packaging guide is complete and directly usable from the repository: verify that `frontend/PLAY_STORE_BUILD.md` and the in-app “Publish to Google Play Store” section remain consistent with the actual repo scripts and asset filenames/paths (manifest URL, asset links URL, icon filenames, feature graphic path). Update the guide content if any instructions or paths are outdated.",
+      "text": "Harden the Bubblewrap helper script workflow (`frontend/scripts/twa/bubblewrap-release.sh`) for the Version 14 Play Store submission flow so it reliably produces a signed AAB (for Play Console) and, when available, an APK (for testing), and prints explicit next steps for updating `frontend/public/.well-known/assetlinks.json` and redeploying the frontend.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "done! now let proceed to upload the nex step on playstore"
+          "yes go ahead"
         ]
       },
       "acceptanceCriteria": [
-        "`frontend/PLAY_STORE_BUILD.md` references the correct current paths used in the repo (e.g., `frontend/public/.well-known/assetlinks.json`, `/manifest.webmanifest`).",
-        "The in-app Play Store publishing section shows correct URLs based on `window.location.origin` and matches the guide’s described URLs.",
-        "Referenced asset filenames match the repo’s static assets under `frontend/public/` (including `/assets/generated/...`)."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Harden the Bubblewrap release helper script workflow so that it reliably produces the expected outputs (signed APK for testing and AAB for Play Console upload) and prints correct, actionable next steps for updating `assetlinks.json` and redeploying the frontend.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "done! now let proceed to upload the nex step on playstore"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Running `frontend/scripts/twa/bubblewrap-release.sh` completes without ambiguous output paths and clearly indicates where the generated `.apk` and `.aab` artifacts are located.",
-        "The script prints the computed SHA-256 fingerprint and reiterates the exact placeholders to replace in `frontend/public/.well-known/assetlinks.json`.",
-        "The script’s documented next steps align with `frontend/public/.well-known/ASSETLINKS_SETUP.md` and `frontend/PLAY_STORE_BUILD.md`."
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Add a Play Store pre-submission checklist section in the app or docs that explicitly lists what must be ready before uploading the AAB (e.g., verified manifest URL, verified assetlinks URL, privacy policy URL, required graphics/screenshots).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "done! now let proceed to upload the nex step on playstore"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A checklist exists (in docs and/or the existing Play Store publishing UI section) that includes: manifest URL, assetlinks URL, privacy policy URL, and required Play Store visual assets.",
-        "Checklist text is in English and is specific enough to follow without external context."
+        "Running `frontend/scripts/twa/bubblewrap-release.sh` completes without errors when Bubblewrap prerequisites are installed, and prints absolute paths to the generated `.aab` (and `.apk` if produced).",
+        "The script prints clear instructions that the user must replace `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT` in `frontend/public/.well-known/assetlinks.json`, then redeploy so it is accessible at `${ORIGIN_URL}/.well-known/assetlinks.json`."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor in `backend/main.mo` (no new backend services).",
-    "Do not edit files in `frontend/src/components/ui` or any other immutable paths listed in SYSTEM_CONTEXT; compose existing UI components instead.",
-    "Do not add third-party authentication providers; Internet Identity remains the only auth method."
+    "Do not edit any files under `frontend/src/components/ui` (read-only UI components).",
+    "Do not modify immutable hook entrypoints: `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`.",
+    "Backend must remain a single Motoko actor in `backend/main.mo`; do not introduce additional backend services."
   ],
   "nonGoals": [
-    "Actually uploading the app to Google Play Console (requires the user’s Play Console account).",
-    "Implementing native Android features beyond TWA packaging.",
-    "Introducing new backend features unrelated to Play Store packaging (e.g., new payment providers)."
+    "Actually uploading or submitting the AAB to Google Play Console (manual external action).",
+    "Integrating any third-party authentication beyond Internet Identity.",
+    "Adding new payment providers or changing Stripe/bank-transfer business logic."
   ],
   "imageRequirements": {
-    "required": [
-      "Google Play feature graphic (ibn-feature-graphic.dim_1024x500.png)",
-      "Android phone screenshot 1 (playstore-screenshot-1.dim_1080x1920.png)",
-      "Android phone screenshot 2 (playstore-screenshot-2.dim_1080x1920.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }
