@@ -1,49 +1,86 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-12T23:51:00.796Z",
-  "summary": "REQ-1 and REQ-4 appear implemented (assetlinks.json added; service worker precaches feature graphic and retains offline fallback). REQ-2 cannot be fully verified due to truncation of the updated Play Store publishing section. REQ-3 is not evidenced in the diff (no generated image files shown and no manifest update shown).",
+  "generatedAt": "2026-02-13T00:35:40.535Z",
+  "summary": "REQ-1 appears implemented via a new Privacy Policy page and a footer link using hash routing. REQ-5 appears partially implemented in the in-app Play Store publishing section (manifest/assetlinks/privacy URLs shown), but evidence is truncated for required visual assets in the checklist. REQ-2 is missing evidence of the required deployable `assetlinks.json` file and placeholder documentation. REQ-3 and REQ-4 cannot be fully verified from the truncated docs/script; key acceptance criteria (consistency checks, explicit placeholder replacement instructions, SHA-256 printing, and aligned next steps) are not evidenced.",
   "missing_requirements": [
     {
       "id": "REQ-2",
-      "requirement": "Update the in-app \"Publish to Google Play Store\" section with a concrete Bubblewrap/PWABuilder checklist, explicitly referencing `/.well-known/assetlinks.json` and `{window.location.origin}/manifest.webmanifest`, and keep the section accessible from the existing landing page flow.",
-      "reason": "The file is truncated in the diff summary; while `manifestUrl` and `assetLinksUrl` variables are present, the checklist content and explicit Bubblewrap/PWABuilder + Digital Asset Links instructions cannot be confirmed from the provided excerpt.",
+      "requirement": "Keep `frontend/public/.well-known/assetlinks.json` deployable at `{origin}/.well-known/assetlinks.json` and document replacing `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT`.",
+      "reason": "The diff summary shows documentation file `frontend/public/.well-known/ASSETLINKS_SETUP.md`, but does not show the required `frontend/public/.well-known/assetlinks.json` file being present/added/modified, nor evidence that the docs explicitly mention the two exact placeholder strings to replace.",
       "evidence": [
-        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx (truncated)"
+        "frontend/public/.well-known/ASSETLINKS_SETUP.md (truncated; no placeholder evidence shown)",
+        "File diff summary: no entry for frontend/public/.well-known/assetlinks.json"
       ]
     },
     {
       "id": "REQ-3",
-      "requirement": "Ensure Play Store listing assets exist under `frontend/public/assets/generated/` with exact filenames, ensure `manifest.webmanifest` references the 192x192 and 512x512 icons under `/assets/generated/`, and reference the feature graphic path in the guide.",
-      "reason": "The diff summary does not show the required image files being added under `frontend/public/assets/generated/`, nor does it show any changes to `frontend/public/manifest.webmanifest` to confirm the required icon references. The guide references the feature graphic path, but presence of the actual static assets and manifest references is not evidenced.",
+      "requirement": "Ensure `frontend/PLAY_STORE_BUILD.md` and the in-app “Publish to Google Play Store” section are consistent with repo scripts and asset filenames/paths (manifest URL, asset links URL, icon filenames, feature graphic path).",
+      "reason": "While `PlayStorePublishingSection` computes manifest/assetlinks URLs from `window.location.origin`, the build guide is truncated mid-section and the in-app section is truncated before showing all referenced assets. The diff does not provide enough evidence that the guide and UI are verified consistent with the repo scripts/asset filenames (including `/assets/generated/...`) and that any outdated paths were corrected.",
       "evidence": [
-        "<file-diff> summary shows only 1 added file (assetlinks.json) and no added PNG files",
-        "No `frontend/public/manifest.webmanifest` modification shown"
+        "frontend/PLAY_STORE_BUILD.md (truncated in provided diff)",
+        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Harden `frontend/scripts/twa/bubblewrap-release.sh` to reliably produce signed APK and AAB, print computed SHA-256 fingerprint, and print aligned next steps for updating `assetlinks.json` placeholders and redeploying the frontend.",
+      "reason": "The script shows deterministic output directories and checks for expected artifact locations, but the provided diff is truncated before any SHA-256 extraction/printing and before the final 'next steps' messaging. Therefore, the acceptance criteria about printing the SHA-256 fingerprint and reiterating exact placeholders and aligned next steps are not evidenced.",
+      "evidence": [
+        "frontend/scripts/twa/bubblewrap-release.sh (truncated)",
+        "frontend/scripts/twa/README.md (describes behavior, but actual script output evidence is truncated)"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Checklist includes manifest URL, assetlinks URL, privacy policy URL, and required Play Store visual assets (feature graphic + screenshots).",
+      "reason": "The in-app checklist clearly includes manifest/assetlinks/privacy policy URLs, but the diff is truncated right as the checklist continues, so the presence of the required visual assets list inside the checklist cannot be confirmed from the provided evidence.",
+      "evidence": [
+        "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx (truncated at checklist continuation)"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Project metadata/state tracking file updated/added with feature request entries unrelated to runtime packaging behavior.",
-      "reason": "Not requested by any REQ; BuildRequest focuses on static assets, guide text, manifest and service worker changes.",
+      "description": "Global visual/theme overhaul (new OKLCH orange/coral palette) and Tailwind token changes.",
+      "reason": "Not requested by any requirement; requirements focus on Play Store/TWA packaging artifacts, docs, checklist, and privacy policy routing/link.",
       "evidence": [
-        "project_state.json"
+        "frontend-file-summaries.txt (mentions modifications to frontend/src/index.css and frontend/tailwind.config.js)"
       ]
     },
     {
-      "description": "Repository-wide frontend file summaries updated.",
-      "reason": "Not requested by any REQ; appears to be documentation/meta output rather than required functionality.",
+      "description": "New/expanded landing page content sections (How it works, testimonials, FAQ) beyond Play Store publishing requirements.",
+      "reason": "Not requested; REQs are specifically about privacy policy page, asset links setup/docs, packaging guide/script hardening, and checklist.",
       "evidence": [
-        "frontend-file-summaries.txt"
+        "frontend-file-summaries.txt (mentions HowItWorksSection.tsx, TestimonialsSection.tsx, FaqSection.tsx changes)"
+      ]
+    },
+    {
+      "description": "Changes/additions related to bank transfer multi-account selection and WhatsApp utilities/messages.",
+      "reason": "Not requested as part of Play Store/TWA packaging scope.",
+      "evidence": [
+        "frontend-file-summaries.txt (mentions DataPlansSection.tsx passing bank accounts, frontend/src/lib/whatsapp.ts changes)"
+      ]
+    },
+    {
+      "description": "Expanded React Query hooks for backend operations (Stripe, bank transfers, admin checks, registration status, caller profile).",
+      "reason": "Not requested; also risks drifting into new functionality unrelated to Play Store packaging.",
+      "evidence": [
+        "frontend-file-summaries.txt (mentions frontend/src/hooks/useQueries.ts changes)"
       ]
     }
   ],
-  "confidence": 0.67,
+  "confidence": 0.66,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/public/.well-known/assetlinks.json",
-    "frontend/public/sw.js",
+    "frontend/PLAY_STORE_BUILD.md",
+    "frontend/public/.well-known/ASSETLINKS_SETUP.md",
+    "frontend/scripts/twa/README.md",
+    "frontend/scripts/twa/bubblewrap-release.sh",
+    "frontend/src/App.tsx",
+    "frontend/src/components/IBNFooter.tsx",
     "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
+    "frontend/src/pages/PrivacyPolicyPage.tsx",
     "project_state.json"
   ]
 }

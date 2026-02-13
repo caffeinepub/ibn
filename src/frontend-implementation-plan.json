@@ -1,89 +1,124 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Google Play Store packaging readiness for IBN PWA (TWA) — frontend assets & guide updates",
+  "title": "TWA release artifacts + Play Store submission readiness (frontend-only)",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Serve a static Digital Asset Links file at `/.well-known/assetlinks.json` with placeholders for TWA verification.",
+      "summary": "Add a publicly accessible Privacy Policy page with English placeholder content and link it from a persistent UI location.",
       "acceptanceCriteria": [
-        "A file exists at `frontend/public/.well-known/assetlinks.json` and is served at `/.well-known/assetlinks.json` by the deployed app.",
-        "The JSON is valid and includes the standard `delegate_permission/common.handle_all_urls` relation with placeholders/instructions for `package_name` and `sha256_cert_fingerprints`.",
-        "No backend changes are required to serve the file (it is a static asset)."
+        "A Privacy Policy page is accessible via a stable URL path/route in the deployed app.",
+        "The footer (or another persistent navigation area) includes a “Privacy Policy” link that opens the page.",
+        "All page text is in English."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/.well-known/assetlinks.json",
+          "path": "frontend/src/pages/PrivacyPolicyPage.tsx",
           "operation": "create",
-          "description": "Create a valid Digital Asset Links JSON file for TWA with `relation: [\"delegate_permission/common.handle_all_urls\"]` and clear placeholder/instruction text for `target.android_app.package_name` and `target.android_app.sha256_cert_fingerprints` values."
+          "description": "Create a dedicated Privacy Policy page with clear English content suitable as placeholder legal text for Play Store submission."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the new Privacy Policy page into the existing hash-route switch (e.g., route key like \"privacy-policy\") so it is reachable at a stable URL."
+        },
+        {
+          "path": "frontend/src/components/IBNFooter.tsx",
+          "operation": "modify",
+          "description": "Add a persistent “Privacy Policy” link that navigates to the Privacy Policy hash-route."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Update the in-app Play Store publishing guide with a concrete Bubblewrap/PWABuilder checklist referencing manifest and assetlinks URLs.",
+      "summary": "Keep Digital Asset Links file deployable and add explicit in-repo instructions for replacing package name and SHA-256 fingerprint placeholders.",
       "acceptanceCriteria": [
-        "The Play Store publishing guide mentions `/.well-known/assetlinks.json` and explains that the values must be filled in after choosing a package name and signing key.",
-        "The guide explicitly references `{window.location.origin}/manifest.webmanifest` as the manifest input and keeps all user-facing text in English.",
-        "The section remains accessible from the existing landing page flow (no broken imports/routes)."
+        "`/.well-known/assetlinks.json` is present under `frontend/public/.well-known/` and is included in the built/deployed static assets.",
+        "Documentation clearly instructs replacing `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT` with real values after signing key generation.",
+        "A developer can open `{origin}/.well-known/assetlinks.json` in the browser and see valid JSON (after replacing placeholders)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
+          "path": "frontend/public/.well-known/assetlinks.json",
           "operation": "modify",
-          "description": "Revise the existing 'Publish to Google Play Store' content into a concrete step-by-step checklist for Bubblewrap/PWABuilder including: manifest input as `${window.location.origin}/manifest.webmanifest`, Digital Asset Links hosted path `/.well-known/assetlinks.json`, and guidance that `package_name` and `sha256_cert_fingerprints` are filled after selecting package name + signing key. Keep all user-facing text in English. Use existing shadcn-ui building blocks already imported (Card/Alert/Button) to present the checklist; verify the component's usage instructions before implementing."
+          "description": "Confirm the file remains valid JSON and retains the two explicit placeholders `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT` for the TWA verification flow."
+        },
+        {
+          "path": "frontend/public/.well-known/ASSETLINKS_SETUP.md",
+          "operation": "modify",
+          "description": "Update documentation to explicitly and unambiguously instruct developers to replace exactly two values in `frontend/public/.well-known/assetlinks.json`: `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT`, and to verify the deployed URL `{origin}/.well-known/assetlinks.json` in a browser."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Ensure required Play Store listing images exist under `frontend/public/assets/generated/` and are referenced appropriately (manifest icons + guide feature graphic path).",
+      "summary": "Ensure PLAY_STORE_BUILD.md and the in-app Play Store publishing section match actual repo URLs and asset filenames/paths.",
       "acceptanceCriteria": [
-        "The required images exist under `frontend/public/assets/generated/` with the exact filenames specified in this build request.",
-        "`frontend/public/manifest.webmanifest` continues to reference the 192x192 and 512x512 icons under `/assets/generated/`.",
-        "The Play Store guide references `/assets/generated/ibn-feature-graphic.dim_1024x500.png` as the feature graphic location."
+        "`frontend/PLAY_STORE_BUILD.md` references the correct current paths used in the repo (e.g., `frontend/public/.well-known/assetlinks.json`, `/manifest.webmanifest`).",
+        "The in-app Play Store publishing section shows correct URLs based on `window.location.origin` and matches the guide’s described URLs.",
+        "Referenced asset filenames match the repo’s static assets under `frontend/public/` (including `/assets/generated/...`)."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/assets/generated/ibn-app-icon.dim_192x192.png",
-          "operation": "create",
-          "description": "Add the required generated app icon asset file at `frontend/public/assets/generated/ibn-app-icon.dim_192x192.png` (static Play Store / launcher icon)."
-        },
-        {
-          "path": "frontend/public/assets/generated/ibn-app-icon.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the required generated app icon asset file at `frontend/public/assets/generated/ibn-app-icon.dim_512x512.png` (static Play Store / launcher icon)."
-        },
-        {
-          "path": "frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png",
-          "operation": "create",
-          "description": "Add the required generated Play feature graphic asset file at `frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png` (static Play Store listing graphic)."
-        },
-        {
-          "path": "frontend/public/manifest.webmanifest",
+          "path": "frontend/PLAY_STORE_BUILD.md",
           "operation": "modify",
-          "description": "Verify/maintain that the manifest continues to reference `/assets/generated/ibn-app-icon.dim_192x192.png` and `/assets/generated/ibn-app-icon.dim_512x512.png` for the 192x192 and 512x512 icons (no changes beyond ensuring correctness)."
+          "description": "Audit and update the guide so all referenced URLs/paths are correct and consistent with the repo: manifest URL `{origin}/manifest.webmanifest`, asset links URL `{origin}/.well-known/assetlinks.json`, Privacy Policy URL (the new stable route), icon filenames under `frontend/public/assets/generated/`, and feature graphic path `frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png`."
         },
         {
           "path": "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
           "operation": "modify",
-          "description": "Update the Play Store publishing guide text to explicitly reference the feature graphic file location as `/assets/generated/ibn-feature-graphic.dim_1024x500.png`. Use existing shadcn-ui content structure already in this section; verify the component's usage instructions before implementing."
+          "description": "Update the in-app “Publish to Google Play Store” section to (1) reflect the correct manifest and assetlinks URLs derived from `window.location.origin`, (2) include the Privacy Policy URL for the new page route, and (3) reference the exact static asset filenames/paths under `frontend/public/assets/generated/` including `frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png`, `frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png`, and `frontend/public/assets/generated/playstore-screenshot-2.dim_1080x1920.png`. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png",
+          "operation": "create",
+          "description": "Add the required Play Store Android phone screenshot asset as a static file at the exact path `frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png` so docs/UI references are valid."
+        },
+        {
+          "path": "frontend/public/assets/generated/playstore-screenshot-2.dim_1080x1920.png",
+          "operation": "create",
+          "description": "Add the required Play Store Android phone screenshot asset as a static file at the exact path `frontend/public/assets/generated/playstore-screenshot-2.dim_1080x1920.png` so docs/UI references are valid."
         }
       ]
     },
     {
       "id": "REQ-4",
-      "summary": "Add the Play Store feature graphic to the service worker precache list without changing caching strategy or offline fallback behavior.",
+      "summary": "Harden the Bubblewrap release helper script output clarity and alignment with the repo’s assetlinks/docs workflow.",
       "acceptanceCriteria": [
-        "`frontend/public/sw.js` precaches `/assets/generated/ibn-feature-graphic.dim_1024x500.png`.",
-        "Existing precache entries and network-first behavior remain intact.",
-        "The app still serves `offline.html` as a navigation fallback when offline."
+        "Running `frontend/scripts/twa/bubblewrap-release.sh` completes without ambiguous output paths and clearly indicates where the generated `.apk` and `.aab` artifacts are located.",
+        "The script prints the computed SHA-256 fingerprint and reiterates the exact placeholders to replace in `frontend/public/.well-known/assetlinks.json`.",
+        "The script’s documented next steps align with `frontend/public/.well-known/ASSETLINKS_SETUP.md` and `frontend/PLAY_STORE_BUILD.md`."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/sw.js",
+          "path": "frontend/scripts/twa/bubblewrap-release.sh",
           "operation": "modify",
-          "description": "Add `/assets/generated/ibn-feature-graphic.dim_1024x500.png` to the existing `PRECACHE_ASSETS` list. Keep the current network-first fetch handling and the `offline.html` navigation fallback unchanged."
+          "description": "Improve script robustness and clarity by ensuring printed artifact paths are unambiguous (absolute paths), validating that the expected `.aab` and `.apk` files exist before printing success, and ensuring the “Next Steps” text precisely matches the placeholders `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT` as documented in `frontend/public/.well-known/ASSETLINKS_SETUP.md` and `frontend/PLAY_STORE_BUILD.md`."
+        },
+        {
+          "path": "frontend/scripts/twa/README.md",
+          "operation": "modify",
+          "description": "Ensure the TWA scripts README stays consistent with the hardened `bubblewrap-release.sh` workflow, including where outputs are written, and the required follow-up of updating `frontend/public/.well-known/assetlinks.json` and redeploying the frontend."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add a Play Store pre-submission checklist that is explicit and usable without external context.",
+      "acceptanceCriteria": [
+        "A checklist exists (in docs and/or the existing Play Store publishing UI section) that includes: manifest URL, assetlinks URL, privacy policy URL, and required Play Store visual assets.",
+        "Checklist text is in English and is specific enough to follow without external context."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/PLAY_STORE_BUILD.md",
+          "operation": "modify",
+          "description": "Expand/verify the “Pre-Submission Checklist” section so it explicitly lists and explains what must be ready before uploading the AAB: manifest URL, assetlinks URL, privacy policy URL (new route), and required visuals including `frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png`, `frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png`, and `frontend/public/assets/generated/playstore-screenshot-2.dim_1080x1920.png`."
+        },
+        {
+          "path": "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
+          "operation": "modify",
+          "description": "Add (or update) an in-app pre-submission checklist subsection that mirrors `frontend/PLAY_STORE_BUILD.md` and includes explicit, copyable URLs based on `window.location.origin` for: manifest, assetlinks, and privacy policy, plus a list of required visual asset filenames/paths. Verify the component's usage instructions before implementing."
         }
       ]
     }

@@ -166,10 +166,12 @@ export interface backendInterface {
     getStripeSessionStatus(sessionId: string): Promise<StripeSessionStatus>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     highestToLowestPrice(): Promise<Array<string>>;
+    isAdmin(): Promise<boolean>;
     isCallerAdmin(): Promise<boolean>;
+    isRegisteredAsUser(): Promise<boolean>;
     isStripeConfigured(): Promise<boolean>;
+    registerAsUser(profile: UserProfile): Promise<void>;
     saveBankAccounts(accounts: Array<BankDetails>): Promise<void>;
-    saveCallerUserProfile(profile: UserProfile): Promise<void>;
     setStripeConfiguration(config: StripeConfiguration): Promise<void>;
     transform(input: TransformationInput): Promise<TransformationOutput>;
 }
@@ -358,6 +360,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async isAdmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isAdmin();
+            return result;
+        }
+    }
     async isCallerAdmin(): Promise<boolean> {
         if (this.processError) {
             try {
@@ -369,6 +385,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async isRegisteredAsUser(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isRegisteredAsUser();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isRegisteredAsUser();
             return result;
         }
     }
@@ -386,31 +416,31 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async saveBankAccounts(arg0: Array<BankDetails>): Promise<void> {
+    async registerAsUser(arg0: UserProfile): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.saveBankAccounts(to_candid_vec_n16(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor.registerAsUser(to_candid_UserProfile_n16(this._uploadFile, this._downloadFile, arg0));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.saveBankAccounts(to_candid_vec_n16(this._uploadFile, this._downloadFile, arg0));
+            const result = await this.actor.registerAsUser(to_candid_UserProfile_n16(this._uploadFile, this._downloadFile, arg0));
             return result;
         }
     }
-    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+    async saveBankAccounts(arg0: Array<BankDetails>): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n19(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor.saveBankAccounts(to_candid_vec_n18(this._uploadFile, this._downloadFile, arg0));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n19(this._uploadFile, this._downloadFile, arg0));
+            const result = await this.actor.saveBankAccounts(to_candid_vec_n18(this._uploadFile, this._downloadFile, arg0));
             return result;
         }
     }
@@ -553,16 +583,28 @@ function from_candid_variant_n14(_uploadFile: (file: ExternalBlob) => Promise<Ui
 function from_candid_vec_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_BankDetails>): Array<BankDetails> {
     return value.map((x)=>from_candid_BankDetails_n4(_uploadFile, _downloadFile, x));
 }
-function to_candid_BankDetails_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: BankDetails): _BankDetails {
-    return to_candid_record_n18(_uploadFile, _downloadFile, value);
-}
-function to_candid_UserProfile_n19(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserProfile): _UserProfile {
+function to_candid_BankDetails_n19(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: BankDetails): _BankDetails {
     return to_candid_record_n20(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserProfile_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserProfile): _UserProfile {
+    return to_candid_record_n17(_uploadFile, _downloadFile, value);
 }
 function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
     return to_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function to_candid_record_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function to_candid_record_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    name: string;
+    phone?: string;
+}): {
+    name: string;
+    phone: [] | [string];
+} {
+    return {
+        name: value.name,
+        phone: value.phone ? candid_some(value.phone) : candid_none()
+    };
+}
+function to_candid_record_n20(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     bic?: string;
     iban?: string;
     note?: string;
@@ -586,18 +628,6 @@ function to_candid_record_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8
         accountNumber: value.accountNumber
     };
 }
-function to_candid_record_n20(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    name: string;
-    phone?: string;
-}): {
-    name: string;
-    phone: [] | [string];
-} {
-    return {
-        name: value.name,
-        phone: value.phone ? candid_some(value.phone) : candid_none()
-    };
-}
 function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
     admin: null;
 } | {
@@ -613,8 +643,8 @@ function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8
         guest: null
     } : value;
 }
-function to_candid_vec_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<BankDetails>): Array<_BankDetails> {
-    return value.map((x)=>to_candid_BankDetails_n17(_uploadFile, _downloadFile, x));
+function to_candid_vec_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<BankDetails>): Array<_BankDetails> {
+    return value.map((x)=>to_candid_BankDetails_n19(_uploadFile, _downloadFile, x));
 }
 export interface CreateActorOptions {
     agent?: Agent;

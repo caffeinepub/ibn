@@ -1,6 +1,7 @@
 import { MessageCircle, Mail, MapPin } from 'lucide-react';
 import { SiFacebook, SiX, SiInstagram } from 'react-icons/si';
 import { getWhatsAppUrl, WHATSAPP_NUMBER } from '@/lib/whatsapp';
+import { navigateToHash } from '@/utils/hashRoute';
 
 export function IBNFooter() {
   const currentYear = new Date().getFullYear();
@@ -60,6 +61,14 @@ export function IBNFooter() {
                   className="hover:text-foreground transition-colors"
                 >
                   Publish to Play Store
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => navigateToHash('privacy-policy')} 
+                  className="hover:text-foreground transition-colors"
+                >
+                  Privacy Policy
                 </button>
               </li>
               <li>

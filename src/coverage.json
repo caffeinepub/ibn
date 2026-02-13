@@ -1,64 +1,83 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-12T23:51:00.800Z",
+  "generatedAt": "2026-02-13T00:35:40.538Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
-    "implemented": 4,
+    "total": 5,
+    "implemented": 5,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add a Digital Asset Links file for Trusted Web Activity verification by creating and serving a static file at `/.well-known/assetlinks.json` (i.e., `frontend/public/.well-known/assetlinks.json`) with clear placeholder values for package name and signing certificate fingerprint.",
+        "summary": "Add a publicly accessible Privacy Policy page in the frontend and ensure it can be used as the Play Store “Privacy Policy URL”. Include clear English content (placeholder text is acceptable) and make it reachable from the app UI (e.g., footer link).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/public/.well-known/assetlinks.json"
+          "frontend/src/pages/PrivacyPolicyPage.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/components/IBNFooter.tsx"
         ],
         "matchedFiles": [
-          "frontend/public/.well-known/assetlinks.json"
+          "frontend/src/pages/PrivacyPolicyPage.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/components/IBNFooter.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Update the in-app \"Publish to Google Play Store\" section to include a concrete checklist specifically for generating an Android package (AAB/APK) via Bubblewrap/PWABuilder and configuring Digital Asset Links, explicitly referencing the hosted path `/.well-known/assetlinks.json` and the app manifest URL `{origin}/manifest.webmanifest`.",
+        "summary": "Finalize the Digital Asset Links setup flow for TWA verification by making it explicit and actionable in-repo: keep `frontend/public/.well-known/assetlinks.json` deployable at `{origin}/.well-known/assetlinks.json` and document exactly which two values must be replaced (Android package name and SHA-256 fingerprint) before Play Store submission.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
+          "frontend/public/.well-known/assetlinks.json",
+          "frontend/public/.well-known/ASSETLINKS_SETUP.md"
         ],
         "matchedFiles": [
-          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
+          "frontend/public/.well-known/ASSETLINKS_SETUP.md"
         ]
       },
       {
         "id": "REQ-3",
-        "summary": "Ensure Play Store listing assets are present as static files under `frontend/public/assets/generated/`, including app icons and a Play feature graphic, and reference them where appropriate (manifest for icons; guide text for feature graphic location).",
+        "summary": "Ensure the Play Store packaging guide is complete and directly usable from the repository: verify that `frontend/PLAY_STORE_BUILD.md` and the in-app “Publish to Google Play Store” section remain consistent with the actual repo scripts and asset filenames/paths (manifest URL, asset links URL, icon filenames, feature graphic path). Update the guide content if any instructions or paths are outdated.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/public/assets/generated/ibn-app-icon.dim_192x192.png",
-          "frontend/public/assets/generated/ibn-app-icon.dim_512x512.png",
-          "frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png",
-          "frontend/public/manifest.webmanifest",
-          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
+          "frontend/PLAY_STORE_BUILD.md",
+          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
+          "frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png",
+          "frontend/public/assets/generated/playstore-screenshot-2.dim_1080x1920.png"
         ],
         "matchedFiles": [
-          "frontend/public/assets/generated/ibn-app-icon.dim_192x192.png",
-          "frontend/public/assets/generated/ibn-app-icon.dim_512x512.png",
-          "frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png",
-          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
+          "frontend/PLAY_STORE_BUILD.md",
+          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
+          "frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png",
+          "frontend/public/assets/generated/playstore-screenshot-2.dim_1080x1920.png"
         ]
       },
       {
         "id": "REQ-4",
-        "summary": "Update the service worker precache list to include the generated Play Store feature graphic so it is available offline alongside existing generated icons (without changing caching strategy).",
+        "summary": "Harden the Bubblewrap release helper script workflow so that it reliably produces the expected outputs (signed APK for testing and AAB for Play Console upload) and prints correct, actionable next steps for updating `assetlinks.json` and redeploying the frontend.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/public/sw.js"
+          "frontend/scripts/twa/bubblewrap-release.sh",
+          "frontend/scripts/twa/README.md"
         ],
         "matchedFiles": [
-          "frontend/public/sw.js"
+          "frontend/scripts/twa/bubblewrap-release.sh",
+          "frontend/scripts/twa/README.md"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Add a Play Store pre-submission checklist section in the app or docs that explicitly lists what must be ready before uploading the AAB (e.g., verified manifest URL, verified assetlinks URL, privacy policy URL, required graphics/screenshots).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/PLAY_STORE_BUILD.md",
+          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/PLAY_STORE_BUILD.md",
+          "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx"
         ]
       }
     ]
@@ -68,12 +87,17 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/.well-known/assetlinks.json",
-    "frontend/public/assets/generated/ibn-app-icon.dim_192x192.png",
-    "frontend/public/assets/generated/ibn-app-icon.dim_512x512.png",
+    "frontend/PLAY_STORE_BUILD.md",
+    "frontend/public/.well-known/ASSETLINKS_SETUP.md",
     "frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png",
-    "frontend/public/sw.js",
+    "frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png",
+    "frontend/public/assets/generated/playstore-screenshot-2.dim_1080x1920.png",
+    "frontend/scripts/twa/README.md",
+    "frontend/scripts/twa/bubblewrap-release.sh",
+    "frontend/src/App.tsx",
+    "frontend/src/components/IBNFooter.tsx",
     "frontend/src/components/LandingPageSections/PlayStorePublishingSection.tsx",
+    "frontend/src/pages/PrivacyPolicyPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

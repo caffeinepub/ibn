@@ -1,12 +1,16 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ExternalLink, Smartphone, Key, FileCheck, Upload, Info, CheckCircle2 } from 'lucide-react';
+import { ExternalLink, Smartphone, Key, FileCheck, Upload, Info, CheckCircle2, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function PlayStorePublishingSection() {
-  const manifestUrl = `${window.location.origin}/manifest.webmanifest`;
-  const assetLinksUrl = `${window.location.origin}/.well-known/assetlinks.json`;
-  const featureGraphicPath = '/assets/generated/ibn-feature-graphic.dim_1024x500.png';
+  const origin = window.location.origin;
+  const manifestUrl = `${origin}/manifest.webmanifest`;
+  const assetLinksUrl = `${origin}/.well-known/assetlinks.json`;
+  const privacyPolicyUrl = `${origin}/#privacy-policy`;
+  const featureGraphicPath = 'frontend/public/assets/generated/ibn-feature-graphic.dim_1024x500.png';
+  const screenshot1Path = 'frontend/public/assets/generated/playstore-screenshot-1.dim_1080x1920.png';
+  const screenshot2Path = 'frontend/public/assets/generated/playstore-screenshot-2.dim_1080x1920.png';
 
   return (
     <section id="play-store-publishing" className="py-16 md:py-24 bg-muted/30">
@@ -27,6 +31,64 @@ export function PlayStorePublishingSection() {
               <strong>Important:</strong> Publishing to the Play Store is not automatic. You'll need to package the app yourself and submit it through Google Play Console. This guide walks you through the process.
             </AlertDescription>
           </Alert>
+
+          <div className="mb-8">
+            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+              <a href="/PLAY_STORE_BUILD.md" target="_blank" rel="noopener noreferrer">
+                <FileText className="h-4 w-4 mr-2" />
+                View Complete Build Guide
+              </a>
+            </Button>
+          </div>
+
+          {/* Pre-Submission Checklist */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Pre-Submission Checklist</CardTitle>
+              <CardDescription>Verify these items before uploading to Play Console</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="font-medium">Manifest URL (accessible):</p>
+                  <code className="block bg-muted p-2 rounded text-xs overflow-x-auto mt-1 break-all">
+                    {manifestUrl}
+                  </code>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="font-medium">Digital Asset Links URL (accessible):</p>
+                  <code className="block bg-muted p-2 rounded text-xs overflow-x-auto mt-1 break-all">
+                    {assetLinksUrl}
+                  </code>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="font-medium">Privacy Policy URL (required by Google):</p>
+                  <code className="block bg-muted p-2 rounded text-xs overflow-x-auto mt-1 break-all">
+                    {privacyPolicyUrl}
+                  </code>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="font-medium">Required Visual Assets:</p>
+                  <ul className="text-xs text-muted-foreground mt-1 ml-4 space-y-1">
+                    <li>• Feature graphic (1024x500): <code className="bg-muted px-1 rounded">{featureGraphicPath}</code></li>
+                    <li>• Screenshot 1 (1080x1920): <code className="bg-muted px-1 rounded">{screenshot1Path}</code></li>
+                    <li>• Screenshot 2 (1080x1920): <code className="bg-muted px-1 rounded">{screenshot2Path}</code></li>
+                    <li>• App icons: <code className="bg-muted px-1 rounded">frontend/public/assets/generated/ibn-app-icon.dim_192x192.png</code> & <code className="bg-muted px-1 rounded">ibn-app-icon.dim_512x512.png</code></li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <div className="space-y-6">
             {/* Step 1: Prerequisites */}
@@ -50,15 +112,12 @@ export function PlayStorePublishingSection() {
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
                   <div>
-                    <p><strong>App Assets Ready:</strong> Feature graphic (1024x500px), app icon, screenshots, and store listing text</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Feature graphic is available at: <code className="bg-muted px-1 rounded">{featureGraphicPath}</code>
-                    </p>
+                    <p><strong>Required Assets:</strong> All visual assets are ready in the repository</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                  <p><strong>Privacy Policy URL:</strong> Required by Google for all apps</p>
+                  <p><strong>Privacy Policy URL:</strong> Available at <code className="bg-muted px-1 rounded text-xs">{privacyPolicyUrl}</code></p>
                 </div>
               </CardContent>
             </Card>
@@ -116,7 +175,7 @@ export function PlayStorePublishingSection() {
                 </div>
 
                 <div className="rounded-lg bg-muted p-4 space-y-3 text-sm">
-                  <p className="font-medium">Bubblewrap Setup Checklist:</p>
+                  <p className="font-medium">Bubblewrap Quick Start:</p>
                   <div className="space-y-2">
                     <div className="flex items-start gap-2">
                       <span className="text-primary mt-1">1.</span>
@@ -146,7 +205,7 @@ export function PlayStorePublishingSection() {
                 </div>
 
                 <div className="rounded-lg bg-muted p-4 space-y-3 text-sm">
-                  <p className="font-medium">PWABuilder Setup Checklist:</p>
+                  <p className="font-medium">PWABuilder Quick Start:</p>
                   <div className="space-y-2">
                     <div className="flex items-start gap-2">
                       <span className="text-primary mt-1">1.</span>
@@ -198,48 +257,57 @@ export function PlayStorePublishingSection() {
                   <div className="flex items-start gap-2">
                     <FileCheck className="h-5 w-5 mt-0.5 text-primary flex-shrink-0" />
                     <div className="flex-1">
-                      <p className="font-medium mb-2">Digital Asset Links File</p>
-                      <p className="text-xs text-muted-foreground mb-3">
-                        This file verifies that your Android app is authorized to open your website URLs. It's already hosted at:
+                      <p className="font-medium mb-2">Digital Asset Links Configuration</p>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        This file verifies that you own both the domain and the Android app. It must be updated with your actual package name and signing key fingerprint.
                       </p>
-                      <code className="block bg-background p-2 rounded text-xs overflow-x-auto break-all mb-3">
-                        {assetLinksUrl}
-                      </code>
-                      <Alert className="mb-3">
-                        <Info className="h-3 w-3" />
-                        <AlertDescription className="text-xs">
-                          <strong>Action Required:</strong> After choosing your package name and generating your signing key, you must update the <code className="bg-muted px-1 rounded">assetlinks.json</code> file with your actual <code className="bg-muted px-1 rounded">package_name</code> and <code className="bg-muted px-1 rounded">sha256_cert_fingerprints</code> values.
-                        </AlertDescription>
-                      </Alert>
-                      <div className="space-y-2 text-xs">
-                        <p className="font-medium">How to get your SHA-256 fingerprint:</p>
-                        <code className="block bg-background p-2 rounded overflow-x-auto">
-                          keytool -list -v -keystore your-keystore.jks -alias your-key-alias
+                      <div className="space-y-2 text-sm">
+                        <p className="font-medium">File location:</p>
+                        <code className="block bg-background p-2 rounded text-xs">
+                          frontend/public/.well-known/assetlinks.json
                         </code>
-                        <p className="text-muted-foreground">
-                          Copy the SHA-256 value and replace <code className="bg-muted px-1 rounded">REPLACE_WITH_YOUR_SHA256_FINGERPRINT</code> in the assetlinks.json file.
-                        </p>
+                        <p className="font-medium mt-3">Deployed URL:</p>
+                        <code className="block bg-background p-2 rounded text-xs break-all">
+                          {assetLinksUrl}
+                        </code>
+                        <p className="font-medium mt-3">Required placeholders to replace:</p>
+                        <ul className="text-xs text-muted-foreground ml-4 space-y-1">
+                          <li>• <code className="bg-background px-1 rounded">REPLACE_WITH_YOUR_PACKAGE_NAME</code></li>
+                          <li>• <code className="bg-background px-1 rounded">REPLACE_WITH_YOUR_SHA256_FINGERPRINT</code></li>
+                        </ul>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2 text-sm">
-                  <Key className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                  <div>
-                    <p className="font-medium mb-1">Generate a Signing Key</p>
-                    <p className="text-muted-foreground text-xs mb-2">
-                      Use Android Studio or keytool to create a signing key. Keep this file secure—you'll need it for all future updates.
-                    </p>
-                    <code className="block bg-muted p-2 rounded text-xs overflow-x-auto">
-                      keytool -genkey -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias
-                    </code>
+                <div className="rounded-lg bg-muted p-4 space-y-3 text-sm">
+                  <div className="flex items-start gap-2">
+                    <Key className="h-5 w-5 mt-0.5 text-primary flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="font-medium mb-2">Extract SHA-256 Fingerprint</p>
+                      <p className="text-xs text-muted-foreground mb-2">
+                        After building your app with Bubblewrap or PWABuilder, extract the SHA-256 fingerprint from your signing key:
+                      </p>
+                      <code className="block bg-background p-2 rounded text-xs overflow-x-auto">
+                        keytool -list -v -keystore your-keystore.keystore -alias your-key-alias
+                      </code>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Look for the "SHA256:" line in the output and copy the fingerprint (format: XX:XX:XX:...).
+                      </p>
+                    </div>
                   </div>
                 </div>
+
+                <Alert>
+                  <Info className="h-4 w-4" />
+                  <AlertDescription className="text-sm">
+                    <strong>Important:</strong> After updating <code className="bg-muted px-1 rounded">assetlinks.json</code> with your actual values, you must rebuild and redeploy your frontend so the file is accessible at <code className="bg-muted px-1 rounded">{assetLinksUrl}</code>
+                  </AlertDescription>
+                </Alert>
               </CardContent>
             </Card>
 
-            {/* Step 4: Upload */}
+            {/* Step 4: Upload to Play Console */}
             <Card>
               <CardHeader>
                 <div className="flex items-start gap-3">
@@ -247,89 +315,46 @@ export function PlayStorePublishingSection() {
                     4
                   </div>
                   <div>
-                    <CardTitle>Upload to Play Console</CardTitle>
+                    <CardTitle>Upload to Google Play Console</CardTitle>
                     <CardDescription>Submit your app for review</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <div className="flex items-start gap-2">
-                  <Upload className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                  <div>
-                    <p className="font-medium mb-1">Create a New App</p>
-                    <p className="text-muted-foreground text-xs">
-                      In Play Console, create a new app and upload your signed APK or AAB file.
-                    </p>
+                  <Upload className="h-5 w-5 mt-0.5 text-primary flex-shrink-0" />
+                  <div className="flex-1">
+                    <ol className="space-y-2 text-muted-foreground">
+                      <li>1. Go to <a href="https://play.google.com/console" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Google Play Console</a></li>
+                      <li>2. Create a new app or select an existing one</li>
+                      <li>3. Navigate to "Release" → "Production" → "Create new release"</li>
+                      <li>4. Upload your AAB file (Android App Bundle)</li>
+                      <li>5. Complete the store listing with:
+                        <ul className="ml-4 mt-1 space-y-1 text-xs">
+                          <li>• App description and screenshots</li>
+                          <li>• Feature graphic from: <code className="bg-muted px-1 rounded">{featureGraphicPath}</code></li>
+                          <li>• Privacy Policy URL: <code className="bg-muted px-1 rounded">{privacyPolicyUrl}</code></li>
+                          <li>• Content rating questionnaire</li>
+                        </ul>
+                      </li>
+                      <li>6. Submit for review</li>
+                    </ol>
                   </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                  <div>
-                    <p className="text-muted-foreground">Complete the store listing with your app description, screenshots, and feature graphic</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Feature graphic (1024x500px) location: <code className="bg-muted px-1 rounded">{featureGraphicPath}</code>
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                  <p className="text-muted-foreground">Set content rating, pricing, and distribution countries</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                  <p className="text-muted-foreground">Add your privacy policy URL</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                  <p className="text-muted-foreground">Submit for review (typically takes 1-3 days)</p>
                 </div>
               </CardContent>
             </Card>
+          </div>
 
-            {/* Resources */}
-            <Card className="border-primary/20 bg-primary/5">
-              <CardHeader>
-                <CardTitle className="text-lg">Helpful Resources</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <a 
-                  href="https://developer.chrome.com/docs/android/trusted-web-activity/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-primary hover:underline"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  Chrome TWA Documentation
-                </a>
-                <a 
-                  href="https://developer.android.com/studio/publish/app-signing" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-primary hover:underline"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  Android App Signing Guide
-                </a>
-                <a 
-                  href="https://developers.google.com/digital-asset-links/v1/getting-started" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-primary hover:underline"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  Digital Asset Links Documentation
-                </a>
-                <a 
-                  href="https://support.google.com/googleplay/android-developer/answer/9859152" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-primary hover:underline"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  Play Console Help Center
-                </a>
-              </CardContent>
-            </Card>
+          <div className="mt-8 text-center">
+            <p className="text-sm text-muted-foreground mb-4">
+              For detailed step-by-step instructions, troubleshooting, and best practices:
+            </p>
+            <Button asChild size="lg">
+              <a href="/PLAY_STORE_BUILD.md" target="_blank" rel="noopener noreferrer">
+                <FileText className="h-4 w-4 mr-2" />
+                Read Complete Build Guide
+              </a>
+            </Button>
           </div>
         </div>
       </div>

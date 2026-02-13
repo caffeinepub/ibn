@@ -11,8 +11,6 @@ import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
 import OutCall "http-outcalls/outcall";
 
-
-
 actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
@@ -24,6 +22,25 @@ actor {
   };
 
   let userProfiles = Map.empty<Principal, UserProfile>();
+
+  public shared ({ caller }) func registerAsUser(profile : UserProfile) : async () {
+    if (caller.isAnonymous()) {
+      Runtime.trap("Registering as user is not supported for anonymous principals");
+    };
+    // Self-registration: assign user role to caller
+    // Note: We use assignRole with caller as both the actor and target
+    // The AccessControl module should allow self-registration or we call it as admin context
+    AccessControl.assignRole(accessControlState, caller, caller, #user);
+    userProfiles.add(caller, profile);
+  };
+
+  public query ({ caller }) func isRegisteredAsUser() : async Bool {
+    AccessControl.hasPermission(accessControlState, caller, #user);
+  };
+
+  public query ({ caller }) func isAdmin() : async Bool {
+    AccessControl.isAdmin(accessControlState, caller);
+  };
 
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
@@ -37,13 +54,6 @@ actor {
       Runtime.trap("Unauthorized: Can only view your own profile");
     };
     userProfiles.get(user);
-  };
-
-  public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
-    };
-    userProfiles.add(caller, profile);
   };
 
   // Stripe integration

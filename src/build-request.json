@@ -1,97 +1,113 @@
 {
   "kind": "build_request",
-  "title": "Finalize Google Play Store packaging readiness for the IBN PWA (TWA)",
+  "title": "Prepare TWA release build artifacts and Play Store submission checklist",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add a Digital Asset Links file for Trusted Web Activity verification by creating and serving a static file at `/.well-known/assetlinks.json` (i.e., `frontend/public/.well-known/assetlinks.json`) with clear placeholder values for package name and signing certificate fingerprint.",
+      "text": "Add a publicly accessible Privacy Policy page in the frontend and ensure it can be used as the Play Store “Privacy Policy URL”. Include clear English content (placeholder text is acceptable) and make it reachable from the app UI (e.g., footer link).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-2"
         ],
         "quotes": [
-          "yes i want"
+          "done! now let proceed to upload the nex step on playstore"
         ]
       },
       "acceptanceCriteria": [
-        "A file exists at `frontend/public/.well-known/assetlinks.json` and is served at `/.well-known/assetlinks.json` by the deployed app.",
-        "The JSON is valid and includes the standard `delegate_permission/common.handle_all_urls` relation with placeholders/instructions for `package_name` and `sha256_cert_fingerprints`.",
-        "No backend changes are required to serve the file (it is a static asset)."
+        "A Privacy Policy page is accessible via a stable URL path/route in the deployed app.",
+        "The footer (or another persistent navigation area) includes a “Privacy Policy” link that opens the page.",
+        "All page text is in English."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the in-app \"Publish to Google Play Store\" section to include a concrete checklist specifically for generating an Android package (AAB/APK) via Bubblewrap/PWABuilder and configuring Digital Asset Links, explicitly referencing the hosted path `/.well-known/assetlinks.json` and the app manifest URL `{origin}/manifest.webmanifest`.",
+      "text": "Finalize the Digital Asset Links setup flow for TWA verification by making it explicit and actionable in-repo: keep `frontend/public/.well-known/assetlinks.json` deployable at `{origin}/.well-known/assetlinks.json` and document exactly which two values must be replaced (Android package name and SHA-256 fingerprint) before Play Store submission.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2",
-          "msg-3"
+          "msg-2"
         ],
         "quotes": [
-          "Do you want me to continue preparing it for Play Store packaging?",
-          "yes i want"
+          "done! now let proceed to upload the nex step on playstore"
         ]
       },
       "acceptanceCriteria": [
-        "The Play Store publishing guide mentions `/.well-known/assetlinks.json` and explains that the values must be filled in after choosing a package name and signing key.",
-        "The guide explicitly references `{window.location.origin}/manifest.webmanifest` as the manifest input and keeps all user-facing text in English.",
-        "The section remains accessible from the existing landing page flow (no broken imports/routes)."
+        "`/.well-known/assetlinks.json` is present under `frontend/public/.well-known/` and is included in the built/deployed static assets.",
+        "Documentation clearly instructs replacing `REPLACE_WITH_YOUR_PACKAGE_NAME` and `REPLACE_WITH_YOUR_SHA256_FINGERPRINT` with real values after signing key generation.",
+        "A developer can open `{origin}/.well-known/assetlinks.json` in the browser and see valid JSON (after replacing placeholders)."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Ensure Play Store listing assets are present as static files under `frontend/public/assets/generated/`, including app icons and a Play feature graphic, and reference them where appropriate (manifest for icons; guide text for feature graphic location).",
+      "text": "Ensure the Play Store packaging guide is complete and directly usable from the repository: verify that `frontend/PLAY_STORE_BUILD.md` and the in-app “Publish to Google Play Store” section remain consistent with the actual repo scripts and asset filenames/paths (manifest URL, asset links URL, icon filenames, feature graphic path). Update the guide content if any instructions or paths are outdated.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-2"
         ],
         "quotes": [
-          "yes i want"
+          "done! now let proceed to upload the nex step on playstore"
         ]
       },
       "acceptanceCriteria": [
-        "The required images exist under `frontend/public/assets/generated/` with the exact filenames specified in this build request.",
-        "`frontend/public/manifest.webmanifest` continues to reference the 192x192 and 512x512 icons under `/assets/generated/`.",
-        "The Play Store guide references `/assets/generated/ibn-feature-graphic.dim_1024x500.png` as the feature graphic location."
+        "`frontend/PLAY_STORE_BUILD.md` references the correct current paths used in the repo (e.g., `frontend/public/.well-known/assetlinks.json`, `/manifest.webmanifest`).",
+        "The in-app Play Store publishing section shows correct URLs based on `window.location.origin` and matches the guide’s described URLs.",
+        "Referenced asset filenames match the repo’s static assets under `frontend/public/` (including `/assets/generated/...`)."
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Update the service worker precache list to include the generated Play Store feature graphic so it is available offline alongside existing generated icons (without changing caching strategy).",
+      "text": "Harden the Bubblewrap release helper script workflow so that it reliably produces the expected outputs (signed APK for testing and AAB for Play Console upload) and prints correct, actionable next steps for updating `assetlinks.json` and redeploying the frontend.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-2"
         ],
         "quotes": [
-          "yes i want"
+          "done! now let proceed to upload the nex step on playstore"
         ]
       },
       "acceptanceCriteria": [
-        "`frontend/public/sw.js` precaches `/assets/generated/ibn-feature-graphic.dim_1024x500.png`.",
-        "Existing precache entries and network-first behavior remain intact.",
-        "The app still serves `offline.html` as a navigation fallback when offline."
+        "Running `frontend/scripts/twa/bubblewrap-release.sh` completes without ambiguous output paths and clearly indicates where the generated `.apk` and `.aab` artifacts are located.",
+        "The script prints the computed SHA-256 fingerprint and reiterates the exact placeholders to replace in `frontend/public/.well-known/assetlinks.json`.",
+        "The script’s documented next steps align with `frontend/public/.well-known/ASSETLINKS_SETUP.md` and `frontend/PLAY_STORE_BUILD.md`."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add a Play Store pre-submission checklist section in the app or docs that explicitly lists what must be ready before uploading the AAB (e.g., verified manifest URL, verified assetlinks URL, privacy policy URL, required graphics/screenshots).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "done! now let proceed to upload the nex step on playstore"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A checklist exists (in docs and/or the existing Play Store publishing UI section) that includes: manifest URL, assetlinks URL, privacy policy URL, and required Play Store visual assets.",
+        "Checklist text is in English and is specific enough to follow without external context."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`, or anything in `frontend/src/components/ui`.",
-    "Keep all backend logic in the single Motoko actor (`backend/main.mo`); only add a migration if persistent state schema changes are required (not expected for these changes)."
+    "Backend must remain a single Motoko actor in `backend/main.mo` (no new backend services).",
+    "Do not edit files in `frontend/src/components/ui` or any other immutable paths listed in SYSTEM_CONTEXT; compose existing UI components instead.",
+    "Do not add third-party authentication providers; Internet Identity remains the only auth method."
   ],
   "nonGoals": [
-    "Actually generating/signing an Android APK/AAB within the codebase or CI (this project will only provide the web assets and instructions needed for Bubblewrap/PWABuilder).",
-    "Integrating third-party authentication providers beyond Internet Identity.",
-    "Adding new payment providers or changing Stripe/bank transfer logic."
+    "Actually uploading the app to Google Play Console (requires the user’s Play Console account).",
+    "Implementing native Android features beyond TWA packaging.",
+    "Introducing new backend features unrelated to Play Store packaging (e.g., new payment providers)."
   ],
   "imageRequirements": {
     "required": [
-      "App icon with a bold \"IBN\" mark and warm orange/coral palette (ibn-app-icon.dim_512x512.png)",
-      "App icon variant for smaller launcher sizes, simplified and high-contrast (ibn-app-icon.dim_192x192.png)",
-      "Clean, modern Google Play feature graphic with warm orange/coral gradient (ibn-feature-graphic.dim_1024x500.png)"
+      "Google Play feature graphic (ibn-feature-graphic.dim_1024x500.png)",
+      "Android phone screenshot 1 (playstore-screenshot-1.dim_1080x1920.png)",
+      "Android phone screenshot 2 (playstore-screenshot-2.dim_1080x1920.png)"
     ],
     "edits": []
   }

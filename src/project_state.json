@@ -1,41 +1,49 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Project includes preparing an Android app build for Play Store packaging and testing.",
+  "summary": "Proceeding to prepare and upload the app to the Google Play Store (next step after confirming login/registration/dashboard).",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- App icon with a bold \"IBN\" mark and warm orange/coral palette (ibn-app-icon.dim_512x512.png)\n- App icon variant for smaller launcher sizes, simplified and high-contrast (ibn-app-icon.dim_192x192.png)\n- Clean, modern Google Play feature graphic with warm orange/coral gradient (ibn-feature-graphic.dim_1024x500.png)",
+  "imageRequirements": "## Required Images\n- Google Play feature graphic (ibn-feature-graphic.dim_1024x500.png)\n- Android phone screenshot 1 (playstore-screenshot-1.dim_1080x1920.png)\n- Android phone screenshot 2 (playstore-screenshot-2.dim_1080x1920.png)",
   "existing_features": [
     {
-      "id": "feature-add-a-digital-asset-links-file-for-trusted-web-activity-verification-by-creating-and-serving-a-static-file-at-well-known-assetlinks-json-i-e-frontend-public-well-known-assetlinks-json-with-clear-placeholder-values-for-package-name-and-signing-certificate-fingerprint",
-      "title": "Add a Digital Asset Links file for Trusted Web Activity verification by creating and serving a static file at `/.well-known/assetlinks.json` (i.e., `frontend/public/.well-known/assetlinks.json`) with clear placeholder values for package name and signing certificate fingerprint.",
+      "id": "feature-add-a-publicly-accessible-privacy-policy-page-in-the-frontend-and-ensure-it-can-be-used-as-the-play-store-privacy-policy-url-include-clear-english-content-placeholder-text-is-acceptable-and-make-it-reachable-from-the-app-ui-e-g-footer-link",
+      "title": "Add a publicly accessible Privacy Policy page in the frontend and ensure it can be used as the Play Store “Privacy Policy URL”. Include clear English content (placeholder text is acceptable) and make it reachable from the app UI (e.g., footer link).",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-update-the-in-app-publish-to-google-play-store-section-to-include-a-concrete-checklist-specifically-for-generating-an-android-package-aab-apk-via-bubblewrap-pwabuilder-and-configuring-digital-asset-links-explicitly-referencing-the-hosted-path-well-known-assetlinks-json-and-the-app-manifest-url-origin-manifest-webmanifest",
-      "title": "Update the in-app \"Publish to Google Play Store\" section to include a concrete checklist specifically for generating an Android package (AAB/APK) via Bubblewrap/PWABuilder and configuring Digital Asset Links, explicitly referencing the hosted path `/.well-known/assetlinks.json` and the app manifest URL `{origin}/manifest.webmanifest`.",
+      "id": "feature-finalize-the-digital-asset-links-setup-flow-for-twa-verification-by-making-it-explicit-and-actionable-in-repo-keep-frontend-public-well-known-assetlinks-json-deployable-at-origin-well-known-assetlinks-json-and-document-exactly-which-two-values-must-be-replaced-android-package-name-and-sha-256-fingerprint-before-play-store-submission",
+      "title": "Finalize the Digital Asset Links setup flow for TWA verification by making it explicit and actionable in-repo: keep `frontend/public/.well-known/assetlinks.json` deployable at `{origin}/.well-known/assetlinks.json` and document exactly which two values must be replaced (Android package name and SHA-256 fingerprint) before Play Store submission.",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-ensure-play-store-listing-assets-are-present-as-static-files-under-frontend-public-assets-generated-including-app-icons-and-a-play-feature-graphic-and-reference-them-where-appropriate-manifest-for-icons-guide-text-for-feature-graphic-location",
-      "title": "Ensure Play Store listing assets are present as static files under `frontend/public/assets/generated/`, including app icons and a Play feature graphic, and reference them where appropriate (manifest for icons; guide text for feature graphic location).",
+      "id": "feature-ensure-the-play-store-packaging-guide-is-complete-and-directly-usable-from-the-repository-verify-that-frontend-play-store-build-md-and-the-in-app-publish-to-google-play-store-section-remain-consistent-with-the-actual-repo-scripts-and-asset-filenames-paths-manifest-url-asset-links-url-icon-filenames-feature-graphic-path-update-the-guide-content-if-any-instructions-or-paths-are-outdated",
+      "title": "Ensure the Play Store packaging guide is complete and directly usable from the repository: verify that `frontend/PLAY_STORE_BUILD.md` and the in-app “Publish to Google Play Store” section remain consistent with the actual repo scripts and asset filenames/paths (manifest URL, asset links URL, icon filenames, feature graphic path). Update the guide content if any instructions or paths are outdated.",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-update-the-service-worker-precache-list-to-include-the-generated-play-store-feature-graphic-so-it-is-available-offline-alongside-existing-generated-icons-without-changing-caching-strategy",
-      "title": "Update the service worker precache list to include the generated Play Store feature graphic so it is available offline alongside existing generated icons (without changing caching strategy).",
+      "id": "feature-harden-the-bubblewrap-release-helper-script-workflow-so-that-it-reliably-produces-the-expected-outputs-signed-apk-for-testing-and-aab-for-play-console-upload-and-prints-correct-actionable-next-steps-for-updating-assetlinks-json-and-redeploying-the-frontend",
+      "title": "Harden the Bubblewrap release helper script workflow so that it reliably produces the expected outputs (signed APK for testing and AAB for Play Console upload) and prints correct, actionable next steps for updating `assetlinks.json` and redeploying the frontend.",
       "reqIds": [
         "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-play-store-pre-submission-checklist-section-in-the-app-or-docs-that-explicitly-lists-what-must-be-ready-before-uploading-the-aab-e-g-verified-manifest-url-verified-assetlinks-url-privacy-policy-url-required-graphics-screenshots",
+      "title": "Add a Play Store pre-submission checklist section in the app or docs that explicitly lists what must be ready before uploading the AAB (e.g., verified manifest URL, verified assetlinks URL, privacy policy URL, required graphics/screenshots).",
+      "reqIds": [
+        "REQ-5"
       ],
       "version": 1
     }
@@ -43,12 +51,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Prepare build for Google Play Store packaging (release bundle/APK, signing, and related packaging steps).",
+      "summary": "Prepare release build and proceed with Google Play Store upload/publishing steps",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Finalize Google Play Store packaging readiness for the IBN PWA (TWA)",
+  "projectName": "Prepare TWA release build artifacts and Play Store submission checklist",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

@@ -1,0 +1,11 @@
+# Ignore build outputs and generated files
+out/
+*.aab
+*.apk
+*.keystore
+*.jks
+
+# Keep the workflow scripts and documentation
+!README.md
+!bubblewrap-release.sh
+!.gitignore

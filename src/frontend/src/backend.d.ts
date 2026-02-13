@@ -83,10 +83,12 @@ export interface backendInterface {
     getStripeSessionStatus(sessionId: string): Promise<StripeSessionStatus>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     highestToLowestPrice(): Promise<Array<string>>;
+    isAdmin(): Promise<boolean>;
     isCallerAdmin(): Promise<boolean>;
+    isRegisteredAsUser(): Promise<boolean>;
     isStripeConfigured(): Promise<boolean>;
+    registerAsUser(profile: UserProfile): Promise<void>;
     saveBankAccounts(accounts: Array<BankDetails>): Promise<void>;
-    saveCallerUserProfile(profile: UserProfile): Promise<void>;
     setStripeConfiguration(config: StripeConfiguration): Promise<void>;
     transform(input: TransformationInput): Promise<TransformationOutput>;
 }
